@@ -34,7 +34,7 @@ This project strictly follows the **MVC (Model-View-Controller)** architecture:
 3. **IntelliJ IDEA** (Recommended IDE)
 
 ### How to Run Locally
-1. Clone the repository: `git clone https://github.com/fluffyplume/buzybee-app.git`
+1. Clone the repository: `git clone https://github.com/FluffyPlume/buzybee-app.git`
 2. Open the project folder in IntelliJ.
 3. Wait for Maven to download the dependencies.
 4. Navigate to `src/main/java/com/buzybee/app/util/MainApp.java`.
