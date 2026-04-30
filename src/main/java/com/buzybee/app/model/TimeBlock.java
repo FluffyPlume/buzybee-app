@@ -13,7 +13,6 @@ import java.util.UUID;
 public class TimeBlock {
 
     private String id;
-    private String dayofWeek; // Monday
     private LocalDate date;
     private LocalTime startTime; // e.g., 4:00 PM
     private LocalTime endTime; // e.g., 8:00 PM
@@ -22,10 +21,9 @@ public class TimeBlock {
     private double remainingHours;
 
     // Constructor
-    public TimeBlock(LocalDate date, String dayofWeek, LocalTime startTime, LocalTime endTime, double totalAvailableHours) {
+    public TimeBlock(LocalDate date, LocalTime startTime, LocalTime endTime, double totalAvailableHours) {
         this.id = UUID.randomUUID().toString();
         this.date = date;
-        this.dayofWeek = dayofWeek;
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalAvailableHours = totalAvailableHours;
@@ -38,8 +36,9 @@ public class TimeBlock {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public String getDayofWeek() { return dayofWeek; }
-    public void setDayofWeek(String dayofWeek) { this.dayofWeek = dayofWeek; }
+    public String getDayOfWeekName() {
+    return this.date.getDayOfWeek().toString(); 
+}
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
