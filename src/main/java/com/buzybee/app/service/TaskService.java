@@ -64,16 +64,27 @@ public class TaskService {
     // 2. THE ALGORITHM TRIGGER
     // ==========================================
 
-    // The UI Controller will call this method when the user clicks "Auto-Schedule"
-    public void generateWeeklySchedule(List<TimeBlock> userSchedule) {
 
-        // 1. Get all the tasks that need to be scheduled
+    public void generateWeeklySchedule() {
         List<Task> tasksToSchedule = taskDAO.getActiveTasks();
+        List<TimeBlock> savedSchedule = taskDAO.getAllTimeBlocks();
 
-        // 2. Trigger the pipeline in your SchedulerService
-        schedulerService.runSchedulingPipeline(tasksToSchedule, userSchedule);
+        schedulerService.runSchedulingPipeline(tasksToSchedule, savedSchedule);
 
-        // 3. Save the newly scheduled results to the hard drive
         taskDAO.saveChanges();
+    }
+
+    public void createWeeklySchedule(List<TimeBlock> completeWeek) throws InvalidTaskException {
+        if (completeWeek == null || completeWeek.size() != 7) {
+            throw new InvalidTaskException("A weekly schedule must contain exactly 7 days.");
+        }
+
+        // Ultimate Backend Validation: Check if the start date is in the past
+        if (completeWeek.get(0).getDate().isBefore(SystemClock.today())) {
+            throw new InvalidTaskException("You cannot start a schedule in the past.");
+        }
+
+        // Overwrite the old schedule with the new one
+        taskDAO.saveWeeklySchedule(completeWeek);
     }
 }

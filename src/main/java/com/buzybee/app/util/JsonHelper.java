@@ -1,6 +1,7 @@
 package com.buzybee.app.util;
 
 import com.buzybee.app.model.Task;
+import com.buzybee.app.model.TimeBlock;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -20,10 +21,11 @@ import java.time.LocalTime;
  */
 public class JsonHelper {
 
-    // The exact name of the file that will appear in your project folder
-    private static final String FILE_PATH = "buzybee_data.json";
 
-    // We use GsonBuilder with setPrettyPrinting so the JSON file is easily readable by humans!
+    private static final String FILE_PATH = "buzybee_data.json";
+    private static final String SCHEDULE_FILE = "schedule.json";
+
+    // We use GsonBuilder with setPrettyPrinting so the JSON file is easily readable
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             // Translator for LocalDate (Used in Task)
@@ -65,6 +67,32 @@ public class JsonHelper {
             return new ArrayList<>();
         }
     }
+    // ==========================================
+    // 3. SAVE TIMEBLOCK
+    // ==========================================
+    public void saveTimeBlocks(List<TimeBlock> blocks) {
+        try (java.io.FileWriter writer = new java.io.FileWriter(SCHEDULE_FILE)) {
+            gson.toJson(blocks, writer);
+        } catch (java.io.IOException e) {
+            System.out.println("Error saving schedule: " + e.getMessage());
+        }
+    }
+
+    // ==========================================
+    // 4. LOAD TIMEBLOCK
+    // ==========================================
+    public List<TimeBlock> loadTimeBlocks() {
+        java.io.File file = new java.io.File(SCHEDULE_FILE);
+        if (!file.exists()) return new java.util.ArrayList<>();
+
+        try (java.io.FileReader reader = new java.io.FileReader(file)) {
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.ArrayList<TimeBlock>>(){}.getType();
+            return gson.fromJson(reader, listType);
+        } catch (java.io.IOException e) {
+            return new java.util.ArrayList<>();
+        }
+    }
+
     /* // Test
     public static void main(String[] args) {
         JsonHelper testHelper = new JsonHelper();

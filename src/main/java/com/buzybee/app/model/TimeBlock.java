@@ -2,6 +2,7 @@ package com.buzybee.app.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -19,6 +20,7 @@ public class TimeBlock {
 
     private double totalAvailableHours; // e.g., 3.0
     private double remainingHours;
+    private List<Task> assignedTasks = new java.util.ArrayList<>();
 
     // Constructor
     public TimeBlock(LocalDate date, LocalTime startTime, LocalTime endTime, double totalAvailableHours) {
@@ -42,6 +44,8 @@ public class TimeBlock {
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
+
+    public List<Task> getAssignedTasks() { return assignedTasks; }
 
     public LocalTime getStartTime() { return startTime; }
     public void setStartTime(LocalTime startTime) { this.startTime = startTime; }

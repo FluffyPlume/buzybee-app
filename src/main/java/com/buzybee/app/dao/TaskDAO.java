@@ -1,6 +1,7 @@
 package com.buzybee.app.dao;
 
 import com.buzybee.app.model.Task;
+import com.buzybee.app.model.TimeBlock;
 import com.buzybee.app.util.JsonHelper;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class TaskDAO {
 
     // The Master List: Holds every task in the app's memory
     private List<Task> allTasks;
+    private List<TimeBlock> allTimeBlocks;
     private JsonHelper jsonHelper;
 
     // ==========================================
@@ -24,6 +26,7 @@ public class TaskDAO {
 
         // The second the DAO is created, it loads the data from the hard drive!
         this.allTasks = jsonHelper.loadTasks();
+        this.allTimeBlocks = jsonHelper.loadTimeBlocks();
 
         // Failsafe: If the file was empty, make sure the list isn't null
         if (this.allTasks == null) {
@@ -45,6 +48,15 @@ public class TaskDAO {
     public void deleteTask(String taskId) {
         allTasks.removeIf(task -> task.getId().equals(taskId));
         jsonHelper.saveTasks(allTasks);
+    }
+
+    public void saveWeeklySchedule(List<TimeBlock> newWeek) {
+        this.allTimeBlocks = newWeek;
+        jsonHelper.saveTimeBlocks(this.allTimeBlocks); // Saves to hard drive
+    }
+
+    public List<TimeBlock> getAllTimeBlocks() {
+        return this.allTimeBlocks;
     }
 
     // Force a save (useful when updating an existing task's status)
