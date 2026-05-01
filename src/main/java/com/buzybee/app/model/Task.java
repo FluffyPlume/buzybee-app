@@ -19,10 +19,11 @@ public class Task {
     private double difficulty; // "1-10 rating", with 1 being the easiest and 10 with being difficult
     private double estimatedTime; // 2 hrs, 3 hrs, 4 hrs
     private LocalDate deadline; // deadline date duhh
+    private LocalDate dateCompleted; // this is for history table purposes, future use gnun basta
 
     // Algorithm & System Variables
     private double priorityScore; // Ratio nung Knapsack Algo
-    private String status; // "Pending" , "Scheduled" , "Backlog/Overdue" , "Completed"
+    private String status; // "PENDING" , "SCHEDULED" , "BACKLOG" , "COMPLETED"
     private List<String> assignedTimeSlots;
 
     // Constructor
@@ -37,7 +38,7 @@ public class Task {
         this.deadline = deadline;
 
         //Default Settings for new entries
-        this.status = "Pending";
+        this.status = "PENDING";
         this.priorityScore = 0;
         this.assignedTimeSlots = new ArrayList<>();
     }
@@ -66,5 +67,8 @@ public class Task {
 
     public List<String> getAssignedTimeSlots() { return assignedTimeSlots; }
     public void setAssignedTimeSlots(List<String> assignedTimeSlots) { this.assignedTimeSlots = assignedTimeSlots; }
+
+    public LocalDate getDateCompleted() { return dateCompleted; }
+    public void setDateCompleted(LocalDate dateCompleted) { this.dateCompleted = dateCompleted; }
 
 }

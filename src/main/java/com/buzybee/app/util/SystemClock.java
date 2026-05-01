@@ -23,7 +23,7 @@ public class SystemClock {
     // 1. CORE TIME METHODS
     // ==========================================
 
-    // Use SystemClock.today() instead of LocalDate.now() everywhere in your app!
+    // Use SystemClock.today() instead of LocalDate.now()
     public static LocalDate today() {
         if (isSimulationMode && simulatedDate != null) {
             return simulatedDate;

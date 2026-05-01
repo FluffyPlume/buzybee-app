@@ -87,4 +87,17 @@ public class TaskService {
         // Overwrite the old schedule with the new one
         taskDAO.saveWeeklySchedule(completeWeek);
     }
+
+    // Marks a task as complete and records the exact date it was finished
+    public void markTaskComplete(String taskId) {
+        for (Task t : taskDAO.getAllTasks()) {
+            if (t.getId().equals(taskId)) {
+                t.setStatus("COMPLETED");
+                t.setDateCompleted(SystemClock.today());
+                taskDAO.saveChanges();
+                break;
+            }
+        }
+    }
+
 }

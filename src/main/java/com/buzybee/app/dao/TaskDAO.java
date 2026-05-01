@@ -24,7 +24,7 @@ public class TaskDAO {
     public TaskDAO() {
         this.jsonHelper = new JsonHelper();
 
-        // The second the DAO is created, it loads the data from the hard drive!
+        // The second the DAO is created, it loads the data from the hard drive
         this.allTasks = jsonHelper.loadTasks();
         this.allTimeBlocks = jsonHelper.loadTimeBlocks();
 
@@ -94,4 +94,16 @@ public class TaskDAO {
     public List<Task> getAllTasks() {
         return allTasks;
     }
+
+    // Gets all finished tasks for History Table
+    public List<Task> getCompletedTasks() {
+        List<Task> history = new java.util.ArrayList<>();
+        for (Task t : allTasks) {
+            if (t.getStatus().equals("COMPLETED")) {
+                history.add(t);
+            }
+        }
+        return history;
+    }
+
 }
