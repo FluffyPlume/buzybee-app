@@ -4,7 +4,7 @@
 ![JavaFX](https://img.shields.io/badge/JavaFX-FF0000?style=for-the-badge&logo=java&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-**BuzyBee** is a desktop application designed to solve decision fatigue and the "backlog paradox" for students and professionals. By utilizing a modified **Time-Weighted Fractional Knapsack Algorithm** paired with **Greedy Task Scheduling**, the system dynamically allocates tasks into available daily free-time blocks based on computed urgency and difficulty ratios.
+**BuzyBee** is a desktop application designed to help students and professionals to create and design their personalized task scheduling system. By utilizing a modified **Time-Weighted Fractional Knapsack Algorithm** paired with **Greedy Task Scheduling**, the system dynamically allocates tasks into available daily free-time blocks based on computed urgency and difficulty ratios. Making an optimized task manager that makes it easy for users to achieve their goals in a timely manner.
 
 ## Core Algorithms
 * **Time-Weighted Fractional Knapsack:** Calculates a dynamic Priority Ratio `(Difficulty × Urgency) / Estimated Time`. The Urgency Multiplier updates automatically as deadlines approach.
