@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buzybee</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════════ */
+:root {
+  --bg:        #f4f5fb;
+  --card:      #ffffff;
+  --sidebar:   #ffffff;
+  --accent:    #6366f1;      /* indigo */
+  --accent-lt: #eef0fd;
+  --accent-dk: #4f52d9;
+  --teal:      #14b8a6;
+  --teal-lt:   #ccfbf1;
+  --green:     #22c55e;
+  --green-lt:  #dcfce7;
+  --orange:    #f97316;
+  --orange-lt: #ffedd5;
+  --pink:      #ec4899;
+  --pink-lt:   #fce7f3;
+  --red:       #ef4444;
+  --red-lt:    #fee2e2;
+  --yellow:    #eab308;
+  --yellow-lt: #fef9c3;
+  --purple:    #a855f7;
+  --purple-lt: #f3e8ff;
+  --text:      #1e1e32;
+  --text-2:    #64648a;
+  --text-3:    #a0a0be;
+  --border:    #ebebf5;
+  --shadow-sm: 0 1px 4px rgba(99,102,241,.07);
+  --shadow:    0 2px 16px rgba(99,102,241,.10);
+  --shadow-lg: 0 8px 32px rgba(99,102,241,.15);
+  --r:         14px;
+  --r-sm:      10px;
+  --r-xs:      6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+/* ══════════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════════ */
+.topbar {
+  height: 56px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 16px; font-weight: 800;
+  color: var(--accent);
+  margin-right: 8px;
+}
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white;
+}
+
+/* Search bar */
+.search {
+  flex: 1; max-width: 360px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 14px;
+  color: var(--text-3);
+  font-size: 13px;
+}
+.search input {
+  border: none; background: transparent; outline: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  color: var(--text); width: 100%;
+}
+.search input::placeholder { color: var(--text-3); }
+.kbd {
+  font-size: 10px; background: var(--border);
+  border-radius: 4px; padding: 2px 5px;
+  color: var(--text-3); font-family: monospace;
+}
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+/* Tab nav in topbar */
+.top-tabs { display: flex; gap: 2px; }
+.top-tab {
+  padding: 6px 14px; border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; background: transparent; color: var(--text-2);
+  transition: all .18s; white-space: nowrap;
+}
+.top-tab:hover  { background: var(--accent-lt); color: var(--accent); }
+.top-tab.active { background: var(--accent); color: white; font-weight: 600; }
+
+.avatar-sm {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent);
+  color: white; font-weight: 700; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.notif-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: none;
+  background: var(--bg); cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; color: var(--text-2);
+}
+.notif-badge {
+  position: absolute; top: 4px; right: 4px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red); border: 2px solid white;
+}
+
+/* ══════════════════════════════════════════
+   BODY LAYOUT
+══════════════════════════════════════════ */
+.body-wrap { display: flex; flex: 1; overflow: hidden; }
+
+/* ── LEFT SIDEBAR ── */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 16px 12px;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.sidebar-section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .8px;
+  color: var(--text-3); text-transform: uppercase;
+  padding: 8px 8px 4px;
+  margin-top: 8px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r-sm);
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  color: var(--text-2);
+  transition: background .15s, color .15s;
+}
+.nav-item:hover  { background: var(--accent-lt); color: var(--accent); }
+.nav-item.active { background: var(--accent-lt); color: var(--accent); font-weight: 600; }
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto; background: var(--accent);
+  color: white; font-size: 10px; font-weight: 700;
+  border-radius: 20px; padding: 1px 7px; min-width: 20px; text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto; padding: 10px 8px 0;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-user-name { font-size: 13px; font-weight: 600; }
+.sidebar-user-email { font-size: 11px; color: var(--text-3); }
+
+/* ── PAGES ── */
+.page { display: none; flex: 1; overflow-y: auto; }
+.page.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════════════════
+   RIGHT NOTIFICATION PANEL
+══════════════════════════════════════════ */
+.right-panel {
+  width: 260px; flex-shrink: 0;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 18px 14px; gap: 14px;
+  overflow-y: auto;
+}
+.rp-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px; font-weight: 700;
+}
+.rp-see-all { font-size: 11px; color: var(--accent); cursor: pointer; margin-left: auto; }
+
+.notif-card {
+  border-radius: var(--r-sm); padding: 10px 12px;
+  display: flex; gap: 10px; align-items: flex-start;
+  cursor: pointer; transition: transform .15s;
+}
+.notif-card:hover { transform: translateX(2px); }
+.ni { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.nm { font-size: 11.5px; line-height: 1.45; flex: 1; }
+.nm strong { display: block; font-weight: 600; margin-bottom: 1px; }
+.na { font-size: 16px; color: var(--text-3); margin-top: 2px; }
+
+.up-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg); border-radius: var(--r-sm);
+  padding: 8px 11px; margin-bottom: 6px;
+  cursor: pointer; transition: background .15s;
+}
+.up-row:hover { background: var(--accent-lt); }
+.up-name { font-size: 12px; font-weight: 500; }
+.up-pill {
+  font-size: 9px; font-weight: 700; color: white;
+  border-radius: 20px; padding: 2px 8px;
+}
+
+/* ══════════════════════════════════════════
+   SHARED CARD & SECTION STYLES
+══════════════════════════════════════════ */
+.page-pad { padding: 22px 24px; }
+
+.page-title { font-family:'Sora',sans-serif; font-size:20px; font-weight:800; }
+.page-sub   { font-size:12px; color:var(--text-2); margin-top:2px; }
+
+.sec-title {
+  font-family:'Sora',sans-serif; font-size:14px; font-weight:700;
+  margin-bottom: 10px;
+}
+
+/* Stat cards */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--card); border-radius: var(--r);
+  padding: 16px 18px; box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 8px;
+  animation: up .4s ease both;
+}
+.stat-top { display: flex; align-items: center; justify-content: space-between; }
+.stat-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.stat-val { font-family:'Sora',sans-serif; font-size:24px; font-weight:800; line-height:1; }
+.stat-lbl { font-size:11px; color:var(--text-2); }
+.stat-delta { font-size:10px; font-weight:600; }
+.delta-up { color: var(--green); }
+
+/* Task card (generic) */
+.task-card {
+  background: var(--card); border-radius: var(--r);
+  padding: 14px 16px; box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 10px;
+  animation: up .35s ease both;
+  transition: transform .18s, box-shadow .18s;
+  cursor: default;
+}
+.task-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.task-card.overdue { border-left: 3px solid var(--red); }
+
+.tc-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.tc-name { font-size:13px; font-weight:600; line-height:1.4; }
+.tc-name.done { text-decoration:line-through; color:var(--text-3); }
+.tc-tag {
+  display:inline-block; font-size:9px; font-weight:700; letter-spacing:.3px;
+  border-radius:20px; padding:2px 9px; margin-top:4px;
+}
+.tc-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.badge {
+  font-size:9px; font-weight:700; color:white;
+  border-radius:20px; padding:3px 9px; white-space:nowrap;
+}
+.badge.high   { background:var(--orange); }
+.badge.medium { background:var(--purple); }
+.badge.low    { background:var(--green);  }
+.badge.overdue-b { background:var(--red); }
+.tc-due { font-size:11px; color:var(--text-2); }
+.tc-actions { display:flex; gap:4px; }
+.ic-btn {
+  background:none; border:none; cursor:pointer;
+  font-size:14px; padding:3px 5px; border-radius:6px;
+  color:var(--text-3); transition:background .15s, color .15s;
+}
+.ic-btn:hover { background:var(--accent-lt); color:var(--accent); }
+
+.prog-track { background:var(--border); border-radius:99px; height:6px; overflow:hidden; }
+.prog-fill  { height:100%; border-radius:99px; transition:width .6s ease; }
+
+/* Buttons */
+.btn-primary {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--accent); color:white;
+  border:none; border-radius:var(--r-sm);
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+  padding:9px 18px; cursor:pointer;
+  transition:background .2s, transform .15s;
+}
+.btn-primary:hover { background:var(--accent-dk); transform:scale(1.02); }
+
+.btn-ghost {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--accent-lt); color:var(--accent);
+  border:none; border-radius:var(--r-sm);
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+  padding:9px 18px; cursor:pointer;
+  transition:background .2s, transform .15s;
+}
+.btn-ghost:hover { background:var(--accent); color:white; transform:scale(1.02); }
+
+.algo-box {
+  background:var(--accent-lt); border-radius:12px;
+  padding:12px 15px; font-size:12px; color:var(--accent);
+  font-weight:500; line-height:1.6;
+  border-left: 3px solid var(--accent);
+}
+.algo-box strong { font-weight:700; }
+
+/* ══════════════════════════════════════════
+   PAGE: DASHBOARD
+══════════════════════════════════════════ */
+#page-dashboard .inner { padding: 22px 24px; display:flex; flex-direction:column; gap:18px; }
+
+/* ══════════════════════════════════════════
+   PAGE: CALENDAR — Weekly + Mini-month style
+══════════════════════════════════════════ */
+#page-calendar {
+  flex-direction: row !important;
+  overflow: hidden;
+}
+
+/* Left mini-calendar sidebar */
+.cal-left {
+  width: 240px; flex-shrink: 0;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex; flex-direction: column; gap: 16px;
+  overflow-y: auto;
+}
+.mini-cal-header {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.mini-cal-title { font-family:'Sora',sans-serif; font-size:14px; font-weight:700; }
+.mini-nav { display:flex; gap:4px; }
+.mini-nav-btn {
+  border:none; background:var(--bg); border-radius:6px;
+  width:26px; height:26px; cursor:pointer; font-size:13px;
+  color:var(--text-2); display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+.mini-nav-btn:hover { background:var(--accent-lt); color:var(--accent); }
+
+/* 7-col mini grid */
+.mini-grid {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  gap:2px; text-align:center;
+}
+.mini-dow {
+  font-size:9px; font-weight:700; color:var(--text-3);
+  padding:3px 0; letter-spacing:.4px;
+}
+.mini-day {
+  font-size:11px; padding:4px 2px; border-radius:6px;
+  cursor:pointer; transition:background .15s;
+  color:var(--text-2);
+}
+.mini-day:hover { background:var(--accent-lt); color:var(--accent); }
+.mini-day.other { color:var(--text-3); }
+.mini-day.today {
+  background:var(--accent); color:white; font-weight:700; border-radius:50%;
+  width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+  margin:auto;
+}
+.mini-day.has-event { position:relative; }
+.mini-day.has-event::after {
+  content:''; position:absolute; bottom:1px; left:50%; transform:translateX(-50%);
+  width:4px; height:4px; border-radius:50%; background:var(--accent);
+}
+
+/* Reminder card */
+.reminder-card {
+  background:var(--accent); border-radius:var(--r-sm);
+  padding:14px; color:white;
+}
+.rc-label { font-size:10px; opacity:.75; margin-bottom:4px; }
+.rc-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.rc-time  { font-size:11px; opacity:.85; }
+
+/* Filters */
+.filter-title { font-size:12px; font-weight:700; margin-bottom:8px; }
+.filter-item  { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:12px; color:var(--text-2); }
+.filter-item input[type=checkbox] { accent-color:var(--accent); }
+
+/* Right weekly view */
+.cal-right {
+  flex: 1; display:flex; flex-direction:column; overflow:hidden;
+}
+
+.week-header-bar {
+  padding: 16px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--card); flex-shrink:0;
+}
+.week-title { font-family:'Sora',sans-serif; font-size:16px; font-weight:700; }
+.week-nav   { display:flex; align-items:center; gap:10px; }
+.wn-btn {
+  width:30px; height:30px; border-radius:8px; border:none;
+  background:var(--bg); cursor:pointer; font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-2); transition:background .15s;
+}
+.wn-btn:hover { background:var(--accent-lt); color:var(--accent); }
+.view-pills { display:flex; gap:4px; }
+.view-pill {
+  padding:5px 12px; border:none; border-radius:6px;
+  font-size:11px; font-weight:600; cursor:pointer;
+  background:var(--bg); color:var(--text-2);
+  transition:background .15s;
+}
+.view-pill.active { background:var(--accent); color:white; }
+
+/* Weekly time grid */
+.week-grid-wrap { flex:1; overflow:auto; }
+.week-grid {
+  display:grid;
+  /* time-label col + 7 day cols */
+  grid-template-columns: 56px repeat(7,1fr);
+  min-width: 700px;
+}
+
+/* Day column headers */
+.wg-day-header {
+  padding:10px 6px; text-align:center;
+  border-bottom:2px solid var(--border);
+  border-right:1px solid var(--border);
+  position:sticky; top:0; background:var(--card); z-index:5;
+}
+.wg-day-header.today-col { background:var(--accent-lt); }
+.wg-dow { font-size:10px; font-weight:700; color:var(--text-3); letter-spacing:.5px; }
+.wg-date {
+  font-family:'Sora',sans-serif; font-size:20px; font-weight:800;
+  color:var(--text); line-height:1.1; margin-top:2px;
+}
+.wg-day-header.today-col .wg-date { color:var(--accent); }
+.wg-corner { position:sticky; top:0; background:var(--card); z-index:6; border-bottom:2px solid var(--border); }
+
+/* Time label column */
+.wg-time-label {
+  padding:0 8px; text-align:right;
+  font-size:10px; color:var(--text-3); font-weight:500;
+  display:flex; align-items:flex-start; justify-content:flex-end;
+  padding-top:2px; border-right:1px solid var(--border);
+}
+
+/* Each hour row cell */
+.wg-cell {
+  border-right:1px solid var(--border);
+  border-bottom:1px solid #f0f0f8;
+  min-height:60px; position:relative;
+  padding:2px 4px;
+}
+.wg-cell:last-child { border-right:none; }
+.wg-cell.today-col  { background:rgba(99,102,241,.025); }
+
+/* Event chip inside a grid cell */
+.wg-event {
+  border-radius:8px; padding:5px 8px;
+  font-size:11px; line-height:1.35;
+  margin-bottom:2px; cursor:pointer;
+  transition:transform .15s, box-shadow .15s;
+  position:relative;
+}
+.wg-event:hover { transform:scale(1.02); box-shadow:var(--shadow); z-index:3; }
+.wg-event-time  { font-size:10px; opacity:.75; }
+.wg-event-title { font-weight:600; }
+
+/* Event colors (one per priority/type) */
+.ev-high   { background:#ffedd5; color:#9a3412; border-left:3px solid var(--orange); }
+.ev-medium { background:#f3e8ff; color:#6b21a8; border-left:3px solid var(--purple); }
+.ev-low    { background:#dcfce7; color:#14532d; border-left:3px solid var(--green);  }
+.ev-leisure{ background:#dbeafe; color:#1e40af; border-left:3px solid #3b82f6; }
+.ev-overdue{ background:#fee2e2; color:#991b1b; border-left:3px solid var(--red);    }
+
+/* ══════════════════════════════════════════
+   PAGE: KANBAN BOARD (Scheduler → Greedy)
+══════════════════════════════════════════ */
+#page-kanban {
+  flex-direction: column !important;
+  overflow: hidden;
+}
+.kanban-header {
+  padding:18px 24px 12px; flex-shrink:0;
+  display:flex; align-items:center; gap:12px;
+  background:var(--card); border-bottom:1px solid var(--border);
+}
+.kanban-body {
+  flex:1; overflow-x:auto; overflow-y:hidden;
+  display:flex; gap:14px; padding:18px 20px;
+  align-items:flex-start;
+}
+.kanban-col {
+  flex-shrink:0; width:260px;
+  background:var(--bg); border-radius:var(--r);
+  display:flex; flex-direction:column; max-height:100%;
+}
+.kanban-col-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.kcol-title { font-size:12px; font-weight:700; letter-spacing:.3px; }
+.kcol-count {
+  font-size:11px; font-weight:700; background:var(--border);
+  border-radius:20px; padding:1px 8px; color:var(--text-2);
+}
+.kcol-add {
+  border:none; background:none; cursor:pointer;
+  font-size:18px; color:var(--text-3); line-height:1;
+  transition:color .15s;
+}
+.kcol-add:hover { color:var(--accent); }
+.kanban-cards { overflow-y:auto; padding:10px 10px 10px; display:flex; flex-direction:column; gap:8px; }
+
+/* Individual Kanban card */
+.k-card {
+  background:var(--card); border-radius:var(--r-sm);
+  padding:12px 13px; box-shadow:var(--shadow-sm);
+  animation:up .3s ease both;
+  transition:transform .18s, box-shadow .18s;
+  cursor:grab;
+}
+.k-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+.k-tags { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:7px; }
+.k-tag {
+  font-size:9px; font-weight:700; letter-spacing:.3px;
+  border-radius:4px; padding:2px 7px;
+}
+.k-title { font-size:12px; font-weight:600; line-height:1.45; margin-bottom:8px; }
+.k-slot  { font-size:10px; color:var(--accent); font-weight:600; margin-bottom:8px; }
+.k-prog-label { display:flex; justify-content:space-between; font-size:10px; color:var(--text-3); margin-bottom:4px; }
+.k-footer { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+.k-meta   { font-size:10px; color:var(--text-3); }
+.k-priority-dot { width:8px; height:8px; border-radius:50%; }
+
+/* Column accent strip (top border color) */
+.col-todo      { border-top:3px solid var(--purple); }
+.col-inprog    { border-top:3px solid var(--orange); }
+.col-review    { border-top:3px solid var(--teal);   }
+.col-done      { border-top:3px solid var(--green);  }
+
+/* ══════════════════════════════════════════
+   PAGE: BACKLOG
+══════════════════════════════════════════ */
+.backlog-inner { padding:22px 24px; display:flex; flex-direction:column; gap:16px; }
+.ctrl-bar {
+  background:var(--card); border-radius:var(--r);
+  padding:15px 18px; box-shadow:var(--shadow-sm);
+  display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;
+}
+.ctrl-group { display:flex; flex-direction:column; gap:4px; }
+.ctrl-group label { font-size:10px; font-weight:700; color:var(--text-3); letter-spacing:.4px; text-transform:uppercase; }
+.ctrl-group input, .ctrl-group select {
+  border:1.5px solid var(--border); border-radius:var(--r-sm);
+  padding:7px 11px; font-family:'DM Sans',sans-serif; font-size:12px;
+  background:var(--bg); color:var(--text); outline:none; min-width:120px;
+  transition:border-color .2s;
+}
+.ctrl-group input:focus, .ctrl-group select:focus { border-color:var(--accent); }
+
+.leisure-grid { display:flex; flex-direction:column; gap:8px; }
+.l-card {
+  background:var(--card); border-radius:var(--r-sm);
+  padding:12px 15px; box-shadow:var(--shadow-sm);
+  display:flex; align-items:center; gap:12px;
+  animation:up .3s ease both; transition:border .2s;
+}
+.l-card.sel  { border:2px solid var(--green); }
+.l-card.skip { opacity:.45; }
+.l-emoji { font-size:24px; }
+.l-info { flex:1; }
+.l-name { font-size:13px; font-weight:600; }
+.l-meta { font-size:11px; color:var(--text-2); margin-top:2px; }
+.l-score { font-family:'Sora',sans-serif; font-size:16px; font-weight:800; color:var(--accent); }
+.l-sel-badge {
+  font-size:9px; font-weight:700; color:white;
+  background:var(--green); border-radius:20px; padding:3px 9px;
+}
+
+/* ══════════════════════════════════════════
+   PAGE: DEPENDENCIES (TOPO)
+══════════════════════════════════════════ */
+.topo-inner { padding:22px 24px; display:flex; flex-direction:column; gap:16px; }
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(20,20,40,.4);
+  display:flex; align-items:center; justify-content:center;
+  z-index:200; opacity:0; pointer-events:none; transition:opacity .2s;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal {
+  background:white; border-radius:18px; padding:28px; width:400px;
+  box-shadow:var(--shadow-lg);
+  transform:translateY(18px); transition:transform .25s;
+}
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal h2 { font-family:'Sora',sans-serif; font-size:17px; font-weight:800; margin-bottom:18px; }
+.modal-row { display:flex; gap:10px; }
+.f-group { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; flex:1; }
+.f-group label { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.4px; }
+.f-group input, .f-group select {
+  border:1.5px solid var(--border); border-radius:var(--r-sm);
+  padding:9px 13px; font-family:'DM Sans',sans-serif; font-size:13px;
+  background:var(--bg); color:var(--text); outline:none;
+  transition:border-color .2s; width:100%;
+}
+.f-group input:focus, .f-group select:focus { border-color:var(--accent); background:white; }
+.modal-footer { display:flex; gap:10px; margin-top:8px; }
+.modal-footer button {
+  flex:1; padding:11px; border:none; border-radius:var(--r-sm);
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; transition:background .2s, transform .15s;
+}
+.modal-footer button:hover { transform:scale(1.02); }
+.btn-ok  { background:var(--accent); color:white; }
+.btn-no  { background:var(--bg); color:var(--text-2); }
+
+/* ══════════════════════════════════════════
+   MISC / UTILS
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-thumb { background:#d0d0ea; border-radius:99px; }
+
+.empty { text-align:center; color:var(--text-3); padding:32px 0; font-size:13px; }
+.divider { height:1px; background:var(--border); }
+.row-between { display:flex; align-items:center; justify-content:space-between; }
+
+@keyframes up {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ TOP BAR ═══════════════════════ -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">⊞</div>
+    Buzybee
+  </div>
+
+  <div class="search">
+    <span style="color:var(--text-3)">🔍</span>
+    <input type="text" placeholder="Search a task…">
+    <span class="kbd">⌘S</span>
+  </div>
+
+  <div class="top-tabs" style="margin-left:16px">
+    <button class="top-tab active" onclick="nav('dashboard',this)">📊 Dashboard</button>
+    <button class="top-tab" onclick="nav('calendar',this)">📆 Calendar</button>
+    <button class="top-tab" onclick="nav('kanban',this)">⚡ Scheduler</button>
+    <button class="top-tab" onclick="nav('backlog',this)">🎮 Backlog</button>
+    <button class="top-tab" onclick="nav('topo',this)">🔗 Dependencies</button>
+  </div>
+
+  <div class="topbar-right">
+    <button class="notif-btn">🔔<span class="notif-badge"></span></button>
+    <div class="avatar-sm">JA</div>
+  </div>
+</header>
+
+<!-- ═══════════════════════ BODY ═══════════════════════ -->
+<div class="body-wrap">
+
+<!-- ── LEFT SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="nav-item active" onclick="nav('dashboard',null)">
+    <span class="nav-icon">⊞</span> Dashboard
+  </div>
+  <div class="nav-item" onclick="nav('calendar',null)">
+    <span class="nav-icon">📆</span> Calendar
+  </div>
+  <div class="nav-item" onclick="nav('kanban',null)">
+    <span class="nav-icon">⚡</span> Scheduler
+    <span class="nav-badge" id="sched-badge">0</span>
+  </div>
+  <div class="nav-item" onclick="nav('backlog',null)">
+    <span class="nav-icon">🎮</span> Backlog
+  </div>
+  <div class="nav-item" onclick="nav('topo',null)">
+    <span class="nav-icon">🔗</span> Dependencies
+  </div>
+
+  <div class="sidebar-section-label">Records</div>
+  <div class="nav-item"><span class="nav-icon">👥</span> Team</div>
+  <div class="nav-item"><span class="nav-icon">📋</span> Clients</div>
+
+  <div class="sidebar-section-label">System</div>
+  <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+  <div class="nav-item"><span class="nav-icon">🛟</span> Support</div>
+
+  <div class="sidebar-footer">
+    <div class="avatar-sm">JA</div>
+    <div>
+      <div class="sidebar-user-name">James A.</div>
+      <div class="sidebar-user-email">james@smartsched.io</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     PAGE 1 — DASHBOARD
+══════════════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="inner" style="padding:22px 24px;display:flex;flex-direction:column;gap:18px">
+
+    <div class="row-between">
+      <div>
+        <div class="page-title">What are your plans for today? 📚</div>
+        <div class="page-sub">Buzybee has auto-organized your schedule. Here's your overview.</div>
+      </div>
+      <button class="btn-primary" onclick="openModal()">＋ Add Task</button>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats-grid">
+      <div class="stat-card" style="animation-delay:.05s">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#eef0fd">📋</div>
+          <span class="stat-delta delta-up">+2 today</span>
+        </div>
+        <div class="stat-val" id="s-total">0</div>
+        <div class="stat-lbl">Total Tasks</div>
+      </div>
+      <div class="stat-card" style="animation-delay:.1s">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#dcfce7">✅</div>
+          <span class="stat-delta delta-up" id="s-pct">0%</span>
+        </div>
+        <div class="stat-val" id="s-done">0</div>
+        <div class="stat-lbl">Completed</div>
+      </div>
+      <div class="stat-card" style="animation-delay:.15s">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#fee2e2">⚠️</div>
+        </div>
+        <div class="stat-val" id="s-over">0</div>
+        <div class="stat-lbl">Overdue</div>
+      </div>
+      <div class="stat-card" style="animation-delay:.2s">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#f3e8ff">⏱️</div>
+        </div>
+        <div class="stat-val" id="s-hrs">0h</div>
+        <div class="stat-lbl">Hours Scheduled</div>
+      </div>
+    </div>
+
+    <div class="sec-title">All Tasks</div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="dash-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 2 — CALENDAR (Weekly)
+══════════════════════════════ -->
+<div class="page" id="page-calendar">
+
+  <!-- Mini calendar sidebar -->
+  <div class="cal-left">
+    <div class="mini-cal-header">
+      <div class="mini-cal-title" id="mini-title">May 2025</div>
+      <div class="mini-nav">
+        <button class="mini-nav-btn" onclick="miniMonth(-1)">‹</button>
+        <button class="mini-nav-btn" onclick="miniMonth(+1)">›</button>
+      </div>
+    </div>
+    <div class="mini-grid" id="mini-grid"></div>
+
+    <!-- Reminder card (first upcoming task) -->
+    <div class="reminder-card" id="reminder-card" style="display:none">
+      <div class="rc-label">Upcoming reminder</div>
+      <div class="rc-title" id="rc-title">—</div>
+      <div class="rc-time"  id="rc-time">—</div>
+    </div>
+
+    <div>
+      <div class="filter-title">Filters</div>
+      <label class="filter-item"><input type="checkbox" checked onchange="renderWeek()"> Task Due Dates</label>
+      <label class="filter-item"><input type="checkbox" checked onchange="renderWeek()" id="flt-slots"> Scheduled Slots</label>
+      <label class="filter-item"><input type="checkbox" checked onchange="renderWeek()" id="flt-leisure"> Leisure (Knapsack)</label>
+    </div>
+  </div>
+
+  <!-- Weekly grid -->
+  <div class="cal-right">
+    <div class="week-header-bar">
+      <div class="week-nav">
+        <button class="wn-btn" onclick="changeWeek(-1)">‹</button>
+        <div class="week-title" id="week-title">Week of May 12</div>
+        <button class="wn-btn" onclick="changeWeek(+1)">›</button>
+        <button class="wn-btn" onclick="jumpToday()" style="font-size:11px;padding:0 8px;width:auto">Today</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="view-pills">
+          <button class="view-pill active">Weekly</button>
+          <button class="view-pill">Monthly</button>
+        </div>
+        <button class="btn-primary" style="padding:7px 14px;font-size:12px" onclick="runGreedyAndCalendar()">⚡ Re-run Schedule</button>
+      </div>
+    </div>
+
+    <div class="week-grid-wrap">
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 3 — KANBAN / GREEDY SCHEDULER
+══════════════════════════════ -->
+<div class="page" id="page-kanban">
+  <div class="kanban-header">
+    <div>
+      <div class="page-title">Greedy Scheduler ⚡</div>
+      <div class="page-sub">Tasks sorted by urgency. Drag between columns to update status.</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+      <button class="btn-ghost" onclick="openModal()">＋ Add Task</button>
+      <button class="btn-primary" onclick="runGreedy();renderKanban()">⚡ Run Greedy</button>
+    </div>
+  </div>
+
+  <div class="algo-box" style="margin:12px 20px 0;flex-shrink:0">
+    <strong>Greedy Algorithm:</strong> Overdue tasks → earliest deadline → highest priority weight (High=3, Med=2, Low=1).
+    Each task is assigned a consecutive time slot. Results also appear on the Calendar.
+  </div>
+
+  <div class="kanban-body" id="kanban-body"></div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 4 — BACKLOG / KNAPSACK
+══════════════════════════════ -->
+<div class="page" id="page-backlog">
+  <div class="backlog-inner">
+    <div>
+      <div class="page-title">Leisure Backlog 🎮</div>
+      <div class="page-sub">0/1 Knapsack — maximize enjoyment within your free time budget.</div>
+    </div>
+    <div class="algo-box">
+      <strong>0/1 Knapsack:</strong> dp[i][w] = max enjoyment using first i items with w hours.
+      Each item is either fully included or skipped — no fractions. Selected items also appear on the Calendar (today).
+    </div>
+    <div class="ctrl-bar">
+      <div class="ctrl-group">
+        <label>Free hours</label>
+        <input type="number" id="freeHrs" value="4" min="1" max="24">
+      </div>
+      <div class="ctrl-group">
+        <label>Item name</label>
+        <input type="text" id="lName" placeholder="e.g. Watch Oppenheimer">
+      </div>
+      <div class="ctrl-group">
+        <label>Hours needed</label>
+        <input type="number" id="lTime" value="2" min="1" max="12">
+      </div>
+      <div class="ctrl-group">
+        <label>Enjoyment (1–10)</label>
+        <input type="number" id="lScore" value="8" min="1" max="10">
+      </div>
+      <div class="ctrl-group">
+        <label>Type</label>
+        <select id="lType">
+          <option value="🎬">🎬 Movie</option>
+          <option value="🎮">🎮 Game</option>
+          <option value="📚">📚 Book</option>
+          <option value="🎵">🎵 Music</option>
+          <option value="🏃">🏃 Exercise</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="addLeisure()">＋ Add</button>
+      <button class="btn-ghost"   onclick="runKnapsack()">🎒 Run Knapsack</button>
+    </div>
+    <div id="knapsack-result" class="algo-box" style="display:none"></div>
+    <div class="sec-title">Leisure Items</div>
+    <div class="leisure-grid" id="leisure-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 5 — TOPOLOGICAL SORT
+══════════════════════════════ -->
+<div class="page" id="page-topo">
+  <div class="topo-inner">
+    <div>
+      <div class="page-title">Dependency Sequencer 🔗</div>
+      <div class="page-sub">Kahn's Algorithm — finds a valid study order respecting all prerequisites.</div>
+    </div>
+    <div class="algo-box">
+      <strong>Kahn's Topological Sort:</strong> Build adjacency list + in-degree map.
+      Repeatedly enqueue nodes with in-degree 0, remove them, and decrement neighbours.
+      If not all nodes processed → cycle detected.
+    </div>
+    <div class="ctrl-bar">
+      <div class="ctrl-group">
+        <label>Must come FIRST</label>
+        <select id="depFrom" style="min-width:180px"></select>
+      </div>
+      <div class="ctrl-group">
+        <label>Depends on the above</label>
+        <select id="depTo" style="min-width:180px"></select>
+      </div>
+      <button class="btn-primary" onclick="addDep()">＋ Add Dependency</button>
+      <button class="btn-ghost"   onclick="runTopo()">🔗 Run Sort</button>
+    </div>
+    <div id="dep-info" class="algo-box" style="display:none"></div>
+    <div class="sec-title">Sorted Study Order</div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="topo-out">
+      <div class="empty">Add dependencies, then click Run Sort.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT NOTIFICATION PANEL ── -->
+<aside class="right-panel">
+  <div class="row-between">
+    <div class="rp-title">🔔 Alerts</div>
+    <span class="rp-see-all">See all</span>
+  </div>
+  <div id="notif-list"></div>
+  <div class="divider"></div>
+  <div class="row-between" style="margin-bottom:8px">
+    <div class="rp-title">📋 Upcoming</div>
+  </div>
+  <div id="assign-list"></div>
+</aside>
+
+</div><!-- end body-wrap -->
+
+<!-- ═══════════════════════ ADD TASK MODAL ═══════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>➕ Add New Task</h2>
+    <div class="f-group"><label>Task name</label>
+      <input id="t-name" placeholder="e.g. DAA Project Draft"></div>
+    <div class="modal-row">
+      <div class="f-group"><label>Category</label>
+        <input id="t-tag" placeholder="e.g. Academics"></div>
+      <div class="f-group"><label>Priority</label>
+        <select id="t-pri">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="f-group"><label>Due date</label>
+        <input type="date" id="t-due"></div>
+      <div class="f-group"><label>Est. hours</label>
+        <input type="number" id="t-hrs" value="2" min="1" max="20"></div>
+    </div>
+    <div class="f-group"><label>Progress %</label>
+      <input type="number" id="t-prog" value="0" min="0" max="100"></div>
+    <div class="modal-footer">
+      <button class="btn-ok"  onclick="addTask()">Add Task</button>
+      <button class="btn-no"  onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+<script>
+
+/* ══════════════════════════════════════════
+   DATA STORE
+══════════════════════════════════════════ */
+
+// tasks[]: the single source of truth for all tasks
+let tasks = [
+  { id:1, name:"Design Packaging Concept",  tag:"Motion Design", priority:"high",   due:"2025-05-16", hours:3, progress:90,  done:false, status:"inprog" },
+  { id:2, name:"Read Chapter 5 – OS Notes", tag:"Academics",     priority:"medium", due:"2025-05-17", hours:2, progress:50,  done:false, status:"todo"   },
+  { id:3, name:"Submit DAA Project Draft",  tag:"DAA Project",   priority:"high",   due:"2025-05-18", hours:5, progress:10,  done:false, status:"todo"   },
+  { id:4, name:"Math Problem Set 4",        tag:"Math",          priority:"low",    due:"2025-05-20", hours:1, progress:100, done:true,  status:"done"   },
+  { id:5, name:"Physics Lab Report",        tag:"Physics",       priority:"medium", due:"2025-05-22", hours:3, progress:30,  done:false, status:"review" },
+];
+
+let deps         = [];      // {from:id, to:id} dependency edges
+let leisure      = [        // Knapsack items
+  { id:1, name:"Watch Oppenheimer",  type:"🎬", time:3, score:9 },
+  { id:2, name:"Play Minecraft",     type:"🎮", time:2, score:8 },
+  { id:3, name:"Read Atomic Habits", type:"📚", time:2, score:7 },
+  { id:4, name:"Watch Arcane S2",    type:"🎬", time:4, score:8 },
+  { id:5, name:"Morning Jog",        type:"🏃", time:1, score:6 },
+];
+let kSel         = new Set();   // Knapsack selected IDs
+let greedySlots  = [];           // [{taskId, start:Date, end:Date}]
+let nextId       = 20;
+
+// Calendar state
+let calY  = new Date().getFullYear();
+let calM  = new Date().getMonth();   // 0-indexed
+let weekStart = getMonday(new Date()); // Monday of current week
+
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+
+// isOverdue: due date has passed and task is not done
+function isOverdue(t) {
+  if (!t.due || t.done) return false;
+  return new Date(t.due) < new Date(new Date().toDateString());
+}
+
+// fmtDate: "2025-05-16" → "May 16"
+function fmtDate(s) {
+  if (!s) return 'No deadline';
+  return new Date(s + 'T00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+// fmtTime: Date → "2:00 PM"
+function fmtTime(d) { return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
+
+// priorityWeight: High=3, Medium=2, Low=1
+function pw(p) { return p==='high'?3:p==='medium'?2:1; }
+
+// barColor: picks progress bar color
+function bc(n) { return n>=75?'var(--green)':n>=40?'var(--accent)':'var(--orange)'; }
+
+// getMonday: returns the Monday of the week containing date d
+function getMonday(d) {
+  const day = d.getDay();                  // 0=Sun,1=Mon…
+  const diff = (day===0) ? -6 : 1 - day;  // how many days back to Monday
+  const mon = new Date(d);
+  mon.setDate(d.getDate() + diff);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+// dateKey: Date → "YYYY-MM-DD" string
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+
+// nav: switches the visible page and updates tab + sidebar highlights
+function nav(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  // Trigger page-specific renders
+  if (id==='dashboard')  renderDash();
+  if (id==='calendar')   { renderMiniCal(); renderWeek(); }
+  if (id==='kanban')     renderKanban();
+  if (id==='backlog')    renderLeisure();
+  if (id==='topo')       refreshDepSelects();
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+
+function renderDash() {
+  const total = tasks.length;
+  const done  = tasks.filter(t=>t.done).length;
+  const over  = tasks.filter(t=>isOverdue(t)).length;
+  const hrs   = tasks.filter(t=>!t.done).reduce((s,t)=>s+t.hours,0);
+  const pct   = total ? Math.round(done/total*100) : 0;
+
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent  = done;
+  document.getElementById('s-pct').textContent   = pct + '%';
+  document.getElementById('s-over').textContent  = over;
+  document.getElementById('s-hrs').textContent   = hrs + 'h';
+  document.getElementById('sched-badge').textContent = tasks.filter(t=>!t.done).length;
+
+  const el = document.getElementById('dash-list');
+  el.innerHTML = tasks.length ? tasks.map((t,i)=>taskCardHTML(t,i,true)).join('') :
+    '<div class="empty">No tasks yet — add one!</div>';
+
+  renderNotifs();
+  renderUpcoming();
+}
+
+// taskCardHTML: returns the HTML string for one task card
+function taskCardHTML(t, i, actions) {
+  return `
+    <div class="task-card ${isOverdue(t)?'overdue':''}" style="animation-delay:${i*.07}s">
+      <div class="tc-top">
+        <div>
+          <div class="tc-name ${t.done?'done':''}">${t.name}</div>
+          <span class="tc-tag" style="background:${tagBg(t.tag)};color:${tagFg(t.tag)}">${t.tag}</span>
+        </div>
+        <div class="tc-right">
+          ${isOverdue(t)?'<span class="badge overdue-b">Overdue</span>':''}
+          <span class="badge ${t.priority}">${cap(t.priority)}</span>
+          <span class="tc-due">Due: ${fmtDate(t.due)}</span>
+          ${actions?`<div class="tc-actions">
+            <button class="ic-btn" onclick="markDone(${t.id})">✓</button>
+            <button class="ic-btn" onclick="deleteTask(${t.id})">🗑</button>
+          </div>`:''}
+        </div>
+      </div>
+      <div class="prog-track">
+        <div class="prog-fill" style="width:${t.progress}%;background:${bc(t.progress)}"></div>
+      </div>
+    </div>`;
+}
+
+function cap(s) { return s[0].toUpperCase()+s.slice(1); }
+
+// Color-code task tags dynamically using a simple hash
+const TAG_PALETTES = [
+  {bg:'#eef0fd',fg:'#4f52d9'},{bg:'#dcfce7',fg:'#166534'},
+  {bg:'#ffedd5',fg:'#9a3412'},{bg:'#f3e8ff',fg:'#6b21a8'},
+  {bg:'#fce7f3',fg:'#9d174d'},{bg:'#dbeafe',fg:'#1e40af'},
+  {bg:'#fef9c3',fg:'#713f12'},{bg:'#ccfbf1',fg:'#134e4a'},
+];
+const tagCache = {};
+let tagIdx = 0;
+function tagColor(tag) {
+  if (!tagCache[tag]) { tagCache[tag] = TAG_PALETTES[tagIdx++ % TAG_PALETTES.length]; }
+  return tagCache[tag];
+}
+function tagBg(tag) { return tagColor(tag).bg; }
+function tagFg(tag) { return tagColor(tag).fg; }
+
+function markDone(id) {
+  const t = tasks.find(t=>t.id===id);
+  if (t) { t.done=!t.done; t.status=t.done?'done':t.status==='done'?'todo':t.status; if(t.done)t.progress=100; }
+  renderDash();
+}
+function deleteTask(id) {
+  tasks=tasks.filter(t=>t.id!==id); deps=deps.filter(d=>d.from!==id&&d.to!==id);
+  renderDash();
+}
+
+/* ══════════════════════════════════════════
+   RIGHT PANEL
+══════════════════════════════════════════ */
+
+function renderNotifs() {
+  const notifs=[];
+  tasks.filter(t=>isOverdue(t)&&!t.done).forEach(t=>
+    notifs.push({icon:'🔴',title:'Overdue!',msg:`"${t.name}" is past due.`,bg:'#fecaca'}));
+  tasks.filter(t=>!t.due&&!t.done).forEach(t=>
+    notifs.push({icon:'🟡',title:'No deadline',msg:`"${t.name}" has no due date.`,bg:'#fef3c7'}));
+  if (!notifs.length) notifs.push({icon:'🟢',title:'All good!',msg:'All tasks are on track.',bg:'#d1fae5'});
+
+  document.getElementById('notif-list').innerHTML = notifs.slice(0,4).map(n=>`
+    <div class="notif-card" style="background:${n.bg};margin-bottom:8px">
+      <span class="ni">${n.icon}</span>
+      <span class="nm"><strong>${n.title}</strong>${n.msg}</span>
+      <span class="na">›</span>
+    </div>`).join('');
+}
+
+function renderUpcoming() {
+  const top=[...tasks].filter(t=>!t.done)
+    .sort((a,b)=>new Date(a.due||'9999')-new Date(b.due||'9999')).slice(0,4);
+  document.getElementById('assign-list').innerHTML = top.map(t=>`
+    <div class="up-row">
+      <span class="up-name">${t.name}</span>
+      <span class="up-pill" style="background:${isOverdue(t)?'var(--red)':t.progress>0?'var(--accent)':'var(--text-3)'}">
+        ${isOverdue(t)?'Overdue':t.progress>0?'Active':'Pending'}
+      </span>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   ALGORITHM 1 — GREEDY SCHEDULER
+   Sort: overdue first → earliest due → highest priority
+   Assign consecutive time slots starting next hour
+══════════════════════════════════════════ */
+
+function runGreedy() {
+  const pending = tasks.filter(t=>!t.done);
+  greedySlots   = [];
+
+  // Sort by: overdue flag → due date → priority weight
+  const sorted = [...pending].sort((a,b)=>{
+    const ao=isOverdue(a)?0:1, bo=isOverdue(b)?0:1;
+    if (ao!==bo) return ao-bo;
+    const dd = new Date(a.due||'9999-12-31')-new Date(b.due||'9999-12-31');
+    if (dd!==0) return dd;
+    return pw(b.priority)-pw(a.priority);
+  });
+
+  // Round up to next whole hour
+  const now = new Date();
+  now.setMinutes(0,0,0);
+  now.setHours(now.getHours()+1);
+  let cur = new Date(now);
+
+  sorted.forEach(t=>{
+    const end = new Date(cur.getTime() + t.hours*3600000); // hours → ms
+    greedySlots.push({ taskId:t.id, start:new Date(cur), end:new Date(end) });
+    cur = new Date(end.getTime() + 15*60000); // 15-min buffer
+  });
+}
+
+function runGreedyAndCalendar() {
+  runGreedy();
+  renderWeek();
+}
+
+/* ══════════════════════════════════════════
+   KANBAN BOARD (Greedy result in columns)
+   Columns: Todo / In Progress / Review / Done
+══════════════════════════════════════════ */
+
+const COLS = [
+  { id:'todo',   label:'Todo',        cls:'col-todo',   emptyMsg:'No pending tasks' },
+  { id:'inprog', label:'In Progress', cls:'col-inprog', emptyMsg:'Nothing in progress' },
+  { id:'review', label:'In Review',   cls:'col-review', emptyMsg:'Nothing in review' },
+  { id:'done',   label:'Done',        cls:'col-done',   emptyMsg:'No completed tasks' },
+];
+
+function renderKanban() {
+  // Re-run greedy so slots are fresh
+  runGreedy();
+
+  const body = document.getElementById('kanban-body');
+  body.innerHTML = '';
+
+  COLS.forEach(col=>{
+    const colTasks = tasks.filter(t=>(t.status||'todo')===col.id);
+    const slotMap  = {};
+    greedySlots.forEach(s=>{ slotMap[s.taskId]=s; });
+
+    const div = document.createElement('div');
+    div.className = `kanban-col ${col.cls}`;
+
+    // Column header
+    div.innerHTML = `
+      <div class="kanban-col-header">
+        <span class="kcol-title">${col.label.toUpperCase()}</span>
+        <span class="kcol-count">${colTasks.length}</span>
+        <button class="kcol-add" onclick="openModal()">＋</button>
+      </div>
+      <div class="kanban-cards" id="kcol-${col.id}"></div>`;
+    body.appendChild(div);
+
+    const cardsEl = div.querySelector(`#kcol-${col.id}`);
+
+    if (!colTasks.length) {
+      cardsEl.innerHTML = `<div class="empty" style="padding:20px 0">${col.emptyMsg}</div>`;
+      return;
+    }
+
+    colTasks.forEach((t,i)=>{
+      const slot  = slotMap[t.id];
+      const card  = document.createElement('div');
+      card.className = 'k-card';
+      card.style.animationDelay = i*.06+'s';
+
+      // Priority dot color
+      const dotColor = t.priority==='high'?'var(--orange)':t.priority==='medium'?'var(--purple)':'var(--green)';
+
+      card.innerHTML = `
+        <div class="k-tags">
+          <span class="k-tag" style="background:${tagBg(t.tag)};color:${tagFg(t.tag)}">#${t.tag.toLowerCase().replace(/\s+/g,'')}</span>
+          ${isOverdue(t)?'<span class="k-tag" style="background:#fee2e2;color:#991b1b">#overdue</span>':''}
+        </div>
+        <div class="k-title">${t.name}</div>
+        ${slot?`<div class="k-slot">🕐 ${fmtTime(slot.start)} – ${fmtTime(slot.end)}</div>`:''}
+        <div class="k-prog-label">
+          <span>Progress</span><span>${t.progress}%</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:${t.progress}%;background:${bc(t.progress)}"></div>
+        </div>
+        <div class="k-footer">
+          <span class="k-meta">Due: ${fmtDate(t.due)}</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="k-priority-dot" style="background:${dotColor}" title="${t.priority} priority"></div>
+            <!-- Move task between columns -->
+            <select style="font-size:10px;border:1px solid var(--border);border-radius:6px;padding:2px 4px;background:var(--bg);color:var(--text-2);cursor:pointer;outline:none"
+              onchange="moveTask(${t.id},this.value)">
+              ${COLS.map(c=>`<option value="${c.id}" ${(t.status||'todo')===c.id?'selected':''}>${c.label}</option>`).join('')}
+            </select>
+          </div>
+        </div>`;
+      cardsEl.appendChild(card);
+    });
+  });
+}
+
+// moveTask: changes a task's status column and re-renders
+function moveTask(id, status) {
+  const t = tasks.find(t=>t.id===id);
+  if (t) { t.status=status; t.done=(status==='done'); if(t.done)t.progress=100; }
+  renderKanban();
+}
+
+/* ══════════════════════════════════════════
+   ALGORITHM 2 — 0/1 KNAPSACK
+══════════════════════════════════════════ */
+
+function addLeisure() {
+  const name=document.getElementById('lName').value.trim();
+  const time=parseInt(document.getElementById('lTime').value);
+  const score=parseInt(document.getElementById('lScore').value);
+  const type=document.getElementById('lType').value;
+  if (!name) { alert('Enter an item name.'); return; }
+  leisure.push({id:Date.now(),name,type,time,score});
+  document.getElementById('lName').value='';
+  renderLeisure();
+}
+
+function runKnapsack() {
+  const W=parseInt(document.getElementById('freeHrs').value);
+  const n=leisure.length;
+  if (!n) { alert('Add leisure items first!'); return; }
+
+  // Build dp table: rows=items, cols=hours-capacity
+  const dp=Array.from({length:n+1},()=>new Array(W+1).fill(0));
+  for (let i=1;i<=n;i++) {
+    const it=leisure[i-1];
+    for (let w=0;w<=W;w++) {
+      // Skip or include: take whichever gives more enjoyment
+      dp[i][w] = it.time>w ? dp[i-1][w] : Math.max(dp[i-1][w], dp[i-1][w-it.time]+it.score);
+    }
+  }
+
+  // Backtrack to find which items were selected
+  kSel=new Set(); let w=W;
+  for (let i=n;i>=1;i--) {
+    if (dp[i][w]!==dp[i-1][w]) { kSel.add(leisure[i-1].id); w-=leisure[i-1].time; }
+  }
+
+  const totalScore=dp[n][W];
+  const usedTime=leisure.filter(it=>kSel.has(it.id)).reduce((s,it)=>s+it.time,0);
+  const res=document.getElementById('knapsack-result');
+  res.style.display='block';
+  res.innerHTML=`✅ <strong>Knapsack Result:</strong> Selected <strong>${kSel.size} items</strong>
+    using <strong>${usedTime}/${W} hours</strong> → total enjoyment score <strong>${totalScore}</strong>.
+    Green items are selected; faded ones don't fit.`;
+  renderLeisure();
+}
+
+function renderLeisure() {
+  const el=document.getElementById('leisure-list');
+  if (!leisure.length) { el.innerHTML='<div class="empty">Add items above.</div>'; return; }
+  el.innerHTML=leisure.map((it,i)=>{
+    const sel=kSel.has(it.id);
+    const cls=kSel.size>0?(sel?'sel':'skip'):'';
+    return `
+      <div class="l-card ${cls}" style="animation-delay:${i*.05}s">
+        <div class="l-emoji">${it.type}</div>
+        <div class="l-info">
+          <div class="l-name">${it.name}</div>
+          <div class="l-meta">⏱ ${it.time}h needed · ⭐ ${it.score}/10 enjoyment</div>
+        </div>
+        <div class="l-score">${it.score}</div>
+        ${sel?'<span class="l-sel-badge">✓ Selected</span>':''}
+        <button class="ic-btn" onclick="delLeisure(${it.id})">🗑</button>
+      </div>`;
+  }).join('');
+}
+
+function delLeisure(id) { leisure=leisure.filter(it=>it.id!==id); kSel.delete(id); renderLeisure(); }
+
+/* ══════════════════════════════════════════
+   ALGORITHM 3 — TOPOLOGICAL SORT (Kahn's)
+══════════════════════════════════════════ */
+
+function refreshDepSelects() {
+  const opts=tasks.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  document.getElementById('depFrom').innerHTML=opts;
+  document.getElementById('depTo').innerHTML  =opts;
+}
+
+function addDep() {
+  const from=parseInt(document.getElementById('depFrom').value);
+  const to  =parseInt(document.getElementById('depTo').value);
+  if (from===to) { alert('A task cannot depend on itself.'); return; }
+  if (deps.find(d=>d.from===from&&d.to===to)) { alert('Already exists.'); return; }
+  deps.push({from,to});
+  const info=document.getElementById('dep-info');
+  info.style.display='block';
+  info.innerHTML='<strong>Dependencies:</strong><br>'+
+    deps.map(d=>`→ "${tasks.find(t=>t.id===d.from)?.name}" before "${tasks.find(t=>t.id===d.to)?.name}"`).join('<br>');
+}
+
+function runTopo() {
+  const el=document.getElementById('topo-out');
+  if (!tasks.length) { el.innerHTML='<div class="empty">Add tasks on Dashboard first.</div>'; return; }
+
+  // Build adjacency list (adj) and in-degree map (inDeg)
+  const adj={}, inDeg={};
+  tasks.forEach(t=>{ adj[t.id]=[]; inDeg[t.id]=0; });
+  deps.forEach(({from,to})=>{
+    if (adj[from]!==undefined&&inDeg[to]!==undefined) { adj[from].push(to); inDeg[to]++; }
+  });
+
+  // Kahn's: start with all zero-in-degree nodes
+  const queue=tasks.filter(t=>inDeg[t.id]===0).map(t=>t.id);
+  const order=[];
+  while (queue.length) {
+    const cur=queue.shift(); order.push(cur);
+    // Decrement each dependent; enqueue if now zero
+    adj[cur].forEach(nx=>{ inDeg[nx]--; if(inDeg[nx]===0)queue.push(nx); });
+  }
+
+  // Cycle check
+  if (order.length!==tasks.length) {
+    el.innerHTML=`<div class="algo-box" style="background:#fecaca;color:#991b1b;border-color:#ef4444">
+      ⚠️ <strong>Cycle detected!</strong> Remove conflicting dependencies.</div>`;
+    return;
+  }
+
+  el.innerHTML=`<div class="algo-box" style="margin-bottom:10px">
+    ✅ <strong>Valid order found!</strong> Study in the steps below.</div>`+
+  order.map((id,i)=>{
+    const t=tasks.find(t=>t.id===id); if(!t) return '';
+    const pre=deps.filter(d=>d.to===t.id).map(d=>tasks.find(x=>x.id===d.from)?.name).filter(Boolean);
+    return `
+      <div class="task-card" style="animation-delay:${i*.08}s">
+        <div class="tc-top">
+          <div>
+            <div class="tc-name">Step ${i+1}: ${t.name}</div>
+            <span class="tc-tag" style="background:${tagBg(t.tag)};color:${tagFg(t.tag)}">${t.tag}</span>
+          </div>
+          <div class="tc-right">
+            <span class="badge ${t.priority}">${cap(t.priority)}</span>
+            <span class="tc-due">Due: ${fmtDate(t.due)}</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-2)">
+          ${pre.length?`📌 After: ${pre.map(p=>`<span style="background:var(--bg);border-radius:4px;padding:1px 7px;margin-right:4px">${p}</span>`).join('')}`
+                      :'📌 No prerequisites — can start anytime'}
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:${t.progress}%;background:${bc(t.progress)}"></div></div>
+      </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   CALENDAR — MINI MONTH
+══════════════════════════════════════════ */
+
+const MONTHS=['January','February','March','April','May','June',
+              'July','August','September','October','November','December'];
+const DOWS=['S','M','T','W','T','F','S'];
+
+function miniMonth(delta) {
+  calM+=delta;
+  if (calM>11){calM=0;calY++;} if (calM<0){calM=11;calY--;}
+  renderMiniCal();
+}
+
+function renderMiniCal() {
+  document.getElementById('mini-title').textContent=`${MONTHS[calM]} ${calY}`;
+  const grid=document.getElementById('mini-grid');
+  grid.innerHTML='';
+
+  // Day-of-week headers
+  DOWS.forEach(d=>{ const h=document.createElement('div'); h.className='mini-dow'; h.textContent=d; grid.appendChild(h); });
+
+  const first=new Date(calY,calM,1);
+  const last =new Date(calY,calM+1,0);
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // Blank cells for days before the 1st
+  for (let i=0;i<first.getDay();i++) {
+    const b=document.createElement('div'); b.className='mini-day other'; grid.appendChild(b);
+  }
+
+  // Build set of days that have tasks
+  const taskDays=new Set(tasks.filter(t=>t.due).map(t=>t.due));
+  const slotDays=new Set(greedySlots.map(s=>dateKey(s.start)));
+
+  for (let d=1;d<=last.getDate();d++) {
+    const thisDay=new Date(calY,calM,d); thisDay.setHours(0,0,0,0);
+    const key=dateKey(thisDay);
+    const isToday=thisDay.getTime()===today.getTime();
+    const hasEv=taskDays.has(key)||slotDays.has(key);
+
+    const cell=document.createElement('div');
+    cell.className='mini-day'+(isToday?' today':'')+(hasEv&&!isToday?' has-event':'');
+    cell.textContent=d;
+    cell.onclick=()=>{ weekStart=getMonday(thisDay); renderWeek(); };
+    grid.appendChild(cell);
+  }
+
+  // Update reminder card
+  const upcoming=[...tasks].filter(t=>!t.done&&t.due).sort((a,b)=>new Date(a.due)-new Date(b.due));
+  const rc=document.getElementById('reminder-card');
+  if (upcoming.length) {
+    rc.style.display='block';
+    document.getElementById('rc-title').textContent=upcoming[0].name;
+    document.getElementById('rc-time').textContent='Due: '+fmtDate(upcoming[0].due);
+  } else { rc.style.display='none'; }
+}
+
+/* ══════════════════════════════════════════
+   CALENDAR — WEEKLY VIEW
+   Events appear as colored chips in the correct slot
+══════════════════════════════════════════ */
+
+function changeWeek(delta) {
+  weekStart=new Date(weekStart.getTime()+delta*7*86400000);
+  renderWeek();
+}
+function jumpToday() { weekStart=getMonday(new Date()); renderWeek(); }
+
+// renderWeek: builds the 7-column × 16-hour grid
+function renderWeek() {
+  const grid=document.getElementById('week-grid');
+  grid.innerHTML='';
+
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // Build event map: "YYYY-MM-DD-HH" → [events]
+  // Each event = { label, cls, startHour, endHour }
+  const evMap={}; // key = "dateKey-hour"
+  function addEv(dateStr, hour, ev) {
+    const k=`${dateStr}-${hour}`;
+    if (!evMap[k]) evMap[k]=[];
+    evMap[k].push(ev);
+  }
+
+  // 1. Task due dates → show on due date at 9 AM if no slot assigned
+  const slottedIds=new Set(greedySlots.map(s=>s.taskId));
+  if (document.getElementById('flt-slots')?.checked!==false) { // filter checked
+    tasks.filter(t=>t.due&&!slottedIds.has(t.id)).forEach(t=>{
+      addEv(t.due,9,{
+        label:t.name, tag:t.tag,
+        time: fmtDate(t.due),
+        cls:'ev-'+(isOverdue(t)?'overdue':t.priority)
+      });
+    });
+  }
+
+  // 2. Greedy slots → show at the actual scheduled hour
+  if (document.getElementById('flt-slots')?.checked!==false) {
+    greedySlots.forEach(s=>{
+      const t=tasks.find(x=>x.id===s.taskId); if(!t) return;
+      const dk=dateKey(s.start);
+      const hr=s.start.getHours();
+      addEv(dk,hr,{
+        label:'⚡ '+t.name,
+        time: `${fmtTime(s.start)}–${fmtTime(s.end)}`,
+        cls:'ev-'+(isOverdue(t)?'overdue':t.priority)
+      });
+    });
+  }
+
+  // 3. Knapsack leisure items → show today at free slots after 6 PM
+  if (document.getElementById('flt-leisure')?.checked!==false) {
+    const todayKey=dateKey(today);
+    let lHour=18; // start leisure at 6 PM
+    leisure.filter(it=>kSel.has(it.id)).forEach(it=>{
+      addEv(todayKey,lHour,{label:it.type+' '+it.name, time:`${lHour}:00 – ${lHour+it.time}:00`, cls:'ev-leisure'});
+      lHour+=it.time;
+    });
+  }
+
+  // ── Day column headers ──
+  // Corner cell (top-left of time grid)
+  const corner=document.createElement('div');
+  corner.className='wg-corner';
+  grid.appendChild(corner);
+
+  // Update week title
+  const endOfWeek=new Date(weekStart.getTime()+6*86400000);
+  document.getElementById('week-title').textContent=
+    `${weekStart.toLocaleDateString('en-US',{month:'long',day:'numeric'})} – ${endOfWeek.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`;
+
+  const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  for (let d=0;d<7;d++) {
+    const day=new Date(weekStart.getTime()+d*86400000);
+    const isToday=day.getTime()===today.getTime();
+    const hdr=document.createElement('div');
+    hdr.className='wg-day-header'+(isToday?' today-col':'');
+    hdr.innerHTML=`<div class="wg-dow">${dayNames[day.getDay()]}</div>
+                   <div class="wg-date">${day.getDate()}</div>`;
+    grid.appendChild(hdr);
+  }
+
+  // ── Time rows (7 AM to 10 PM) ──
+  const START_HR=7, END_HR=22;
+  for (let h=START_HR;h<END_HR;h++) {
+    // Time label cell
+    const lbl=document.createElement('div');
+    lbl.className='wg-time-label';
+    lbl.textContent=h===12?'12 PM':h>12?(h-12)+' PM':h+' AM';
+    grid.appendChild(lbl);
+
+    // 7 day cells for this hour row
+    for (let d=0;d<7;d++) {
+      const day=new Date(weekStart.getTime()+d*86400000);
+      const isToday=day.getTime()===today.getTime();
+      const cell=document.createElement('div');
+      cell.className='wg-cell'+(isToday?' today-col':'');
+
+      const key=`${dateKey(day)}-${h}`;
+      const events=evMap[key]||[];
+      events.forEach(ev=>{
+        const chip=document.createElement('div');
+        chip.className=`wg-event ${ev.cls}`;
+        chip.innerHTML=`<div class="wg-event-time">${ev.time}</div>
+                        <div class="wg-event-title">${ev.label}</div>`;
+        cell.appendChild(chip);
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+
+function openModal()  { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function addTask() {
+  const name =document.getElementById('t-name').value.trim();
+  const tag  =document.getElementById('t-tag').value.trim()||'General';
+  const pri  =document.getElementById('t-pri').value;
+  const due  =document.getElementById('t-due').value;
+  const hrs  =parseInt(document.getElementById('t-hrs').value)||2;
+  const prog =Math.min(100,Math.max(0,parseInt(document.getElementById('t-prog').value)||0));
+
+  if (!name) { alert('Please enter a task name.'); return; }
+  tasks.push({id:nextId++,name,tag,priority:pri,due,hours:hrs,progress:prog,done:false,status:'todo'});
+
+  // Clear fields
+  ['t-name','t-tag','t-due'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('t-hrs').value=2;
+  document.getElementById('t-prog').value=0;
+
+  closeModal();
+  renderDash();
+}
+
+// Close modal on backdrop click
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+runGreedy();      // pre-run so calendar has slots on first load
+renderDash();     // populate dashboard immediately
+</script>
+</body>
+</html>
