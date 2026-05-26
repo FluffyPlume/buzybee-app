@@ -1,4 +1,7 @@
 package com.buzybee.app.exception;
 
-public class NoAvailabilityException {
+public class NoAvailabilityException extends Exception {
+    public NoAvailabilityException(String message) {
+        super(message);
+    }
 }
