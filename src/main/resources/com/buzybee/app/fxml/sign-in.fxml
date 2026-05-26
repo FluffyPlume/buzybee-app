@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane prefHeight="383.0" prefWidth="682.0" stylesheets="@../css/sign-in.css"
+            styleClass="signin-root" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.buzybee.app.controller.SignInController">
+    <children>
+        <ImageView fitHeight="383.0" fitWidth="682.0" pickOnBounds="true">
+            <image>
+                <Image url="@../images/pattern%20bg.png" />
+            </image>
+        </ImageView>
+
+        <AnchorPane layoutX="332.0" prefHeight="383.0" prefWidth="350.0" styleClass="brand-panel" />
+
+        <AnchorPane layoutX="23.0" layoutY="31.0" prefHeight="321.0" prefWidth="258.0">
+            <children>
+                <Label layoutX="10.0" layoutY="2.0" text="Welcome back!" styleClass="login-title" />
+                <Label layoutX="15.0" layoutY="39.0" text="Sign in to continue your session" styleClass="login-subtitle" />
+
+                <Label layoutX="16.0" layoutY="66.0" text="Email address" styleClass="field-label" />
+                <TextField layoutX="14.0" layoutY="86.0" prefHeight="36.0" prefWidth="243.0"
+                           promptText="you@example" styleClass="signin-field, email-field" />
+
+                <Label layoutX="16.0" layoutY="127.0" text="Password" styleClass="field-label" />
+                <PasswordField layoutX="14.0" layoutY="149.0" prefHeight="36.0" prefWidth="243.0"
+                               promptText="●●●●●●" styleClass="signin-field, password-field" />
+
+                <Button layoutX="112.0" layoutY="190.0" mnemonicParsing="false" onAction="#handleForgotPassword"
+                        prefHeight="20.0" prefWidth="138.0" text="Forgot Password?" styleClass="forgot-button" />
+
+                <Button layoutX="7.0" layoutY="211.0" mnemonicParsing="false" onAction="#handleSignIn"
+                        prefHeight="36.0" prefWidth="243.0" text="Sign In" styleClass="primary-button" />
+
+                <Line endX="94.0" layoutX="11.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
+                <Label layoutX="123.0" layoutY="250.0" text="or" styleClass="or-label" />
+                <Line endX="94.0" layoutX="158.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
+                <Button layoutX="7.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleGoogleSignIn"
+                        prefHeight="35.0" prefWidth="243.0" text="Continue with Google" styleClass="google-button">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/Google%20Logo.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Label fx:id="statusLabel" layoutX="0.0" layoutY="307.0" prefWidth="243.0" text="" styleClass="status-label" />
+            </children>
+        </AnchorPane>
+
+        <Label alignment="CENTER" layoutX="332.0" layoutY="38.0" prefWidth="350.0" text="BuzyBee"
+               textAlignment="CENTER" styleClass="brand-title" />
+        <Label layoutX="386.0" layoutY="140.0" prefWidth="240.0" text="Buzz through your goals,&#10;one session at a time."
+               textAlignment="CENTER" styleClass="brand-subtitle" />
+        <Label alignment="CENTER" layoutX="332.0" layoutY="223.0" prefWidth="350.0"
+               text="Don't have an account?" textAlignment="CENTER" styleClass="signup-prompt" />
+        <Button layoutX="419.5" layoutY="254.0" mnemonicParsing="false" onAction="#handleSignUp"
+                prefHeight="44.0" prefWidth="175.0" text="Sign Up!" styleClass="signup-button" />
+
+        <ImageView fitHeight="165.0" fitWidth="203.0" layoutX="260.0" layoutY="218.0" preserveRatio="true">
+            <image>
+                <Image url="@../images/Bee.png" />
+            </image>
+        </ImageView>
+    </children>
+</AnchorPane>
