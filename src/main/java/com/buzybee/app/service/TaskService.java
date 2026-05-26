@@ -65,11 +65,13 @@ public class TaskService {
     // ==========================================
 
 
-    public void generateWeeklySchedule() {
-        List<Task> tasksToSchedule = taskDAO.getActiveTasks();
+    public void generateWeeklySchedule(String mode) {
+        List<Task> tasksToSchedule = new java.util.ArrayList<>();
+        tasksToSchedule.addAll(taskDAO.getActiveTasks());
+        tasksToSchedule.addAll(taskDAO.getBacklogTasks());
         List<TimeBlock> savedSchedule = taskDAO.getAllTimeBlocks();
 
-        schedulerService.runSchedulingPipeline(tasksToSchedule, savedSchedule);
+        schedulerService.runSchedulingPipeline(tasksToSchedule, savedSchedule, mode);
 
         taskDAO.saveChanges();
     }

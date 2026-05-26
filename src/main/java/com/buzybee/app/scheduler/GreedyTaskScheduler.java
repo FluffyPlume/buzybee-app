@@ -8,7 +8,7 @@ import java.util.List;
 public class GreedyTaskScheduler {
 
     // The Service calls this after the Knapsack is done sorting
-    public void assignTasksToTimeBlocks(List<Task> sortedTasks, List<TimeBlock> schedule) throws NoAvailabilityException {
+    public void assignTasksToTimeBlocks(List<Task> sortedTasks, List<TimeBlock> schedule, String mode) throws NoAvailabilityException {
         System.out.println("--- 2. RUNNING GREEDY SCHEDULER ---");
 
         // TODO: The Greedy loop goes here

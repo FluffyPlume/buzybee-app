@@ -28,7 +28,7 @@ public class SchedulerService {
     // ==========================================
     // Pipeline
     // ==========================================
-    public void runSchedulingPipeline(List<Task> activeTasks, List<TimeBlock> availableSchedule) {
+    public void runSchedulingPipeline(List<Task> activeTasks, List<TimeBlock> availableSchedule, String mode) {
         System.out.println("=== STARTING SCHEDULING PIPELINE ===");
 
         // Step 1: Hand the list to Knapsack to be scored and sorted
@@ -36,7 +36,7 @@ public class SchedulerService {
 
         // Step 2: Hand the sorted list and the schedule to the Greedy Algorithm
         try {
-            greedyScheduler.assignTasksToTimeBlocks(activeTasks, availableSchedule);
+            greedyScheduler.assignTasksToTimeBlocks(activeTasks, availableSchedule, mode);
         } catch (NoAvailabilityException e) {
             System.out.println("ALERT: " + e.getMessage());
         }
