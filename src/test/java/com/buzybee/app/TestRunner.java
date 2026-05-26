@@ -44,7 +44,7 @@ public class TestRunner {
         // Print sorted tasks to verify the math worked
         System.out.println("\n--- KNAPSACK RESULTS ---");
         for (Task t : dummyTasks) {
-            System.out.println(t.getName() + " | Score: " + t.getPriorityScore());
+            System.out.println(t.getName() + " | Score: " + t.getPriorityScore() + " | Hours to Complete: " + t.getEstimatedTime() + " | Deadline: " + t.getDeadline());
         }
 
         // 4. Run the Greedy Scheduler

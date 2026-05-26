@@ -9,13 +9,70 @@ public class GreedyTaskScheduler {
 
     // The Service calls this after the Knapsack is done sorting
     public void assignTasksToTimeBlocks(List<Task> sortedTasks, List<TimeBlock> schedule, String mode) throws NoAvailabilityException {
-        System.out.println("--- 2. RUNNING GREEDY SCHEDULER ---");
+        System.out.println("--- 2. RUNNING GREEDY SCHEDULER in " + mode + "MODE ---");
 
-        // TODO: The Greedy loop goes here
-        // 1. Pick the first task
-        // 2. Find the first available TimeBlock
-        // 3. Subtract task time from block's remainingHours
-        // 4. If task is bigger than remaining time, split.
+        if (mode.equals("FRONTLOAD")) {
+            for (Task task : sortedTasks){ // Pick up each task one by one (starting with the highest priority)
+                double hoursLeftToSchedule = task.getEstimatedTime(); // Tracks how many hours of this task still need to be place
+                for (TimeBlock block : schedule){ // Walk through the 7 day schedule from Monday to Sunday
+                    if(hoursLeftToSchedule <= 0){ // If finished scheduling the task, stop looking for blocks!
+                        break;
+                    }
+                    if (block.getRemainingHours() > 0){ // If timeblock has free time, do this
+                        double hoursToAssign = Math.min(hoursLeftToSchedule, block.getRemainingHours()); // Basically checks which one is smaller para ayun ung hours na ilalagay, so no cases na 2hrs lng ung monday pero 4 hrs ung task so pipiliin is ung 2 since un lang kasya
+                        block.getAssignedTasks().add(task); // Add task to that day's assigned list
+                        block.setRemainingHours(block.getRemainingHours() - hoursToAssign); // Deduct the hours from the day's capacity
+                        hoursLeftToSchedule -= hoursToAssign; // Deduct the hours from the task's remaining work
+                        task.getAssignedTimeSlots().add(block.getDayOfWeekName() + " (" + hoursToAssign + " hrs"); // Keep History record of task itself
+                    }
+                }
+                if (hoursLeftToSchedule > 0){ System.out.println("WARNING: Not enough free time in the week to finish " + task.getName()); }
+                else { task.setStatus("SCHEDULED"); }
+            }
+        }
+        else if (mode.equals("BACKLOAD")) {
+            for (Task task : sortedTasks){
+                double hoursLeftToSchedule = task.getEstimatedTime();
+
+                if ("BACKLOG".equals(task.getStatus())){
+                    for (TimeBlock block : schedule){ // LOOP FORWARD
+                        if (hoursLeftToSchedule <= 0) break;
+                        if (block.getRemainingHours() > 0){
+                            double hoursToAssign = Math.min(hoursLeftToSchedule, block.getRemainingHours());
+                            block.getAssignedTasks().add(task);
+                            block.setRemainingHours(block.getRemainingHours() - hoursToAssign);
+                            hoursLeftToSchedule -= hoursToAssign;
+                            task.getAssignedTimeSlots().add(block.getDayOfWeekName() + " (" + hoursToAssign + " hrs");
+                        }
+                    }
+                }
+
+                else {
+                    for (int i = schedule.size() - 1; i >= 0; i--) { // Walk backwards from the end of the schedule to the beginning
+                        TimeBlock block = schedule.get(i);
+                        if (hoursLeftToSchedule <= 0) {
+                            break;
+                        }
+
+                        if (block.getDate().isAfter(task.getDeadline())) { // Skip this day if it is AFTER the task's deadline
+                            continue;
+                        }
+
+                        if (block.getRemainingHours() > 0) {
+                            double hoursToAssign = Math.min(hoursLeftToSchedule, block.getRemainingHours());
+
+                            block.getAssignedTasks().add(task);
+                            block.setRemainingHours(block.getRemainingHours() - hoursToAssign);
+                            hoursLeftToSchedule -= hoursToAssign;
+                            task.getAssignedTimeSlots().add(block.getDayOfWeekName() + " (" + hoursToAssign + " hrs");
+                        }
+                    }
+                }
+
+                if (hoursLeftToSchedule > 0){ System.out.println("WARNING: Not enough free time before deadline for " + task.getName()); }
+                else { task.setStatus("SCHEDULED"); }
+            }
+        }
 
         System.out.println("Assigning tasks to schedule...");
     }
