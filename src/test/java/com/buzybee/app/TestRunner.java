@@ -53,7 +53,7 @@ public class TestRunner {
 
         try {
             // Change "FRONTLOAD" to "BACKLOAD" later to test the reverse loop
-            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "BACKLOAD");
+            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "FRONTLOAD");
 
             // 5. Print the final calendar to see where things landed
             for (TimeBlock block : dummySchedule) {
