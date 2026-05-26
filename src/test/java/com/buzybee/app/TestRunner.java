@@ -32,7 +32,7 @@ public class TestRunner {
             dummySchedule.add(new TimeBlock(
                     startDay.plusDays(i),
                     LocalTime.of(16, 0),  // Start at 4:00 PM
-                    LocalTime.of(20, 0),  // End at 8:00 PM
+                    LocalTime.of(18, 0),  // End at 6:00 PM
                     2.0                   // 2 hours total capacity per day
             ));
         }
