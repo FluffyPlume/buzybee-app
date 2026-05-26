@@ -44,7 +44,7 @@ public class TestRunner {
         // Print sorted tasks to verify the math worked
         System.out.println("\n--- KNAPSACK RESULTS ---");
         for (Task t : dummyTasks) {
-            System.out.println(t.getName() + " | Score: " + t.getPriorityScore());
+            System.out.println(t.getName() + " | Score: " + t.getPriorityScore() + " | Hours to Complete: " + t.getEstimatedTime() + " | Deadline: " + t.getDeadline());
         }
 
         // 4. Run the Greedy Scheduler
@@ -53,7 +53,7 @@ public class TestRunner {
 
         try {
             // Change "FRONTLOAD" to "BACKLOAD" later to test the reverse loop
-            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "FRONTLOAD");
+            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "BACKLOAD");
 
             // 5. Print the final calendar to see where things landed
             for (TimeBlock block : dummySchedule) {

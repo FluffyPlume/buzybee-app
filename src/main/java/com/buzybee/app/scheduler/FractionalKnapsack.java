@@ -14,11 +14,34 @@ public class FractionalKnapsack {
 
     private void calculatePriorityScores(List<Task> tasks) {
         System.out.println("Calculating Knapsack Priority Scores...");
-        // TODO: (Difficulty * Urgency) / Estimated Time
+        for (Task task : tasks) {
+            // 1. Calculate days remaining until the deadline
+            long daysRemaining = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(), task.getDeadline());
+
+            // Failsafe: If a task is due today or overdue, treat it as 1 day to prevent dividing by zero
+            if (daysRemaining <= 0) {
+                daysRemaining = 1;
+            }
+
+            // 2. Define Urgency (Closer deadline = higher urgency number)
+            double urgency = 10.0 / daysRemaining;
+
+            // 3. The Core Knapsack Formula
+            double score = (task.getDifficulty() * urgency) / task.getEstimatedTime();
+
+            // 4. The Rules: Overdue tasks get a 2x priority boost
+            if ("BACKLOG".equals(task.getStatus())) {
+                score *= 2.0;
+            }
+
+            // Save the final mathematical score to the task
+            task.setPriorityScore(score);
+        }
     }
 
     private void sortTasksByPriority(List<Task> tasks) {
         System.out.println("Sorting tasks from highest to lowest priority...");
-        // TODO: Collections.sort() goes here
+        // This sorts the list in descending order based on the priority score we just calculated
+        tasks.sort((t1, t2) -> Double.compare(t2.getPriorityScore(), t1.getPriorityScore()));
     }
 }
