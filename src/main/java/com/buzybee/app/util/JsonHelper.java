@@ -14,16 +14,14 @@ import com.google.gson.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 /**
  * Utility class responsible for serializing and deserializing Tasks to JSON.
  * Bridges the gap between the Java object model and the hard drive storage.
  */
 public class JsonHelper {
 
-
-    private static final String FILE_PATH = "buzybee_data.json";
-    private static final String SCHEDULE_FILE = "schedule.json";
+    private String taskFilePath;
+    private String scheduleFilePath;
 
     // We use GsonBuilder with setPrettyPrinting so the JSON file is easily readable
     private Gson gson = new GsonBuilder()
@@ -35,13 +33,29 @@ public class JsonHelper {
             .registerTypeAdapter(LocalTime.class, (JsonSerializer<LocalTime>) (src, typeOfSrc, context) -> new JsonPrimitive(src.toString()))
             .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, typeOfT, context) -> LocalTime.parse(json.getAsString()))
             .create();
+
+    // ==========================================
+    // DYNAMIC CONSTRUCTOR
+    // ==========================================
+    public JsonHelper(String username) {
+        // Automatically point to the new data folder and the user's specific files
+        this.taskFilePath = "data/tasks_" + username + ".json";
+        this.scheduleFilePath = "data/schedule_" + username + ".json";
+
+        // Failsafe: Create the 'data' folder on the hard drive if it doesn't exist yet!
+        File dataDir = new File("data");
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+    }
+
     // ==========================================
     // 1. SAVE TASKS (Java List -> JSON File)
     // ==========================================
     public void saveTasks(List<Task> tasks) {
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+        try (FileWriter writer = new FileWriter(taskFilePath)) {
             gson.toJson(tasks, writer);
-            System.out.println("Tasks successfully saved to JSON!");
+            System.out.println("Tasks successfully saved to: " + taskFilePath);
         } catch (IOException e) {
             System.out.println("Error saving tasks: " + e.getMessage());
         }
@@ -51,15 +65,13 @@ public class JsonHelper {
     // 2. LOAD TASKS (JSON File -> Java List)
     // ==========================================
     public List<Task> loadTasks() {
-        File file = new File(FILE_PATH);
+        File file = new File(taskFilePath);
 
-        // If the app is opening for the very first time, return an empty list
         if (!file.exists()) {
             return new ArrayList<>();
         }
 
         try (FileReader reader = new FileReader(file)) {
-            // This weird Type line is just how Gson handles Lists
             Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
             return gson.fromJson(reader, listType);
         } catch (IOException e) {
@@ -67,13 +79,14 @@ public class JsonHelper {
             return new ArrayList<>();
         }
     }
+
     // ==========================================
     // 3. SAVE TIMEBLOCK
     // ==========================================
     public void saveTimeBlocks(List<TimeBlock> blocks) {
-        try (java.io.FileWriter writer = new java.io.FileWriter(SCHEDULE_FILE)) {
+        try (FileWriter writer = new FileWriter(scheduleFilePath)) {
             gson.toJson(blocks, writer);
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             System.out.println("Error saving schedule: " + e.getMessage());
         }
     }
@@ -82,39 +95,14 @@ public class JsonHelper {
     // 4. LOAD TIMEBLOCK
     // ==========================================
     public List<TimeBlock> loadTimeBlocks() {
-        java.io.File file = new java.io.File(SCHEDULE_FILE);
-        if (!file.exists()) return new java.util.ArrayList<>();
+        File file = new File(scheduleFilePath);
+        if (!file.exists()) return new ArrayList<>();
 
-        try (java.io.FileReader reader = new java.io.FileReader(file)) {
-            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.ArrayList<TimeBlock>>(){}.getType();
+        try (FileReader reader = new FileReader(file)) {
+            Type listType = new TypeToken<ArrayList<TimeBlock>>(){}.getType();
             return gson.fromJson(reader, listType);
-        } catch (java.io.IOException e) {
-            return new java.util.ArrayList<>();
+        } catch (IOException e) {
+            return new ArrayList<>();
         }
     }
-
-    /* // Test
-    public static void main(String[] args) {
-        JsonHelper testHelper = new JsonHelper();
-
-        // 1. Create a fake list of tasks
-        List<Task> myTasks = new ArrayList<>();
-        Task task1 = new Task("Write Chapter 1", 4.0, 3.5, java.time.LocalDate.now().plusDays(2));
-        Task task2 = new Task("Design App Logo", 2.0, 1.0, java.time.LocalDate.now().plusDays(5));
-
-        myTasks.add(task1);
-        myTasks.add(task2);
-
-        System.out.println("--- ATTEMPTING TO SAVE ---");
-        testHelper.saveTasks(myTasks);
-
-        System.out.println("\n--- ATTEMPTING TO LOAD ---");
-        List<Task> loadedTasks = testHelper.loadTasks();
-
-        for (Task t : loadedTasks) {
-            System.out.println("Successfully loaded: " + t.getName() + " (Status: " + t.getStatus() + ")");
-        }
-    }
-
-     */
 }

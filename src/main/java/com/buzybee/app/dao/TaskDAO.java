@@ -21,8 +21,8 @@ public class TaskDAO {
     // ==========================================
     // 1. CONSTRUCTOR
     // ==========================================
-    public TaskDAO() {
-        this.jsonHelper = new JsonHelper();
+    public TaskDAO(String username) {
+        this.jsonHelper = new JsonHelper(username);
 
         // The second the DAO is created, it loads the data from the hard drive
         this.allTasks = jsonHelper.loadTasks();
