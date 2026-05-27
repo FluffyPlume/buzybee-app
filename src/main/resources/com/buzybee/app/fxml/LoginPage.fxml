@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="383.0" prefWidth="682.0" stylesheets="@../css/sign-in.css"
             styleClass="signin-root" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.buzybee.app.controller.SignInController">
+            fx:controller="com.buzybee.app.controller.LoginPageController">
     <children>
         <ImageView fitHeight="383.0" fitWidth="682.0" pickOnBounds="true">
             <image>

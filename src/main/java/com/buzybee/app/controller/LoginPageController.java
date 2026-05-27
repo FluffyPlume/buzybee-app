@@ -25,17 +25,16 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public class SignInController {
+public class LoginPageController {
+    // --- ANIMATION CONSTANTS ---
     private static final Duration SLIDE_DURATION = Duration.millis(650);
     private static final double OVERLAY_TRAVEL = -332;
     private static final double OVERLAY_WIDTH = 350;
     private static final double FORM_OFFSET = 36;
-
-    private final UserDAO userDAO = new UserDAO();
-
     private boolean signUpMode;
     private boolean animating;
 
+    // --- UI ELEMENTS ---
     @FXML private AnchorPane brandPanel;
     @FXML private AnchorPane signInForm;
     @FXML private AnchorPane signUpForm;
@@ -46,8 +45,18 @@ public class SignInController {
     @FXML private Button brandSwitchButton;
     @FXML private Label signInStatusLabel;
     @FXML private Label signUpStatusLabel;
+
+    // --- YOUR BACKEND TOOLS ---
+    private final UserDAO userDAO = new UserDAO();
+
+    // Sign-In Fields
     @FXML private TextField signInIdentifierField;
     @FXML private PasswordField signInPasswordField;
+
+    // Sign-Up Fields (NEW)
+    @FXML private TextField signUpEmailField;
+    @FXML private TextField signUpUsernameField;
+    @FXML private PasswordField signUpPasswordField;
 
     @FXML
     private void initialize() {
@@ -56,6 +65,10 @@ public class SignInController {
             signUpForm.setMouseTransparent(true);
         }
     }
+
+    // ==========================================
+    // BACKEND LOGIC
+    // ==========================================
 
     @FXML
     private void handleSignIn() {
@@ -79,37 +92,26 @@ public class SignInController {
     }
 
     @FXML
-    private void handleGoogleSignIn() {
-        signInStatusLabel.setText("Google Sign In is not supported in this version.");
-    }
-
-    @FXML
-    private void handleForgotPassword() {
-        signInStatusLabel.setText("Password recovery is ready to connect.");
-    }
-
-    @FXML
     private void handleSignUpSubmit() {
-        signUpStatusLabel.setText("Use the dedicated sign-up screen to register.");
-    }
+        String email = signUpEmailField.getText();
+        String user = signUpUsernameField.getText();
+        String pass = signUpPasswordField.getText();
 
-    @FXML
-    private void handleGoogleSignUp() {
-        signUpStatusLabel.setText("Google Sign Up is not supported in this version.");
-    }
-
-    @FXML
-    private void showSignUp() {
-        if (signUpForm == null) {
-            loadScreen("fxml/sign-up.fxml", 682, 383);
+        if (email == null || email.isBlank() || user == null || user.isBlank() || pass == null || pass.isBlank()) {
+            signUpStatusLabel.setText("Please fill out all fields.");
             return;
         }
-        animateMode(true);
-    }
 
-    @FXML
-    private void showSignIn() {
-        animateMode(false);
+        boolean isRegistered = userDAO.registerUser(user, pass, email);
+
+        if (isRegistered) {
+            signUpStatusLabel.setText("Success! Creating your workspace...");
+            User newUser = new User(user, pass, email);
+            SessionManager.getInstance().startSession(newUser);
+            showDashboard();
+        } else {
+            signUpStatusLabel.setText("Username is already taken.");
+        }
     }
 
     private void showDashboard() {
@@ -127,14 +129,42 @@ public class SignInController {
             stage.centerOnScreen();
         } catch (IOException exception) {
             signInStatusLabel.setText("Screen could not be loaded.");
+            signUpStatusLabel.setText("Screen could not be loaded.");
             exception.printStackTrace();
         }
     }
 
+    // ==========================================
+    // DUMMY BUTTONS & ANIMATION LOGIC
+    // ==========================================
+
+    @FXML
+    private void handleGoogleSignIn() {
+        signInStatusLabel.setText("Google Sign In is not supported.");
+    }
+
+    @FXML
+    private void handleForgotPassword() {
+        signInStatusLabel.setText("Password recovery coming soon.");
+    }
+
+    @FXML
+    private void handleGoogleSignUp() {
+        signUpStatusLabel.setText("Google Sign Up is not supported.");
+    }
+
+    @FXML
+    private void showSignUp() {
+        animateMode(true);
+    }
+
+    @FXML
+    private void showSignIn() {
+        animateMode(false);
+    }
+
     private void animateMode(boolean targetSignUpMode) {
-        if (animating || signUpMode == targetSignUpMode) {
-            return;
-        }
+        if (animating || signUpMode == targetSignUpMode) { return; }
 
         animating = true;
         signUpMode = targetSignUpMode;
@@ -193,31 +223,23 @@ public class SignInController {
             setStyleClass(brandPrompt, "signin-prompt");
             setStyleClass(brandSwitchButton, "signin-switch-button");
             brandPanel.setPrefWidth(OVERLAY_WIDTH);
-            brandTitle.setLayoutX(0);
-            brandTitle.setLayoutY(100);
+            brandTitle.setLayoutX(0); brandTitle.setLayoutY(100);
             brandTitle.setPrefWidth(OVERLAY_WIDTH);
             brandTitle.setAlignment(javafx.geometry.Pos.CENTER);
             brandTitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-            brandSubtitle.setLayoutX(0);
-            brandSubtitle.setLayoutY(116);
+            brandSubtitle.setLayoutX(0); brandSubtitle.setLayoutY(116);
             brandSubtitle.setPrefWidth(OVERLAY_WIDTH);
             brandSubtitle.setAlignment(javafx.geometry.Pos.CENTER);
             brandSubtitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-            brandPrompt.setLayoutX(0);
-            brandPrompt.setLayoutY(239);
+            brandPrompt.setLayoutX(0); brandPrompt.setLayoutY(239);
             brandPrompt.setPrefWidth(OVERLAY_WIDTH);
-            brandSwitchButton.setLayoutX(76);
-            brandSwitchButton.setLayoutY(270);
-            brandSwitchButton.setPrefWidth(198);
-            brandSwitchButton.setPrefHeight(45);
+            brandSwitchButton.setLayoutX(76); brandSwitchButton.setLayoutY(270);
+            brandSwitchButton.setPrefWidth(198); brandSwitchButton.setPrefHeight(45);
             brandSwitchButton.setAlignment(javafx.geometry.Pos.CENTER);
             brandSwitchButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-            beeImage.setFitHeight(142);
-            beeImage.setFitWidth(175);
-            beeImage.setLayoutX(257);
-            beeImage.setLayoutY(1);
-            beeImage.setScaleX(-1);
-            beeImage.setTranslateY(-8);
+            beeImage.setFitHeight(142); beeImage.setFitWidth(175);
+            beeImage.setLayoutX(257); beeImage.setLayoutY(1);
+            beeImage.setScaleX(-1); beeImage.setTranslateY(-8);
             brandTitle.setText("WELCOME TO");
             brandSubtitle.setText("BuzyBee!");
             brandPrompt.setText("Sign In to enjoy the app!");
@@ -229,29 +251,21 @@ public class SignInController {
             setStyleClass(brandPrompt, "signup-prompt");
             setStyleClass(brandSwitchButton, "signup-button");
             brandPanel.setPrefWidth(OVERLAY_WIDTH);
-            brandTitle.setLayoutX(0);
-            brandTitle.setLayoutY(38);
+            brandTitle.setLayoutX(0); brandTitle.setLayoutY(38);
             brandTitle.setPrefWidth(OVERLAY_WIDTH);
             brandTitle.setAlignment(javafx.geometry.Pos.CENTER);
             brandTitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-            brandSubtitle.setLayoutX(54);
-            brandSubtitle.setLayoutY(140);
+            brandSubtitle.setLayoutX(54); brandSubtitle.setLayoutY(140);
             brandSubtitle.setPrefWidth(240);
-            brandPrompt.setLayoutX(0);
-            brandPrompt.setLayoutY(223);
+            brandPrompt.setLayoutX(0); brandPrompt.setLayoutY(223);
             brandPrompt.setPrefWidth(OVERLAY_WIDTH);
-            brandSwitchButton.setLayoutX(87.5);
-            brandSwitchButton.setLayoutY(254);
-            brandSwitchButton.setPrefWidth(175);
-            brandSwitchButton.setPrefHeight(44);
+            brandSwitchButton.setLayoutX(87.5); brandSwitchButton.setLayoutY(254);
+            brandSwitchButton.setPrefWidth(175); brandSwitchButton.setPrefHeight(44);
             brandSwitchButton.setAlignment(javafx.geometry.Pos.CENTER);
             brandSwitchButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-            beeImage.setFitHeight(165);
-            beeImage.setFitWidth(203);
-            beeImage.setLayoutX(260);
-            beeImage.setLayoutY(218);
-            beeImage.setScaleX(1);
-            beeImage.setTranslateY(8);
+            beeImage.setFitHeight(165); beeImage.setFitWidth(203);
+            beeImage.setLayoutX(260); beeImage.setLayoutY(218);
+            beeImage.setScaleX(1); beeImage.setTranslateY(8);
             brandTitle.setText("BuzyBee");
             brandSubtitle.setText("Buzz through your goals,\none session at a time.");
             brandPrompt.setText("Don't have an account?");
