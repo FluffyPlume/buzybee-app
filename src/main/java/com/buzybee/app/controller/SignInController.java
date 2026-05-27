@@ -92,7 +92,7 @@ public class SignInController {
 
             loadDashboard();
         } else { signInStatusLabel.setText("Invalid username/email or password"); }
-        signInStatusLabel.setText("Sign in is ready to connect.");
+
     }
 
     @FXML

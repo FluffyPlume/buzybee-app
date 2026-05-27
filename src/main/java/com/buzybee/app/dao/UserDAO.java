@@ -71,6 +71,7 @@ public class UserDAO {
         try (java.io.FileWriter writer = new java.io.FileWriter(FILE_PATH)) {
             gson.toJson(users, writer);
             System.out.println("Successfully registered new user: " + username);
+            System.out.println("FILE SAVED EXACTLY HERE: " + new File(FILE_PATH).getAbsolutePath()); //debug
             return true;
         } catch (IOException e) {
             System.out.println("Error saving new user: " + e.getMessage());
