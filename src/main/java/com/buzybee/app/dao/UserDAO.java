@@ -33,18 +33,24 @@ public class UserDAO {
     }
 
     // Check if the typed username and password match our database
-    public boolean authenticate(String username, String password){
+    public User authenticate(String identifier, String password){
         List<User> users = loadAllUsers();
         for (User user : users){
-            if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)){
-                return true; // match found
+            // Check if textfield matches either Username OR Email
+            boolean matchesUsername = user.getUsername().equalsIgnoreCase(identifier);
+            boolean matchesEmail = user.getEmail() != null && user.getEmail().equalsIgnoreCase(identifier);
+
+            if ((matchesUsername || matchesEmail) && user.getPassword().equals(password)){
+                System.out.println("Login Succesful for: " + user.getUsername());
+                return user; // Return the full user profile
             }
         }
-        return false; // Invalid username or password
+        System.out.println("Login Failed: Invalid Credentials.");
+        return null; // Return null if no match is found
     }
 
     // Register a new user and auto-create the file
-    public boolean registerUser(String username, String password) {
+    public boolean registerUser(String username, String password, String email) {
         List<User> users = loadAllUsers();
 
         for (User u : users){
@@ -54,7 +60,7 @@ public class UserDAO {
             }
         }
 
-        users.add(new User(username, password));
+        users.add(new User(username, password, email));
 
         File dataDir = new File("data");
         if (!dataDir.exists()){
