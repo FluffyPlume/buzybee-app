@@ -9,10 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="383.0" prefWidth="682.0" stylesheets="@../css/sign-in.css"
-            styleClass="signin-root" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.buzybee.app.controller.SignInController">
+<AnchorPane prefHeight="383.0" prefWidth="682.0" styleClass="signin-root" stylesheets="@../css/sign-in.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.SignInController">
     <children>
         <ImageView fitHeight="383.0" fitWidth="682.0" pickOnBounds="true">
             <image>
@@ -22,28 +19,23 @@
 
         <AnchorPane fx:id="signInForm" layoutX="23.0" layoutY="31.0" prefHeight="321.0" prefWidth="258.0">
             <children>
-                <Label layoutX="10.0" layoutY="2.0" text="Welcome back!" styleClass="login-title" />
-                <Label layoutX="15.0" layoutY="39.0" text="Sign in to continue your session" styleClass="login-subtitle" />
+                <Label layoutX="10.0" layoutY="2.0" styleClass="login-title" text="Welcome back!" />
+                <Label layoutX="15.0" layoutY="39.0" styleClass="login-subtitle" text="Sign in to continue your session" />
 
-                <Label layoutX="16.0" layoutY="66.0" text="Email address" styleClass="field-label" />
-                <TextField layoutX="14.0" layoutY="86.0" prefHeight="36.0" prefWidth="243.0"
-                           promptText="you@example" styleClass="signin-field, email-field" />
+                <Label layoutX="16.0" layoutY="66.0" styleClass="field-label" text="Email address" />
+                <TextField fx:id="signInIdentifierField" layoutX="14.0" layoutY="86.0" prefHeight="36.0" prefWidth="243.0" promptText="you@example" styleClass="signin-field, email-field" />
 
-                <Label layoutX="16.0" layoutY="127.0" text="Password" styleClass="field-label" />
-                <PasswordField layoutX="14.0" layoutY="149.0" prefHeight="36.0" prefWidth="243.0"
-                               promptText="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" styleClass="signin-field, password-field" />
+                <Label layoutX="16.0" layoutY="127.0" styleClass="field-label" text="Password" />
+                <PasswordField fx:id="signInPasswordField" layoutX="14.0" layoutY="149.0" prefHeight="36.0" prefWidth="243.0" promptText="●●●●●●" styleClass="signin-field, password-field" />
 
-                <Button layoutX="112.0" layoutY="190.0" mnemonicParsing="false" onAction="#handleForgotPassword"
-                        prefHeight="20.0" prefWidth="138.0" text="Forgot Password?" styleClass="forgot-button" />
+                <Button layoutX="112.0" layoutY="190.0" mnemonicParsing="false" onAction="#handleForgotPassword" prefHeight="20.0" prefWidth="138.0" styleClass="forgot-button" text="Forgot Password?" />
 
-                <Button layoutX="7.0" layoutY="211.0" mnemonicParsing="false" onAction="#handleSignIn"
-                        prefHeight="36.0" prefWidth="243.0" text="Sign In" styleClass="primary-button" />
+                <Button layoutX="7.0" layoutY="211.0" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="36.0" prefWidth="243.0" styleClass="primary-button" text="Sign In" />
 
                 <Line endX="94.0" layoutX="11.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
-                <Label layoutX="123.0" layoutY="250.0" text="or" styleClass="or-label" />
+                <Label layoutX="123.0" layoutY="250.0" styleClass="or-label" text="or" />
                 <Line endX="94.0" layoutX="158.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
-                <Button layoutX="7.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleGoogleSignIn"
-                        prefHeight="35.0" prefWidth="243.0" text="Continue with Google" styleClass="google-button">
+                <Button layoutX="7.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleGoogleSignIn" prefHeight="35.0" prefWidth="243.0" styleClass="google-button" text="Continue with Google">
                     <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
                             <image>
@@ -52,36 +44,30 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Label fx:id="signInStatusLabel" layoutX="0.0" layoutY="307.0" prefWidth="243.0" text="" styleClass="status-label" />
+                <Label fx:id="signInStatusLabel" layoutX="0.0" layoutY="307.0" prefWidth="243.0" styleClass="status-label" text="" />
             </children>
         </AnchorPane>
 
-        <AnchorPane fx:id="signUpForm" layoutX="396.0" layoutY="14.0" opacity="0.0"
-                    prefHeight="328.0" prefWidth="260.0" translateX="36.0">
+        <AnchorPane fx:id="signUpForm" layoutX="396.0" layoutY="14.0" opacity="0.0" prefHeight="328.0" prefWidth="260.0" translateX="36.0">
             <children>
-                <Label layoutX="3.0" layoutY="-2.0" text="Create an account!" styleClass="signup-title" />
-                <Label layoutX="7.0" layoutY="33.0" text="Register to sign in" styleClass="signup-subtitle" />
+                <Label layoutX="3.0" layoutY="-2.0" styleClass="signup-title" text="Create an account!" />
+                <Label layoutX="7.0" layoutY="33.0" styleClass="signup-subtitle" text="Register to sign in" />
 
-                <Label layoutX="8.0" layoutY="60.0" text="Email address" styleClass="field-label" />
-                <TextField layoutX="6.0" layoutY="78.0" prefHeight="37.0" prefWidth="253.0"
-                           promptText="you@example" styleClass="signin-field, email-field" />
+                <Label layoutX="8.0" layoutY="60.0" styleClass="field-label" text="Email address" />
+                <TextField layoutX="6.0" layoutY="78.0" prefHeight="37.0" prefWidth="253.0" promptText="you@example" styleClass="signin-field, email-field" />
 
-                <Label layoutX="8.0" layoutY="117.0" text="Username" styleClass="field-label" />
-                <TextField layoutX="6.0" layoutY="135.0" prefHeight="37.0" prefWidth="253.0"
-                           promptText="you12345" styleClass="signin-field, email-field" />
+                <Label layoutX="8.0" layoutY="117.0" styleClass="field-label" text="Username" />
+                <TextField layoutX="6.0" layoutY="135.0" prefHeight="37.0" prefWidth="253.0" promptText="you12345" styleClass="signin-field, email-field" />
 
-                <Label layoutX="8.0" layoutY="174.0" text="Password" styleClass="field-label" />
-                <PasswordField layoutX="6.0" layoutY="194.0" prefHeight="37.0" prefWidth="253.0"
-                               promptText="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" styleClass="signin-field, password-field" />
+                <Label layoutX="8.0" layoutY="174.0" styleClass="field-label" text="Password" />
+                <PasswordField layoutX="6.0" layoutY="194.0" prefHeight="37.0" prefWidth="253.0" promptText="●●●●●●" styleClass="signin-field, password-field" />
 
-                <Button layoutX="6.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSignUpSubmit"
-                        prefHeight="37.0" prefWidth="253.0" text="Sign Up" styleClass="primary-button" />
+                <Button layoutX="6.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSignUpSubmit" prefHeight="37.0" prefWidth="253.0" styleClass="primary-button" text="Sign Up" />
 
                 <Line endX="94.0" layoutX="7.0" layoutY="296.0" startX="0.0" styleClass="or-line" />
-                <Label layoutX="126.0" layoutY="286.0" text="or" styleClass="or-label" />
+                <Label layoutX="126.0" layoutY="286.0" styleClass="or-label" text="or" />
                 <Line endX="94.0" layoutX="161.0" layoutY="296.0" startX="0.0" styleClass="or-line" />
-                <Button layoutX="6.0" layoutY="307.0" mnemonicParsing="false" onAction="#handleGoogleSignUp"
-                        prefHeight="36.0" prefWidth="253.0" text="Continue with Google" styleClass="google-button">
+                <Button layoutX="6.0" layoutY="307.0" mnemonicParsing="false" onAction="#handleGoogleSignUp" prefHeight="36.0" prefWidth="253.0" styleClass="google-button" text="Continue with Google">
                     <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
                             <image>
@@ -90,22 +76,16 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Label fx:id="signUpStatusLabel" layoutX="6.0" layoutY="344.0" prefWidth="253.0" text="" styleClass="status-label" />
+                <Label fx:id="signUpStatusLabel" layoutX="6.0" layoutY="344.0" prefWidth="253.0" styleClass="status-label" text="" />
             </children>
         </AnchorPane>
 
         <AnchorPane fx:id="brandPanel" layoutX="332.0" prefHeight="383.0" prefWidth="350.0" styleClass="brand-panel">
             <children>
-                <Label fx:id="brandTitle" alignment="CENTER" layoutY="38.0" prefWidth="350.0" text="BuzyBee"
-                       textAlignment="CENTER" styleClass="brand-title" />
-                <Label fx:id="brandSubtitle" alignment="CENTER" layoutX="54.0" layoutY="140.0" prefWidth="240.0"
-                       text="Buzz through your goals,&#10;one session at a time."
-                       textAlignment="CENTER" styleClass="brand-subtitle" />
-                <Label fx:id="brandPrompt" alignment="CENTER" layoutY="223.0" prefWidth="350.0"
-                       text="Don't have an account?" textAlignment="CENTER" styleClass="signup-prompt" />
-                <Button fx:id="brandSwitchButton" alignment="CENTER" layoutX="87.5" layoutY="254.0" mnemonicParsing="false"
-                        onAction="#showSignUp" prefHeight="44.0" prefWidth="175.0"
-                        text="Sign Up!" textAlignment="CENTER" styleClass="signup-button" />
+                <Label fx:id="brandTitle" alignment="CENTER" layoutY="38.0" prefWidth="350.0" styleClass="brand-title" text="BuzyBee" textAlignment="CENTER" />
+                <Label fx:id="brandSubtitle" alignment="CENTER" layoutX="54.0" layoutY="140.0" prefWidth="240.0" styleClass="brand-subtitle" text="Buzz through your goals,&#10;one session at a time." textAlignment="CENTER" />
+                <Label fx:id="brandPrompt" alignment="CENTER" layoutY="223.0" prefWidth="350.0" styleClass="signup-prompt" text="Don't have an account?" textAlignment="CENTER" />
+                <Button fx:id="brandSwitchButton" alignment="CENTER" layoutX="87.5" layoutY="254.0" mnemonicParsing="false" onAction="#showSignUp" prefHeight="44.0" prefWidth="175.0" styleClass="signup-button" text="Sign Up!" textAlignment="CENTER" />
             </children>
         </AnchorPane>
 
