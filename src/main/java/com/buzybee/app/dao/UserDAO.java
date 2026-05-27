@@ -44,5 +44,31 @@ public class UserDAO {
     }
 
     // Register a new user and auto-create the file
+    public boolean registerUser(String username, String password) {
+        List<User> users = loadAllUsers();
 
+        for (User u : users){
+            if (u.getUsername().equalsIgnoreCase(username)){
+                System.out.println("Registration failed: Username '" + username + " is already taken.");
+                return false;
+            }
+        }
+
+        users.add(new User(username, password));
+
+        File dataDir = new File("data");
+        if (!dataDir.exists()){
+            dataDir.mkdirs();
+        }
+        // Save the updated list back to users.json
+        // If users.json doesn't exist, FileWriter creates it
+        try (java.io.FileWriter writer = new java.io.FileWriter(FILE_PATH)) {
+            gson.toJson(users, writer);
+            System.out.println("Successfully registered new user: " + username);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error saving new user: " + e.getMessage());
+            return false;
+        }
+    }
 }
