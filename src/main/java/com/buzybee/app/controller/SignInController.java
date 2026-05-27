@@ -1,27 +1,29 @@
 package com.buzybee.app.controller;
 
+import com.buzybee.app.MainApp;
+import com.buzybee.app.config.SessionManager;
 import com.buzybee.app.dao.UserDAO;
 import com.buzybee.app.model.User;
-import com.buzybee.app.config.SessionManager;
-import com.buzybee.app.MainApp;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 public class SignInController {
     private static final Duration SLIDE_DURATION = Duration.millis(650);
@@ -29,75 +31,56 @@ public class SignInController {
     private static final double OVERLAY_WIDTH = 350;
     private static final double FORM_OFFSET = 36;
 
+    private final UserDAO userDAO = new UserDAO();
+
     private boolean signUpMode;
     private boolean animating;
 
-    @FXML
-    private AnchorPane brandPanel;
-
-    @FXML
-    private AnchorPane signInForm;
-
-    @FXML
-    private AnchorPane signUpForm;
-
-    @FXML
-    private ImageView beeImage;
-
-    @FXML
-    private Label brandTitle;
-
-    @FXML
-    private Label brandSubtitle;
-
-    @FXML
-    private Label brandPrompt;
-
-    @FXML
-    private Button brandSwitchButton;
-
-    @FXML
-    private Label signInStatusLabel;
-
-    @FXML
-    private Label signUpStatusLabel;
-
+    @FXML private AnchorPane brandPanel;
+    @FXML private AnchorPane signInForm;
+    @FXML private AnchorPane signUpForm;
+    @FXML private ImageView beeImage;
+    @FXML private Label brandTitle;
+    @FXML private Label brandSubtitle;
+    @FXML private Label brandPrompt;
+    @FXML private Button brandSwitchButton;
+    @FXML private Label signInStatusLabel;
+    @FXML private Label signUpStatusLabel;
     @FXML private TextField signInIdentifierField;
     @FXML private PasswordField signInPasswordField;
 
-    private UserDAO userDAO = new UserDAO();
-
     @FXML
     private void initialize() {
-        signUpForm.setDisable(true);
-        signUpForm.setMouseTransparent(true);
+        if (signUpForm != null) {
+            signUpForm.setDisable(true);
+            signUpForm.setMouseTransparent(true);
+        }
     }
 
     @FXML
     private void handleSignIn() {
         String identifier = signInIdentifierField.getText();
-        String pass = signInPasswordField.getText();
+        String password = signInPasswordField.getText();
 
-        if (identifier.isEmpty() || pass.isEmpty()) {
+        if (identifier == null || identifier.isBlank() || password == null || password.isBlank()) {
             signInStatusLabel.setText("Please enter your credentials.");
             return;
         }
 
-        User loggedInUser = userDAO.authenticate(identifier, pass);
+        User loggedInUser = userDAO.authenticate(identifier, password);
+        if (loggedInUser == null) {
+            signInStatusLabel.setText("Invalid username/email or password");
+            return;
+        }
 
-        if (loggedInUser != null) {
-            signInStatusLabel.setText("Success! Loading workspace...");
-
-            SessionManager.getInstance().startSession(loggedInUser);
-
-            loadDashboard();
-        } else { signInStatusLabel.setText("Invalid username/email or password"); }
-
+        signInStatusLabel.setText("Success! Loading workspace...");
+        SessionManager.getInstance().startSession(loggedInUser);
+        showDashboard();
     }
 
     @FXML
     private void handleGoogleSignIn() {
-        signInStatusLabel.setText("Google Sign Up is not supported in this version.");
+        signInStatusLabel.setText("Google Sign In is not supported in this version.");
     }
 
     @FXML
@@ -107,22 +90,45 @@ public class SignInController {
 
     @FXML
     private void handleSignUpSubmit() {
-        signUpStatusLabel.setText("Sign up is ready to connect.");
+        signUpStatusLabel.setText("Use the dedicated sign-up screen to register.");
     }
 
     @FXML
     private void handleGoogleSignUp() {
-        signUpStatusLabel.setText("Google sign up is ready to connect.");
+        signUpStatusLabel.setText("Google Sign Up is not supported in this version.");
     }
 
     @FXML
     private void showSignUp() {
+        if (signUpForm == null) {
+            loadScreen("fxml/sign-up.fxml", 682, 383);
+            return;
+        }
         animateMode(true);
     }
 
     @FXML
     private void showSignIn() {
         animateMode(false);
+    }
+
+    private void showDashboard() {
+        loadScreen("fxml/dashboard.fxml", 622, 348);
+    }
+
+    private void loadScreen(String fxmlPath, double width, double height) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) signInForm.getScene().getWindow();
+
+            stage.setScene(new Scene(root, width, height));
+            stage.setResizable(false);
+            stage.centerOnScreen();
+        } catch (IOException exception) {
+            signInStatusLabel.setText("Screen could not be loaded.");
+            exception.printStackTrace();
+        }
     }
 
     private void animateMode(boolean targetSignUpMode) {
@@ -332,17 +338,5 @@ public class SignInController {
         transition.setToY(0);
         transition.setInterpolator(Interpolator.EASE_BOTH);
         return transition;
-    }
-
-    private void loadDashboard() {
-        try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("fxml/dashboard.fxml"));
-            Stage stage = (Stage) signInStatusLabel.getScene().getWindow();
-            // Assuming your dashboard matches the app size
-            stage.setScene(new Scene(loader.load(), 682, 383));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            signInStatusLabel.setText("Could not open Dashboard.");
-        }
     }
 }

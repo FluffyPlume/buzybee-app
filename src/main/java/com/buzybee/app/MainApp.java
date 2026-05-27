@@ -13,7 +13,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws IOException {
         Font.loadFont(MainApp.class.getResource("fonts/Ramsina-Regular.ttf").toExternalForm(), 16);
 
-        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("fxml/sign-in.fxml"));
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("fxml/auth.fxml"));
         Scene scene = new Scene(loader.load(), 682, 383);
 
         stage.setTitle("BuzyBee");
