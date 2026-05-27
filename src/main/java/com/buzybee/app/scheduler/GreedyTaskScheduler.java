@@ -69,7 +69,23 @@ public class GreedyTaskScheduler {
                     }
                 }
 
-                if (hoursLeftToSchedule > 0){ System.out.println("WARNING: Not enough free time before deadline for " + task.getName()); }
+                if (hoursLeftToSchedule > 0){
+                    System.out.println("IMPOSSIBLE SCHEDULE DETECTED for:  " + task.getName());
+
+                    // Force the remaining hours into the absolulte earliest slots available
+                    for (TimeBlock block : schedule){
+                        if (hoursLeftToSchedule <= 0 ){ break; }
+                        double hoursToAssign = Math.min(hoursLeftToSchedule, block.getRemainingHours());
+                        block.setRemainingHours(block.getRemainingHours() - hoursToAssign);
+                        hoursLeftToSchedule -= hoursToAssign;
+
+                        // Mark as emergency allocation
+                        task.getAssignedTimeSlots().add(block.getDayOfWeekName() + " (" + hoursToAssign +  " hrs) [OVERALLOCATED]");
+
+                    }
+                }
+                if (hoursLeftToSchedule > 0){ task.setStatus("FAILED_CONSTRAINT"); } // Impossible: Even using the entire week, not enough hours
+                else if (task.getAssignedTimeSlots().stream().anyMatch(slot -> slot.contains("OVERALLOCATED"))) { task.setStatus("OVERALLOCATED_WARNING"); } // It fits but only by breaking the backload rule
                 else { task.setStatus("SCHEDULED"); }
             }
         }
