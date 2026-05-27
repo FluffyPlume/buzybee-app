@@ -16,7 +16,7 @@ public class TestRunner {
 
         // 1. Create Fake Tasks (Total: 7 hours of work)
         List<Task> dummyTasks = new ArrayList<>();
-        dummyTasks.add(new Task("Math Homework", 8.0, 2.0, LocalDate.now().plusDays(2)));
+        dummyTasks.add(new Task("Math Homework", 8.0, 6.0, LocalDate.now().plusDays(2)));
         dummyTasks.add(new Task("Science Essay", 5.0, 4.0, LocalDate.now().plusDays(5)));
 
         // Force one to be a BACKLOG task to test your multiplier
@@ -44,7 +44,8 @@ public class TestRunner {
         // Print sorted tasks to verify the math worked
         System.out.println("\n--- KNAPSACK RESULTS ---");
         for (Task t : dummyTasks) {
-            System.out.println(t.getName() + " | Score: " + t.getPriorityScore() + " | Hours to Complete: " + t.getEstimatedTime() + " | Deadline: " + t.getDeadline());
+            String cleanScore = String.format("%.2f", t.getPriorityScore());
+            System.out.println(t.getName() + " | Score: " + cleanScore + " | Hours to Complete: " + t.getEstimatedTime() + " | Deadline: " + t.getDeadline());
         }
 
         // 4. Run the Greedy Scheduler
@@ -53,13 +54,13 @@ public class TestRunner {
 
         try {
             // Change "FRONTLOAD" to "BACKLOAD" later to test the reverse loop
-            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "FRONTLOAD");
+            greedy.assignTasksToTimeBlocks(dummyTasks, dummySchedule, "BACKLOAD");
 
             // 5. Print the final calendar to see where things landed
             for (TimeBlock block : dummySchedule) {
                 System.out.println(block.getDayOfWeekName() + " (" + block.getDate() + ") - Remaining Hours: " + block.getRemainingHours());
                 for (Task t : block.getAssignedTasks()) {
-                    System.out.println("  -> Scheduled: " + t.getName());
+                    System.out.println("  -> Scheduled: " + t.getName() + " | STATUS: " + t.getStatus());
                 }
             }
         } catch (Exception e) {
