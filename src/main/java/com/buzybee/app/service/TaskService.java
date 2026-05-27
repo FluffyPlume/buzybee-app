@@ -1,5 +1,6 @@
 package com.buzybee.app.service;
 
+import com.buzybee.app.config.SessionManager;
 import com.buzybee.app.dao.TaskDAO;
 import com.buzybee.app.exception.InvalidTaskException;
 import com.buzybee.app.exception.TaskOverdueException;
@@ -16,13 +17,10 @@ import java.util.List;
  */
 public class TaskService {
 
-    private TaskDAO taskDAO;
-    private SchedulerService schedulerService;
+    private TaskDAO taskDAO = SessionManager.getInstance().getTaskDao();
+    private SchedulerService schedulerService = new SchedulerService();
 
-    public TaskService(TaskDAO taskDAO) {
-        this.taskDAO = taskDAO;
-        this.schedulerService = new SchedulerService();
-    }
+    public TaskService() {}
 
     // ==========================================
     // 1. VALIDATION & CRUD (Create, Read, Update, Delete)
