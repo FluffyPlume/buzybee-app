@@ -1,0 +1,111 @@
+.dashboard-root {
+    -fx-background-color: #483521;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.top-bar {
+    -fx-background-color: #483521;
+}
+
+.brand-title {
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.top-actions {
+    -fx-min-height: 29px;
+}
+
+.theme-toggle {
+    -fx-background-color: #FFC936;
+    -fx-background-radius: 15;
+    -fx-padding: 1 3 1 3;
+}
+
+.top-icon-wrap {
+    -fx-alignment: CENTER;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-pref-width: 28px;
+    -fx-pref-height: 28px;
+}
+
+.dark-icon-wrap {
+    -fx-background-color: #7B6555;
+    -fx-background-radius: 14;
+}
+
+.user-icon-wrap {
+    -fx-background-color: #FFC936;
+    -fx-background-radius: 15;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+}
+
+.side-rail {
+    -fx-background-color: #483521;
+}
+
+.rail-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 32px;
+    -fx-min-height: 31px;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 31px;
+    -fx-max-width: 32px;
+    -fx-max-height: 31px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.rail-btn:focused,
+.rail-btn:armed,
+.rail-btn:pressed {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+.rail-btn-active {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #FFFFFF;
+}
+
+.rail-btn-active:hover,
+.rail-btn-active:focused,
+.rail-btn-active:armed,
+.rail-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-divider {
+    -fx-background-color: rgba(255,255,255,0.38);
+    -fx-min-height: 1px;
+    -fx-pref-height: 1px;
+}
+
+.logout-btn {
+    -fx-translate-y: -7px;
+}
+
+.dashboard-canvas {
+    -fx-background-color: #FAEEDA;
+}

@@ -49,7 +49,7 @@ public class SignUpController {
         String email = emailField.getText();
         String user = usernameField.getText();
         String pass = passwordField.getText();
-        String confirm = confirmPasswordField.getText();
+        String confirm = confirmPasswordField == null ? pass : confirmPasswordField.getText();
 
         if (email == null || email.isEmpty() || user == null || user.isEmpty() || pass == null || pass.isEmpty() || confirm == null || confirm.isEmpty()){
             statusLabel.setText("Please fill out all fields.");
@@ -81,7 +81,7 @@ public class SignUpController {
 
     @FXML
     private void handleSignIn() {
-        playPanelTransition("fxml/sign-in.fxml", 332, 360, -360);
+        loadScreen("fxml/auth.fxml");
     }
 
     private void playPanelTransition(String nextScreen, double panelDestinationX, double currentFormDestinationX,
@@ -140,7 +140,13 @@ public class SignUpController {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource(fxmlPath));
             Stage stage = (Stage) statusLabel.getScene().getWindow();
-            stage.setScene(new Scene(loader.load(), 682, 383));
+            if ("fxml/dashboard.fxml".equals(fxmlPath)) {
+                stage.setScene(new Scene(loader.load(), 622, 348));
+            } else {
+                stage.setScene(new Scene(loader.load(), 682, 383));
+            }
+            stage.setResizable(false);
+            stage.centerOnScreen();
         } catch (IOException exception) {
             brandPanel.setDisable(false);
             formPane.setDisable(false);
