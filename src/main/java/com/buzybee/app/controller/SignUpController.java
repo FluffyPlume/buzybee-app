@@ -1,6 +1,10 @@
 package com.buzybee.app.controller;
 
 import com.buzybee.app.MainApp;
+import com.buzybee.app.dao.UserDAO;
+import com.buzybee.app.model.User;
+import com.buzybee.app.config.SessionManager;
+
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -10,6 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -31,14 +37,46 @@ public class SignUpController {
     @FXML
     private Label statusLabel;
 
+    @FXML private TextField emailField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+
+    private UserDAO userDAO = new UserDAO();
+
     @FXML
     private void handleSignUp() {
-        statusLabel.setText("Sign up is ready to connect.");
+        String email = emailField.getText();
+        String user = usernameField.getText();
+        String pass = passwordField.getText();
+        String confirm = confirmPasswordField.getText();
+
+        if (email == null || email.isEmpty() || user == null || user.isEmpty() || pass == null || pass.isEmpty() || confirm == null || confirm.isEmpty()){
+            statusLabel.setText("Please fill out all fields.");
+            return;
+        }
+
+        if (!pass.equals(confirm)){
+            statusLabel.setText("Password does not match!");
+            return;
+        }
+
+        boolean isRegistered = userDAO.registerUser(user, pass, email);
+
+        if (isRegistered) {
+            statusLabel.setText("Success! Creating your workspace...");
+
+            User newUser = new User(user, pass, email);
+            SessionManager.getInstance().startSession(newUser);
+
+            loadScreen("fxml/dashboard.fxml");
+        } else { statusLabel.setText("Username is already taken"); }
+
     }
 
     @FXML
     private void handleGoogleSignUp() {
-        statusLabel.setText("Google sign up is ready to connect.");
+        statusLabel.setText("Google Sign Up is not supported in this version.");
     }
 
     @FXML
