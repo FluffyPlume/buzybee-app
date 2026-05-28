@@ -18,6 +18,10 @@ public class FractionalKnapsack {
             // 1. Calculate days remaining until the deadline
             long daysRemaining = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(), task.getDeadline());
 
+            if (daysRemaining < 0 && task.getStatus().equals("PENDING")){
+                task.setStatus("BACKLOG");
+            }
+
             // Failsafe: If a task is due today or overdue, treat it as 1 day to prevent dividing by zero
             if (daysRemaining <= 0) {
                 daysRemaining = 1;

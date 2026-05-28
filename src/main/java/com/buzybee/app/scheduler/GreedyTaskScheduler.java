@@ -26,7 +26,10 @@ public class GreedyTaskScheduler {
                         task.getAssignedTimeSlots().add(block.getDayOfWeekName() + " (" + hoursToAssign + " hrs"); // Keep History record of task itself
                     }
                 }
-                if (hoursLeftToSchedule > 0){ System.out.println("WARNING: Not enough free time in the week to finish " + task.getName()); }
+                if (hoursLeftToSchedule > 0){
+                    System.out.println("WARNING: Not enough free time in the week to finish " + task.getName());
+                    task.setStatus("FAILED_CONSTRAINT");
+                }
                 else { task.setStatus("SCHEDULED"); }
             }
         }
