@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 public class AddTaskController {
 
+    @FXML private Label lblModalTitle;
     @FXML private TextField txtName;
     @FXML private DatePicker dpDeadline;
     @FXML private TextField txtTime;
@@ -56,6 +57,10 @@ public class AddTaskController {
 
     public void setTaskToEdit(Task task) {
         this.taskToEdit = task;
+
+        if (lblModalTitle != null) {
+            lblModalTitle.setText("Edit Task");
+        }
 
         txtName.setText(task.getName());
         dpDeadline.setValue(task.getDeadline());
