@@ -198,7 +198,7 @@ public class TasksController {
     @FXML
     private void handleAddNewTask() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-edit-task-modal.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Add New Task");
@@ -207,7 +207,7 @@ public class TasksController {
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-            AddTaskController controller = loader.getController();
+            AddEditTaskController controller = loader.getController();
             Task newTask = controller.getCreatedTask();
 
             if (newTask != null) {
@@ -230,9 +230,9 @@ public class TasksController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-edit-task-modal.fxml"));
             Parent root = loader.load();
-            AddTaskController controller = loader.getController();
+            AddEditTaskController controller = loader.getController();
             controller.setTaskToEdit(selectedTask);
 
             Stage stage = new Stage();

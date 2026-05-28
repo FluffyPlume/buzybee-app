@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
-public class AddTaskController {
+public class AddEditTaskController {
 
     @FXML private Label lblModalTitle;
     @FXML private TextField txtName;
