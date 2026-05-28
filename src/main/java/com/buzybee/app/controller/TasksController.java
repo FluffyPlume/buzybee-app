@@ -67,6 +67,18 @@ public class TasksController {
         backlogListView.setItems(backlogTasks);
         completedListView.setItems(completedTasks);
 
+        colPriorityScore.setCellFactory(column -> new javafx.scene.control.TableCell<Task, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+
         // Listeners: When a user clicks a row, show the details
         pendingTasksTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showTaskDetails(newValue)
