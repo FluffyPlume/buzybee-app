@@ -20,6 +20,7 @@ public class Task {
     private double estimatedTime; // 2 hrs, 3 hrs, 4 hrs
     private LocalDate deadline; // deadline date duhh
     private LocalDate dateCompleted; // this is for history table purposes, future use gnun basta
+    private LocalDate dateAdded; // History Table purposes
 
     // Algorithm & System Variables
     private double priorityScore; // Ratio nung Knapsack Algo
@@ -48,6 +49,7 @@ public class Task {
         this.status = "PENDING";
         this.priorityScore = 0;
         this.assignedTimeSlots = new ArrayList<>();
+        this.dateAdded = LocalDate.now();
     }
 
 
@@ -78,5 +80,8 @@ public class Task {
 
     public LocalDate getDateCompleted() { return dateCompleted; }
     public void setDateCompleted(LocalDate dateCompleted) { this.dateCompleted = dateCompleted; }
+
+    public LocalDate getDateAdded() { return dateAdded; }
+    public void setDateAdded(LocalDate dateAdded) { this.dateAdded = dateAdded; }
 
 }
