@@ -19,35 +19,109 @@
 }
 
 .theme-toggle {
-    -fx-background-color: #FFC936;
-    -fx-background-radius: 15;
-    -fx-padding: 1 3 1 3;
+    -fx-background-color: #826443;
+    -fx-background-radius: 8;
+    -fx-min-width: 56px;
+    -fx-min-height: 24px;
+    -fx-pref-width: 56px;
+    -fx-pref-height: 24px;
+    -fx-max-width: 56px;
+    -fx-max-height: 24px;
+    -fx-padding: 1 2 1 2;
 }
 
-.top-icon-wrap {
+.theme-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
     -fx-alignment: CENTER;
-    -fx-min-width: 28px;
-    -fx-min-height: 28px;
-    -fx-pref-width: 28px;
-    -fx-pref-height: 28px;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 25px;
+    -fx-min-height: 22px;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 22px;
+    -fx-max-width: 25px;
+    -fx-max-height: 22px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-.dark-icon-wrap {
-    -fx-background-color: #7B6555;
-    -fx-background-radius: 14;
+.theme-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
 }
 
-.user-icon-wrap {
+.theme-btn:focused,
+.theme-btn:armed,
+.theme-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.theme-btn-active,
+.theme-btn-active:hover,
+.theme-btn-active:focused,
+.theme-btn-active:armed,
+.theme-btn-active:pressed {
     -fx-background-color: #FFC936;
-    -fx-background-radius: 15;
-    -fx-min-width: 30px;
-    -fx-min-height: 30px;
-    -fx-pref-width: 30px;
-    -fx-pref-height: 30px;
+    -fx-background-radius: 7;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
 
 .side-rail {
     -fx-background-color: #483521;
+}
+
+.top-action-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.top-action-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+}
+
+.top-action-btn:focused,
+.top-action-btn:armed,
+.top-action-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.top-action-btn-active,
+.top-action-btn-active:hover,
+.top-action-btn-active:focused,
+.top-action-btn-active:armed,
+.top-action-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
 
 .rail-btn {
@@ -71,9 +145,23 @@
     -fx-faint-focus-color: transparent;
 }
 
+.side-rail .button,
+.side-rail .button:focused,
+.side-rail .button:armed,
+.side-rail .button:pressed,
+.side-rail .button:default {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-padding: 0;
+}
+
 .rail-btn:focused,
 .rail-btn:armed,
 .rail-btn:pressed {
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
@@ -85,6 +173,20 @@
 .rail-btn-active {
     -fx-background-color: #FFC936;
     -fx-text-fill: #FFFFFF;
+}
+
+.side-rail .rail-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+.side-rail .rail-btn-active,
+.side-rail .rail-btn-active:hover,
+.side-rail .rail-btn-active:focused,
+.side-rail .rail-btn-active:armed,
+.side-rail .rail-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
 
 .rail-btn-active:hover,
@@ -102,8 +204,10 @@
     -fx-pref-height: 1px;
 }
 
-.logout-btn {
-    -fx-translate-y: -7px;
+.logout-slot {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10 0;
 }
 
 .dashboard-canvas {
