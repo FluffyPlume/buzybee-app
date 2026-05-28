@@ -1,4 +1,4 @@
 package com.buzybee.app.controller;
 
-public class BacklogController {
+public class SettingsController {
 }
