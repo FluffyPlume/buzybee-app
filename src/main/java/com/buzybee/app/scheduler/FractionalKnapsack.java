@@ -27,7 +27,7 @@ public class FractionalKnapsack {
             double urgency = 10.0 / daysRemaining;
 
             // 3. The Core Knapsack Formula
-            double score = (task.getDifficulty() * urgency) / task.getEstimatedTime();
+            double score = (task.getDifficulty() * urgency) / Math.sqrt(task.getEstimatedTime());
 
             // 4. The Rules: Overdue tasks get a 2x priority boost
             if ("BACKLOG".equals(task.getStatus())) {
