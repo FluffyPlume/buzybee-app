@@ -115,7 +115,7 @@ public class LoginPageController {
     }
 
     private void showDashboard() {
-        loadScreen("fxml/dashboard.fxml", 622, 348);
+        loadScreen("fxml/dashboard.fxml", 1280, 720);
     }
 
     private void loadScreen(String fxmlPath, double width, double height) {
@@ -124,8 +124,12 @@ public class LoginPageController {
             Parent root = loader.load();
             Stage stage = (Stage) signInForm.getScene().getWindow();
 
-            stage.setScene(new Scene(root, width, height));
-            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+
+            stage.setWidth(width);
+            stage.setHeight(height);
+
+            stage.setResizable(true);
             stage.centerOnScreen();
         } catch (IOException exception) {
             signInStatusLabel.setText("Screen could not be loaded.");

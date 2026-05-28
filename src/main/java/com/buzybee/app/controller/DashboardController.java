@@ -77,6 +77,8 @@ public class DashboardController {
             stage.setScene(new javafx.scene.Scene(root));
             stage.setWidth(682);
             stage.setHeight(383);
+            stage.setResizable(false);
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             System.out.println("Could not load the login screen!");
