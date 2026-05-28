@@ -14,17 +14,31 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class TasksController {
 
     @FXML private TableView<Task> pendingTasksTable;
-    @FXML private TableColumn<Task, String> colName;
-    @FXML private TableColumn<Task, LocalDate> colDeadline;
-    @FXML private TableColumn<Task, Double> colTime;
-    @FXML private TableColumn<Task, Double> colDifficulty;
-    @FXML private TableColumn<Task, Double> colPriorityScore;
+    @FXML private TableColumn<Task, String> colPendingName;
+    @FXML private TableColumn<Task, LocalDate> colPendingDeadline;
+    @FXML private TableColumn<Task, Double> colPendingTime;
+    @FXML private TableColumn<Task, Double> colPendingDifficulty;
+    @FXML private TableColumn<Task, Double> colPendingPriorityScore;
 
-    @FXML private ListView<Task> backlogListView;
+    @FXML private TableView<Task> activeTasksTable;
+    @FXML private TableColumn<Task, String> colActiveName;
+    @FXML private TableColumn<Task, LocalDate> colActiveDeadline;
+    @FXML private TableColumn<Task, Double> colActiveTime;
+    @FXML private TableColumn<Task, Double> colActiveDifficulty;
+    @FXML private TableColumn<Task, Double> colActivePriorityScore;
+
+    @FXML private TableView<Task> backlogTasksTable;
+    @FXML private TableColumn<Task, String> colBacklogName;
+    @FXML private TableColumn<Task, LocalDate> colBacklogDeadline;
+    @FXML private TableColumn<Task, Double> colBacklogTime;
+    @FXML private TableColumn<Task, Double> colBacklogDifficulty;
+    @FXML private TableColumn<Task, Double> colBacklogPriorityScore;
+
     @FXML private ListView<Task> completedListView;
 
     @FXML private Label lblDetailName;
@@ -34,6 +48,7 @@ public class TasksController {
     @FXML private Label lblDetailDifficulty;
     @FXML private Label lblDetailPriorityScore;
     @FXML private Label lblDetailDaysRemaining;
+    @FXML private Label lblDetailDateAdded;
 
     @FXML private Button btnAddNewTask;
     @FXML private Button btnMarkComplete;
@@ -44,78 +59,103 @@ public class TasksController {
 
     private TaskService taskService;
 
-    // Temporary list to hold our data until you build the JSON database saving
     private ObservableList<Task> pendingTasks = FXCollections.observableArrayList();
+    private ObservableList<Task> activeTasks = FXCollections.observableArrayList();
     private ObservableList<Task> backlogTasks = FXCollections.observableArrayList();
     private ObservableList<Task> completedTasks = FXCollections.observableArrayList();
 
-
     @FXML
     private void initialize() {
-
         taskService = new TaskService();
-        //  Tell the Table Columns which variables to look for in Task.java
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-        colTime.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
-        colDifficulty.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
-        colPriorityScore.setCellValueFactory(new PropertyValueFactory<>("priorityScore"));
 
-        // Tell the ListViews to only display the Task's name
-        setupListView(backlogListView);
-        setupListView(completedListView);
+        setupTableColumns(pendingTasksTable, colPendingName, colPendingDeadline, colPendingTime, colPendingDifficulty, colPendingPriorityScore);
+        setupTableColumns(activeTasksTable, colActiveName, colActiveDeadline, colActiveTime, colActiveDifficulty, colActivePriorityScore);
+        setupTableColumns(backlogTasksTable, colBacklogName, colBacklogDeadline, colBacklogTime, colBacklogDifficulty, colBacklogPriorityScore);
 
-        //  Connect the Lists to our Data
-        pendingTasksTable.setItems(pendingTasks);
-        backlogListView.setItems(backlogTasks);
-        completedListView.setItems(completedTasks);
-
-        colPriorityScore.setCellFactory(column -> new javafx.scene.control.TableCell<Task, Double>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("%.2f", item));
-                }
-            }
-        });
-
-        // Listeners: When a user clicks a row, show the details
-        pendingTasksTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showTaskDetails(newValue)
-        );
-        backlogListView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showTaskDetails(newValue)
-        );
-        completedListView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showTaskDetails(newValue)
-        );
-
-        pendingTasksTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        loadDataFromDatabase();
-
-    }
-
-    private void setupListView(ListView<Task> listView) {
-        listView.setCellFactory(param -> new ListCell<Task>() {
+        completedListView.setCellFactory(param -> new ListCell<Task>() {
             @Override
             protected void updateItem(Task task, boolean empty) {
                 super.updateItem(task, empty);
-                if (empty || task == null || task.getName() == null) {
+                if (empty || task == null) {
                     setText(null);
                 } else {
-                    setText(task.getName()); // Only show the name in the small lists
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+                    String addedDate = (task.getDateAdded() != null) ? task.getDateAdded().format(formatter) : "Unknown";
+                    String compDate = (task.getDateCompleted() != null) ? task.getDateCompleted().format(formatter) : "Unknown";
+
+                    setText(task.getName() + " \n(Added: " + addedDate + " | Completed: " + compDate + ")");
                 }
             }
         });
+
+        pendingTasksTable.setItems(pendingTasks);
+        activeTasksTable.setItems(activeTasks);
+        backlogTasksTable.setItems(backlogTasks);
+        completedListView.setItems(completedTasks);
+
+        setupSelectionListener(pendingTasksTable, activeTasksTable, backlogTasksTable, completedListView);
+        setupSelectionListener(activeTasksTable, pendingTasksTable, backlogTasksTable, completedListView);
+        setupSelectionListener(backlogTasksTable, pendingTasksTable, activeTasksTable, completedListView);
+
+        completedListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                pendingTasksTable.getSelectionModel().clearSelection();
+                activeTasksTable.getSelectionModel().clearSelection();
+                backlogTasksTable.getSelectionModel().clearSelection();
+                showTaskDetails(newVal);
+            }
+        });
+
+        loadDataFromDatabase();
     }
+
+
+    private void setupTableColumns(TableView<Task> table, TableColumn<Task, String> name, TableColumn<Task, LocalDate> deadline, TableColumn<Task, Double> time, TableColumn<Task, Double> difficulty, TableColumn<Task, Double> priority) {
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        deadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+        time.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
+        difficulty.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+        priority.setCellValueFactory(new PropertyValueFactory<>("priorityScore"));
+
+        priority.setCellFactory(column -> new javafx.scene.control.TableCell<Task, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) { setText(null); }
+                else { setText(String.format("%.2f", item)); }
+            }
+        });
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    private void setupSelectionListener(TableView<Task> primaryTable, TableView<Task> clear1, TableView<Task> clear2, ListView<Task> clear3) {
+        primaryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                clear1.getSelectionModel().clearSelection();
+                clear2.getSelectionModel().clearSelection();
+                clear3.getSelectionModel().clearSelection();
+                showTaskDetails(newVal);
+            }
+        });
+    }
+
+    private Task getSelectedTask() {
+        if (pendingTasksTable.getSelectionModel().getSelectedItem() != null) return pendingTasksTable.getSelectionModel().getSelectedItem();
+        if (activeTasksTable.getSelectionModel().getSelectedItem() != null) return activeTasksTable.getSelectionModel().getSelectedItem();
+        if (backlogTasksTable.getSelectionModel().getSelectedItem() != null) return backlogTasksTable.getSelectionModel().getSelectedItem();
+        if (completedListView.getSelectionModel().getSelectedItem() != null) return completedListView.getSelectionModel().getSelectedItem();
+        return null;
+    }
+
+
 
     private void showTaskDetails(Task task) {
         if (task != null) {
             if (lblDetailName != null) lblDetailName.setText(task.getName());
             if (lblDetailStatus != null) lblDetailStatus.setText(task.getStatus());
+            if (lblDetailDateAdded != null) {
+                lblDetailDateAdded.setText(task.getDateAdded() != null ? task.getDateAdded().toString() : "Unknown");
+            }
             if (lblDetailDeadline != null) lblDetailDeadline.setText(task.getDeadline().toString());
 
             if (lblDetailDaysRemaining != null) lblDetailDaysRemaining.setText(task.getDaysRemaining() + " days");
@@ -125,38 +165,31 @@ public class TasksController {
         } else {
             if (lblDetailName != null) lblDetailName.setText("---");
             if (lblDetailStatus != null) lblDetailStatus.setText("---");
+            if (lblDetailDateAdded != null) lblDetailDateAdded.setText("---");
             if (lblDetailDeadline != null) lblDetailDeadline.setText("---");
-
-            // CLEAR WHEN DESELECTED
             if (lblDetailDaysRemaining != null) lblDetailDaysRemaining.setText("---");
-
             if (lblDetailTime != null) lblDetailTime.setText("---");
             if (lblDetailDifficulty != null) lblDetailDifficulty.setText("---");
             if (lblDetailPriorityScore != null) lblDetailPriorityScore.setText("---");
         }
-    }
 
-    private void loadDummyData() {
-        pendingTasks.add(new Task("Write Essay", 6.0, 3.5, LocalDate.now().plusDays(2)));
-        pendingTasks.add(new Task("Math Homework", 8.0, 2.0, LocalDate.now().plusDays(1)));
-
-        Task backlogItem = new Task("Read Chapter 4", 3.0, 1.0, LocalDate.now().minusDays(1));
-        backlogItem.setStatus("BACKLOG");
-        backlogTasks.add(backlogItem);
+        if (task != null && "COMPLETED".equals(task.getStatus())) {
+            btnMarkComplete.setText("Unmark Task");
+        } else {
+            btnMarkComplete.setText("Mark as Complete");
+        }
     }
 
     private void loadDataFromDatabase() {
-        // Clear the old data from the UI lists
         pendingTasks.clear();
+        activeTasks.clear();
         backlogTasks.clear();
         completedTasks.clear();
 
-        // Fetch the fresh data from the JSON database via the Service
         if (taskService != null) {
             pendingTasks.addAll(taskService.getAllActiveTasks());
+            activeTasks.addAll(taskService.getAllActiveTasks());
             backlogTasks.addAll(taskService.getBacklogTasks());
-
-
             completedTasks.addAll(SessionManager.getInstance().getTaskDao().getCompletedTasks());
         }
     }
@@ -165,33 +198,22 @@ public class TasksController {
     @FXML
     private void handleAddNewTask() {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
-            javafx.scene.Parent root = loader.load();
-
-
-            javafx.stage.Stage stage = new javafx.stage.Stage();
+            Parent root = loader.load();
+            Stage stage = new Stage();
             stage.setTitle("Add New Task");
-            stage.setScene(new javafx.scene.Scene(root));
+            stage.setScene(new Scene(root));
             stage.setResizable(false);
-
-
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-
             stage.showAndWait();
-
 
             AddTaskController controller = loader.getController();
             Task newTask = controller.getCreatedTask();
 
-
             if (newTask != null) {
                 taskService.createNewTask(newTask);
-
                 loadDataFromDatabase();
             }
-
         } catch (Exception e) {
             System.out.println("Could not load the Add Task window!");
             e.printStackTrace();
@@ -200,8 +222,7 @@ public class TasksController {
 
     @FXML
     private void handleEditTask() {
-
-        Task selectedTask = pendingTasksTable.getSelectionModel().getSelectedItem();
+        Task selectedTask = getSelectedTask();
 
         if (selectedTask == null) {
             System.out.println("Please select a task to edit!");
@@ -211,7 +232,6 @@ public class TasksController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
             Parent root = loader.load();
-
             AddTaskController controller = loader.getController();
             controller.setTaskToEdit(selectedTask);
 
@@ -220,8 +240,7 @@ public class TasksController {
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
-            pendingTasksTable.refresh();
-
+            loadDataFromDatabase();
             showTaskDetails(selectedTask);
 
         } catch (Exception e) {
@@ -232,21 +251,32 @@ public class TasksController {
 
     @FXML
     private void handleDeleteTask() {
-        Task selected = pendingTasksTable.getSelectionModel().getSelectedItem();
+        Task selected = getSelectedTask();
         if (selected != null) {
             taskService.deleteTask(selected.getId());
             loadDataFromDatabase();
             System.out.println("Deleted: " + selected.getName());
-        } else { System.out.println("Please select a task first."); }
+        } else {
+            System.out.println("Please select a task first.");
+        }
     }
 
     @FXML
     private void handleMarkComplete() {
-        Task selected = pendingTasksTable.getSelectionModel().getSelectedItem();
+        Task selected = getSelectedTask();
         if (selected != null) {
-            taskService.markTaskComplete(selected.getId());
+
+            if ("COMPLETED".equals(selected.getStatus())) {
+                taskService.unmarkTaskComplete(selected.getId());
+                System.out.println("Unmarked: " + selected.getName());
+            }
+            else {
+                taskService.markTaskComplete(selected.getId());
+                System.out.println("Completed: " + selected.getName());
+            }
+
             loadDataFromDatabase();
-            System.out.println("Completed: " + selected.getName());
+
         } else {
             System.out.println("Please select a task first!");
         }
@@ -260,9 +290,7 @@ public class TasksController {
 
     @FXML
     private void handleRunKnapsack() {
-       // Run the algorithm and save the results (I'm using "DEFAULT" mode based on your code)
         taskService.prioritizeActiveTasks();
-        // Refresh the UI to show the new Priority Scores!
         loadDataFromDatabase();
         System.out.println("Algorithm Finished! Lists refreshed.");
     }

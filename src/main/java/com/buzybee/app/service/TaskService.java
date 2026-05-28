@@ -110,4 +110,15 @@ public class TaskService {
         }
     }
 
+    public void unmarkTaskComplete(String taskId) {
+        for (Task t : taskDAO.getAllTasks()) {
+            if (t.getId().equals(taskId)) {
+                t.setStatus("PENDING");
+                t.setDateCompleted(null); // Erase the finish date!
+                taskDAO.saveChanges();
+                break;
+            }
+        }
+    }
+
 }
