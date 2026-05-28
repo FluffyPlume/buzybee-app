@@ -68,15 +68,26 @@ public class TaskDAO {
     // 3. Filter Views
     // ==========================================
 
-    // Gets all tasks that still need to be done
-    public List<Task> getActiveTasks() {
-        List<Task> active = new ArrayList<>();
+    // 1. Gets only tasks waiting in the inbox
+    public List<Task> getPendingTasks() {
+        List<Task> pending = new ArrayList<>();
         for (Task t : allTasks) {
-            if (t.getStatus().equals("PENDING") || t.getStatus().equals("SCHEDULED")) {
-                active.add(t);
+            if (t.getStatus().equals("PENDING")) {
+                pending.add(t);
             }
         }
-        return active;
+        return pending;
+    }
+
+    // 2. Gets only tasks that the algorithm successfully placed in the calendar
+    public List<Task> getScheduledTasks() {
+        List<Task> scheduled = new ArrayList<>();
+        for (Task t : allTasks) {
+            if (t.getStatus().equals("SCHEDULED")) {
+                scheduled.add(t);
+            }
+        }
+        return scheduled;
     }
 
     // Gets all tasks that missed their deadline

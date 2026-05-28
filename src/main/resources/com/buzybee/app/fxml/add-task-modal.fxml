@@ -44,4 +44,25 @@
             </Label>
             <DatePicker fx:id="dpDeadline" prefWidth="250.0" style="-fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Est. Time (hrs):" textFill
+            <Label text="Est. Time (hrs):" textFill="#483521" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <TextField fx:id="txtTime" promptText="e.g. 2.5" style="-fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Difficulty (1-10):" textFill="#483521" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <TextField fx:id="txtDifficulty" promptText="e.g. 8" style="-fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        </children>
+    </GridPane>
+
+    <HBox spacing="10.0">
+        <Region HBox.hgrow="ALWAYS" />
+        <Button mnemonicParsing="false" onAction="#handleCancel" style="-fx-background-color: transparent; -fx-border-color: #483521; -fx-border-radius: 5; -fx-text-fill: #483521; -fx-cursor: hand;" text="Cancel">
+            <font><Font name="System Bold" size="14.0" /></font>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#handleSave" style="-fx-background-color: #483521; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Save Task">
+            <font><Font name="System Bold" size="14.0" /></font>
+        </Button>
+    </HBox>
+</VBox>

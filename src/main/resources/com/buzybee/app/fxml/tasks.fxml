@@ -40,17 +40,19 @@
                             </columns>
                         </TableView>
                     </Tab>
-                    <Tab text="Active Tasks">
-                        <TableView fx:id="activeTasksTable" VBox.vgrow="ALWAYS">
+
+                    <Tab text="Scheduled Tasks">
+                        <TableView fx:id="scheduledTasksTable" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colActiveName" prefWidth="150.0" text="Task Name" />
-                                <TableColumn fx:id="colActiveDeadline" prefWidth="90.0" text="Deadline" />
-                                <TableColumn fx:id="colActiveTime" prefWidth="70.0" text="Est. Time" />
-                                <TableColumn fx:id="colActiveDifficulty" prefWidth="70.0" text="Difficulty" />
-                                <TableColumn fx:id="colActivePriorityScore" prefWidth="90.0" text="Priority Score" />
+                                <TableColumn fx:id="colScheduledName" prefWidth="150.0" text="Task Name" />
+                                <TableColumn fx:id="colScheduledDeadline" prefWidth="90.0" text="Deadline" />
+                                <TableColumn fx:id="colScheduledTime" prefWidth="70.0" text="Est. Time" />
+                                <TableColumn fx:id="colScheduledDifficulty" prefWidth="70.0" text="Difficulty" />
+                                <TableColumn fx:id="colScheduledPriorityScore" prefWidth="90.0" text="Priority Score" />
                             </columns>
                         </TableView>
                     </Tab>
+
                     <Tab text="Backlog Tasks">
                         <TableView fx:id="backlogTasksTable" VBox.vgrow="ALWAYS">
                             <columns>

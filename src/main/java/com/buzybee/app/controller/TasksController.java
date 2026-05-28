@@ -25,12 +25,12 @@ public class TasksController {
     @FXML private TableColumn<Task, Double> colPendingDifficulty;
     @FXML private TableColumn<Task, Double> colPendingPriorityScore;
 
-    @FXML private TableView<Task> activeTasksTable;
-    @FXML private TableColumn<Task, String> colActiveName;
-    @FXML private TableColumn<Task, LocalDate> colActiveDeadline;
-    @FXML private TableColumn<Task, Double> colActiveTime;
-    @FXML private TableColumn<Task, Double> colActiveDifficulty;
-    @FXML private TableColumn<Task, Double> colActivePriorityScore;
+    @FXML private TableView<Task> scheduledTasksTable;
+    @FXML private TableColumn<Task, String> colScheduledName;
+    @FXML private TableColumn<Task, LocalDate> colScheduledDeadline;
+    @FXML private TableColumn<Task, Double> colScheduledTime;
+    @FXML private TableColumn<Task, Double> colScheduledDifficulty;
+    @FXML private TableColumn<Task, Double> colScheduledPriorityScore;
 
     @FXML private TableView<Task> backlogTasksTable;
     @FXML private TableColumn<Task, String> colBacklogName;
@@ -60,7 +60,7 @@ public class TasksController {
     private TaskService taskService;
 
     private ObservableList<Task> pendingTasks = FXCollections.observableArrayList();
-    private ObservableList<Task> activeTasks = FXCollections.observableArrayList();
+    private ObservableList<Task> scheduledTasks = FXCollections.observableArrayList();
     private ObservableList<Task> backlogTasks = FXCollections.observableArrayList();
     private ObservableList<Task> completedTasks = FXCollections.observableArrayList();
 
@@ -69,7 +69,7 @@ public class TasksController {
         taskService = new TaskService();
 
         setupTableColumns(pendingTasksTable, colPendingName, colPendingDeadline, colPendingTime, colPendingDifficulty, colPendingPriorityScore);
-        setupTableColumns(activeTasksTable, colActiveName, colActiveDeadline, colActiveTime, colActiveDifficulty, colActivePriorityScore);
+        setupTableColumns(scheduledTasksTable, colScheduledName, colScheduledDeadline, colScheduledTime, colScheduledDifficulty, colScheduledPriorityScore);
         setupTableColumns(backlogTasksTable, colBacklogName, colBacklogDeadline, colBacklogTime, colBacklogDifficulty, colBacklogPriorityScore);
 
         completedListView.setCellFactory(param -> new ListCell<Task>() {
@@ -89,18 +89,18 @@ public class TasksController {
         });
 
         pendingTasksTable.setItems(pendingTasks);
-        activeTasksTable.setItems(activeTasks);
+        scheduledTasksTable.setItems(scheduledTasks);
         backlogTasksTable.setItems(backlogTasks);
         completedListView.setItems(completedTasks);
 
-        setupSelectionListener(pendingTasksTable, activeTasksTable, backlogTasksTable, completedListView);
-        setupSelectionListener(activeTasksTable, pendingTasksTable, backlogTasksTable, completedListView);
-        setupSelectionListener(backlogTasksTable, pendingTasksTable, activeTasksTable, completedListView);
+        setupSelectionListener(pendingTasksTable, scheduledTasksTable, backlogTasksTable, completedListView);
+        setupSelectionListener(scheduledTasksTable, pendingTasksTable, backlogTasksTable, completedListView);
+        setupSelectionListener(backlogTasksTable, pendingTasksTable, scheduledTasksTable, completedListView);
 
         completedListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 pendingTasksTable.getSelectionModel().clearSelection();
-                activeTasksTable.getSelectionModel().clearSelection();
+                scheduledTasksTable.getSelectionModel().clearSelection();
                 backlogTasksTable.getSelectionModel().clearSelection();
                 showTaskDetails(newVal);
             }
@@ -141,7 +141,7 @@ public class TasksController {
 
     private Task getSelectedTask() {
         if (pendingTasksTable.getSelectionModel().getSelectedItem() != null) return pendingTasksTable.getSelectionModel().getSelectedItem();
-        if (activeTasksTable.getSelectionModel().getSelectedItem() != null) return activeTasksTable.getSelectionModel().getSelectedItem();
+        if (scheduledTasksTable.getSelectionModel().getSelectedItem() != null) return scheduledTasksTable.getSelectionModel().getSelectedItem();
         if (backlogTasksTable.getSelectionModel().getSelectedItem() != null) return backlogTasksTable.getSelectionModel().getSelectedItem();
         if (completedListView.getSelectionModel().getSelectedItem() != null) return completedListView.getSelectionModel().getSelectedItem();
         return null;
@@ -182,13 +182,13 @@ public class TasksController {
 
     private void loadDataFromDatabase() {
         pendingTasks.clear();
-        activeTasks.clear();
+        scheduledTasks.clear();
         backlogTasks.clear();
         completedTasks.clear();
 
         if (taskService != null) {
             pendingTasks.addAll(taskService.getAllActiveTasks());
-            activeTasks.addAll(taskService.getAllActiveTasks());
+            scheduledTasks.addAll(taskService.getAllActiveTasks());
             backlogTasks.addAll(taskService.getBacklogTasks());
             completedTasks.addAll(SessionManager.getInstance().getTaskDao().getCompletedTasks());
         }

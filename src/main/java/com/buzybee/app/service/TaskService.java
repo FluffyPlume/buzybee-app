@@ -9,7 +9,6 @@ import com.buzybee.app.model.TimeBlock;
 import com.buzybee.app.util.SystemClock;
 import java.util.List;
 
-
 /**
  * The 'General Manager' of the application.
  * Handles validation, orchestrates communication between the DAO and the
@@ -49,13 +48,28 @@ public class TaskService {
         taskDAO.deleteTask(taskId);
     }
 
-    // Pass-through methods for the UI to get data
-    public List<Task> getAllActiveTasks() {
-        return taskDAO.getActiveTasks();
+    // ==========================================
+    // UI DATA FETCHERS (Updated for Pending/Scheduled Split)
+    // ==========================================
+
+    public List<Task> getPendingTasks() {
+        return taskDAO.getPendingTasks();
+    }
+
+    public List<Task> getScheduledTasks() {
+        return taskDAO.getScheduledTasks();
     }
 
     public List<Task> getBacklogTasks() {
         return taskDAO.getBacklogTasks();
+    }
+
+    // Helper method for the algorithm: combines Pending and Scheduled tasks
+    public List<Task> getAllActiveTasks() {
+        List<Task> allActive = new java.util.ArrayList<>();
+        allActive.addAll(taskDAO.getPendingTasks());
+        allActive.addAll(taskDAO.getScheduledTasks());
+        return allActive;
     }
 
     // ==========================================
@@ -64,7 +78,7 @@ public class TaskService {
 
     public void prioritizeActiveTasks() {
         List<Task> tasksToScore = new java.util.ArrayList<>();
-        tasksToScore.addAll(taskDAO.getActiveTasks());
+        tasksToScore.addAll(getAllActiveTasks()); // Uses the helper method!
         tasksToScore.addAll(taskDAO.getBacklogTasks());
 
         schedulerService.runPrioritizationOnly(tasksToScore);
@@ -75,7 +89,7 @@ public class TaskService {
 
     public void generateWeeklySchedule(String mode) {
         List<Task> tasksToSchedule = new java.util.ArrayList<>();
-        tasksToSchedule.addAll(taskDAO.getActiveTasks());
+        tasksToSchedule.addAll(getAllActiveTasks()); // Uses the helper method!
         tasksToSchedule.addAll(taskDAO.getBacklogTasks());
         List<TimeBlock> savedSchedule = taskDAO.getAllTimeBlocks();
 
@@ -98,6 +112,10 @@ public class TaskService {
         taskDAO.saveWeeklySchedule(completeWeek);
     }
 
+    // ==========================================
+    // 3. TASK COMPLETION
+    // ==========================================
+
     // Marks a task as complete and records the exact date it was finished
     public void markTaskComplete(String taskId) {
         for (Task t : taskDAO.getAllTasks()) {
@@ -110,6 +128,7 @@ public class TaskService {
         }
     }
 
+    // Reverses a completed task back to PENDING and clears the completion date
     public void unmarkTaskComplete(String taskId) {
         for (Task t : taskDAO.getAllTasks()) {
             if (t.getId().equals(taskId)) {
@@ -120,5 +139,4 @@ public class TaskService {
             }
         }
     }
-
 }
