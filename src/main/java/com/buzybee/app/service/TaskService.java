@@ -62,6 +62,16 @@ public class TaskService {
     // 2. THE ALGORITHM TRIGGER
     // ==========================================
 
+    public void prioritizeActiveTasks() {
+        List<Task> tasksToScore = new java.util.ArrayList<>();
+        tasksToScore.addAll(taskDAO.getActiveTasks());
+        tasksToScore.addAll(taskDAO.getBacklogTasks());
+
+        schedulerService.runPrioritizationOnly(tasksToScore);
+
+        // Save the new Priority Scores to the JSON file
+        taskDAO.saveChanges();
+    }
 
     public void generateWeeklySchedule(String mode) {
         List<Task> tasksToSchedule = new java.util.ArrayList<>();

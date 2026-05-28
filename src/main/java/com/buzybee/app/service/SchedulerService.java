@@ -28,6 +28,13 @@ public class SchedulerService {
     // ==========================================
     // Pipeline
     // ==========================================
+
+    public void runPrioritizationOnly(List<Task> activeTasks) {
+        System.out.println("=== RUNNING PRIORITIZATION ONLY ===");
+        knapsackAlgorithm.prioritizeTasks(activeTasks);
+        System.out.println("=== PRIORITIZATION COMPLETE ===");
+    }
+
     public void runSchedulingPipeline(List<Task> activeTasks, List<TimeBlock> availableSchedule, String mode) {
         System.out.println("=== STARTING SCHEDULING PIPELINE ===");
 
