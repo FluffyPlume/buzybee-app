@@ -3,6 +3,7 @@ package com.buzybee.app;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -16,6 +17,9 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("fxml/auth.fxml"));
         Scene scene = new Scene(loader.load(), 682, 383);
 
+
+        Image appIcon = new Image(getClass().getResourceAsStream("/com/buzybee/app/images/Bee.png"));
+        stage.getIcons().add(appIcon);
         stage.setTitle("BuzyBee");
         stage.setResizable(false);
         stage.setScene(scene);
