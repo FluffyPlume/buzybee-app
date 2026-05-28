@@ -6,6 +6,7 @@ import com.buzybee.app.service.TaskService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -49,18 +50,18 @@ public class TasksController {
     private void initialize() {
 
         taskService = new TaskService();
-        // 1. Tell the Table Columns which variables to look for in Task.java
+        //  Tell the Table Columns which variables to look for in Task.java
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
         colTime.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
         colDifficulty.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         colPriorityScore.setCellValueFactory(new PropertyValueFactory<>("priorityScore"));
 
-        // 2. Tell the ListViews to only display the Task's name
+        // Tell the ListViews to only display the Task's name
         setupListView(backlogListView);
         setupListView(completedListView);
 
-        // 3. Connect the Lists to our Data
+        //  Connect the Lists to our Data
         pendingTasksTable.setItems(pendingTasks);
         backlogListView.setItems(backlogTasks);
         completedListView.setItems(completedTasks);
@@ -97,21 +98,22 @@ public class TasksController {
 
     private void showTaskDetails(Task task) {
         if (task != null) {
-            // Update the right-side panel with the clicked task's data
-            if(lblDetailName != null) lblDetailName.setText(task.getName());
-            if(lblDetailStatus != null) lblDetailStatus.setText("Status: " + task.getStatus());
-            if(lblDetailDeadline != null) lblDetailDeadline.setText("Deadline: " + task.getDeadline().toString());
-            if(lblDetailTime != null) lblDetailTime.setText("Est. Time: " + task.getEstimatedTime() + " hrs");
-            if(lblDetailDifficulty != null) lblDetailDifficulty.setText("Difficulty: " + task.getDifficulty() + "/10");
-            if(lblDetailPriorityScore != null) lblDetailPriorityScore.setText("Priority: " + task.getPriorityScore());
+            if (lblDetailName != null) lblDetailName.setText(task.getName());
+            if (lblDetailStatus != null) lblDetailStatus.setText(task.getStatus());
+            if (lblDetailDeadline != null) lblDetailDeadline.setText(task.getDeadline().toString());
+            if (lblDetailTime != null) lblDetailTime.setText(task.getEstimatedTime() + " hrs");
+
+            if (lblDetailDifficulty != null) lblDetailDifficulty.setText(String.format("%.1f", task.getDifficulty()));
+
+            if (lblDetailPriorityScore != null) lblDetailPriorityScore.setText(String.format("%.2f", task.getPriorityScore()));
         } else {
-            // Clear the panel if nothing is selected
-            if(lblDetailName != null) lblDetailName.setText("Select a task...");
-            if(lblDetailStatus != null) lblDetailStatus.setText("Status: ");
-            if(lblDetailDeadline != null) lblDetailDeadline.setText("Deadline:");
-            if(lblDetailTime != null) lblDetailTime.setText("Est. Time: ");
-            if(lblDetailDifficulty != null) lblDetailDifficulty.setText("Difficulty: ");
-            if(lblDetailPriorityScore != null) lblDetailPriorityScore.setText("Priority: ");
+            // Clear the values to empty dashes when nothing is highlighted
+            if (lblDetailName != null) lblDetailName.setText("---");
+            if (lblDetailStatus != null) lblDetailStatus.setText("---");
+            if (lblDetailDeadline != null) lblDetailDeadline.setText("---");
+            if (lblDetailTime != null) lblDetailTime.setText("---");
+            if (lblDetailDifficulty != null) lblDetailDifficulty.setText("---");
+            if (lblDetailPriorityScore != null) lblDetailPriorityScore.setText("---");
         }
     }
 
@@ -143,7 +145,38 @@ public class TasksController {
 
     @FXML
     private void handleAddNewTask() {
-        System.out.println("Add New Task clicked! (Next we will make a popup window for this)");
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Add New Task");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setResizable(false);
+
+
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+
+            stage.showAndWait();
+
+
+            AddTaskController controller = loader.getController();
+            Task newTask = controller.getCreatedTask();
+
+
+            if (newTask != null) {
+                taskService.createNewTask(newTask);
+
+                loadDataFromDatabase();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Could not load the Add Task window!");
+            e.printStackTrace();
+        }
     }
 
     @FXML

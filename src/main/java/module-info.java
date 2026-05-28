@@ -8,7 +8,7 @@ module com.buzybee.app {
     requires java.sql;
 
     opens com.buzybee.app to javafx.fxml;
-    opens com.buzybee.app.model to com.google.gson;
+    opens com.buzybee.app.model to com.google.gson, javafx.base;
     opens com.buzybee.app.controller to javafx.fxml;
     exports com.buzybee.app;
 }

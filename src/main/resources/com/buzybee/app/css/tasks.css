@@ -25,8 +25,13 @@
     -fx-font-weight: bold;
 }
 
+/* Selected Row Background */
 .table-view .table-row-cell:selected {
     -fx-background-color: #FFE082;
+    -fx-text-fill: #483521;
+}
+
+.table-view .table-row-cell:selected .table-cell {
     -fx-text-fill: #483521;
 }
 
@@ -53,7 +58,6 @@
     -fx-background-color: #FFE082;
     -fx-text-fill: #483521;
 }
-
 
 .tasks-button {
     -fx-background-color: #483521;
