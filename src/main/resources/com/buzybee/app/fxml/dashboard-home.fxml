@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="650.0" prefWidth="1000.0" spacing="15.0" style="-fx-background-color: #FAEEDA;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.DashboardHomeController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+    </padding>
+    <children>
+
+        <Label text="Welcome Back to BuzyBee" textFill="#483521">
+            <font>
+                <Font name="Georgia Bold" size="28.0" />
+            </font>
+        </Label>
+
+        <Label text="Your workspace dashboard home is ready. Use the sidebar rail to navigate your tasks" textFill="#6D5339">
+            <font>
+                <Font name="System Graphic" size="14.0" />
+            </font>
+        </Label>
+
+    </children>
+</VBox>

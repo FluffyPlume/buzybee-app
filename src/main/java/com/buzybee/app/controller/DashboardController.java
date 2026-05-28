@@ -28,27 +28,25 @@ public class DashboardController {
     private void initialize() {
         // Set the default active button and load the default screen
         setActiveNav(btnDashboard);
-        // loadScreen("dashboard-home.fxml"); // Uncomment this once you make the file
+        loadScreen("dashboard-home.fxml");
     }
-
-    // Navigation Click Events
 
     @FXML
     private void onNavDashboard() {
         setActiveNav(btnDashboard);
-        // loadScreen("dashboard-home.fxml");
+         loadScreen("dashboard-home.fxml");
     }
 
     @FXML
     private void onNavCalendar() {
         setActiveNav(btnCalendar);
-        // loadScreen("calendar.fxml"); // Uncomment this once you make the file
+        // loadScreen("calendar.fxml");
     }
 
     @FXML
     private void onNavTasks() {
         setActiveNav(btnTasks);
-        // loadScreen("tasks.fxml"); // Uncomment this once you make the file
+         loadScreen("tasks.fxml");
     }
 
     @FXML
