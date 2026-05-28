@@ -26,6 +26,13 @@ public class Task {
     private String status; // "PENDING" , "SCHEDULED" , "BACKLOG" , "COMPLETED"
     private List<String> assignedTimeSlots;
 
+    public long getDaysRemaining() {
+        if (this.deadline == null) {
+            return 0;
+        }
+        return java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(), this.deadline);
+    }
+
     // Constructor
     public Task(String name, double difficulty, double estimatedTime, LocalDate deadline) {
 
@@ -42,6 +49,7 @@ public class Task {
         this.priorityScore = 0;
         this.assignedTimeSlots = new ArrayList<>();
     }
+
 
     // Getters and Setters
     public String getId() { return id; }

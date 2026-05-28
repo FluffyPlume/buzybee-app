@@ -30,6 +30,7 @@ public class TasksController {
     @FXML private Label lblDetailTime;
     @FXML private Label lblDetailDifficulty;
     @FXML private Label lblDetailPriorityScore;
+    @FXML private Label lblDetailDaysRemaining;
 
     @FXML private Button btnAddNewTask;
     @FXML private Button btnMarkComplete;
@@ -101,16 +102,19 @@ public class TasksController {
             if (lblDetailName != null) lblDetailName.setText(task.getName());
             if (lblDetailStatus != null) lblDetailStatus.setText(task.getStatus());
             if (lblDetailDeadline != null) lblDetailDeadline.setText(task.getDeadline().toString());
+
+            if (lblDetailDaysRemaining != null) lblDetailDaysRemaining.setText(task.getDaysRemaining() + " days");
             if (lblDetailTime != null) lblDetailTime.setText(task.getEstimatedTime() + " hrs");
-
             if (lblDetailDifficulty != null) lblDetailDifficulty.setText(String.format("%.1f", task.getDifficulty()));
-
             if (lblDetailPriorityScore != null) lblDetailPriorityScore.setText(String.format("%.2f", task.getPriorityScore()));
         } else {
-            // Clear the values to empty dashes when nothing is highlighted
             if (lblDetailName != null) lblDetailName.setText("---");
             if (lblDetailStatus != null) lblDetailStatus.setText("---");
             if (lblDetailDeadline != null) lblDetailDeadline.setText("---");
+
+            // CLEAR WHEN DESELECTED
+            if (lblDetailDaysRemaining != null) lblDetailDaysRemaining.setText("---");
+
             if (lblDetailTime != null) lblDetailTime.setText("---");
             if (lblDetailDifficulty != null) lblDetailDifficulty.setText("---");
             if (lblDetailPriorityScore != null) lblDetailPriorityScore.setText("---");
