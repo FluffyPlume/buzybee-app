@@ -7,8 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
@@ -197,13 +200,35 @@ public class TasksController {
 
     @FXML
     private void handleEditTask() {
-        Task selected = pendingTasksTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            System.out.println("Editing: " + selected.getName());
-        } else {
-            System.out.println("Please select a task first!");
+
+        Task selectedTask = pendingTasksTable.getSelectionModel().getSelectedItem();
+
+        if (selectedTask == null) {
+            System.out.println("Please select a task to edit!");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
+            Parent root = loader.load();
+
+            AddTaskController controller = loader.getController();
+            controller.setTaskToEdit(selectedTask);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Task");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            pendingTasksTable.refresh();
+
+            showTaskDetails(selectedTask);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleDeleteTask() {

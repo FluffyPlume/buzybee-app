@@ -17,7 +17,7 @@ public class AddTaskController {
     @FXML private TextField txtDifficulty;
     @FXML private Label lblError;
 
-
+    private Task taskToEdit = null;
     private Task createdTask = null;
 
     @FXML
@@ -25,7 +25,6 @@ public class AddTaskController {
         lblError.setText(""); // Clear old errors
 
         try {
-
             String name = txtName.getText();
             LocalDate deadline = dpDeadline.getValue();
 
@@ -37,13 +36,31 @@ public class AddTaskController {
             double time = Double.parseDouble(txtTime.getText());
             double difficulty = Double.parseDouble(txtDifficulty.getText());
 
-            createdTask = new Task(name, difficulty, time, deadline);
+            if (taskToEdit == null) {
+                createdTask = new Task(name, difficulty, time, deadline);
+            } else {
+                taskToEdit.setName(name);
+                taskToEdit.setDeadline(deadline);
+                taskToEdit.setEstimatedTime(time);
+                taskToEdit.setDifficulty(difficulty);
+
+                createdTask = taskToEdit;
+            }
 
             closeWindow();
 
         } catch (NumberFormatException e) {
             lblError.setText("Time and Difficulty must be numbers (e.g. 2.5 or 8).");
         }
+    }
+
+    public void setTaskToEdit(Task task) {
+        this.taskToEdit = task;
+
+        txtName.setText(task.getName());
+        dpDeadline.setValue(task.getDeadline());
+        txtTime.setText(String.valueOf(task.getEstimatedTime()));
+        txtDifficulty.setText(String.valueOf(task.getDifficulty()));
     }
 
     @FXML
