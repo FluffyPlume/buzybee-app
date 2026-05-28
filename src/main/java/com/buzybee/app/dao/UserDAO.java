@@ -58,6 +58,10 @@ public class UserDAO {
                 System.out.println("Registration failed: Username '" + username + " is already taken.");
                 return false;
             }
+            if (u.getEmail() != null && u.getEmail().equalsIgnoreCase(email)) {
+                System.out.println("Registration failed: Email '" + email + "' is already registered.");
+                return false;
+            }
         }
 
         users.add(new User(username, password, email));

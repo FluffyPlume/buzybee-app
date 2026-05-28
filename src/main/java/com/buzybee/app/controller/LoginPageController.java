@@ -110,7 +110,7 @@ public class LoginPageController {
             SessionManager.getInstance().startSession(newUser);
             showDashboard();
         } else {
-            signUpStatusLabel.setText("Username is already taken.");
+            signUpStatusLabel.setText("Username or email already taken.");
         }
     }
 
