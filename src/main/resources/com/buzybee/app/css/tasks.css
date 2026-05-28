@@ -90,6 +90,62 @@
     -fx-border-color: transparent;
 }
 
+
 .split-pane *.split-pane-divider {
-    -fx-background-color: rgba(72, 53, 33, 0.15);
+    -fx-padding: 0 1 0 1;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.tab-pane .tab,
+.tab-pane .tab:focused,
+.tab-pane .tab:selected {
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+}
+.tab-pane *.tab-header-background {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.tab-pane > .tab-content-area {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #6D5339;
+    -fx-background-radius: 6 6 0 0;
+    -fx-padding: 6 15 6 15;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #4A3623;
+    -fx-background-radius: 6 6 0 0;
+    -fx-padding: 6 15 6 15;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .table-view {
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.tab-pane .table-view .column-header-background {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
 }
