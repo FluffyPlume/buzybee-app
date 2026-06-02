@@ -1,0 +1,214 @@
+.app-shell-root.dark-mode,
+.dark-mode .top-bar,
+.dark-mode .side-rail {
+    -fx-background-color: #30302e;
+}
+
+.dark-mode .brand-title {
+    -fx-text-fill: #F4E9D4;
+}
+
+.dark-mode .theme-toggle {
+    -fx-background-color: #242422;
+}
+
+.dark-mode .theme-btn:hover,
+.dark-mode .top-action-btn:hover,
+.dark-mode .side-rail .rail-btn:hover {
+    -fx-background-color: rgba(255, 201, 54, 0.18);
+}
+
+.dark-mode .theme-btn-active,
+.dark-mode .theme-btn-active:hover,
+.dark-mode .theme-btn-active:focused,
+.dark-mode .theme-btn-active:armed,
+.dark-mode .theme-btn-active:pressed,
+.dark-mode .top-action-btn-active,
+.dark-mode .top-action-btn-active:hover,
+.dark-mode .top-action-btn-active:focused,
+.dark-mode .top-action-btn-active:armed,
+.dark-mode .top-action-btn-active:pressed,
+.dark-mode .side-rail .rail-btn-active,
+.dark-mode .side-rail .rail-btn-active:hover,
+.dark-mode .side-rail .rail-btn-active:focused,
+.dark-mode .side-rail .rail-btn-active:armed,
+.dark-mode .side-rail .rail-btn-active:pressed {
+    -fx-background-color: #FFC936;
+}
+
+.dark-mode .dashboard-canvas,
+.dark-mode .dashboard-page,
+.dark-mode .tasks-page {
+    -fx-background-color: #1f1f1d;
+}
+
+.dark-mode .dashboard-title,
+.dark-mode .dashboard-subtitle,
+.dark-mode .tasks-page .label {
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .dashboard-subtitle {
+    -fx-text-fill: #B8B0A4;
+}
+
+.dark-mode .dashboard-search,
+.dark-mode .metric-card,
+.dark-mode .timeline-card,
+.dark-mode .side-card {
+    -fx-background-color: #2b2b29;
+    -fx-border-color: rgba(244, 233, 212, 0.16);
+    -fx-border-radius: 12;
+}
+
+.dark-mode .dashboard-search {
+    -fx-text-fill: #EDE6DA;
+    -fx-prompt-text-fill: #8F887E;
+}
+
+.dark-mode .metric-card-alert {
+    -fx-background-color: #302b28;
+}
+
+.dark-mode .metric-title,
+.dark-mode .side-card-title {
+    -fx-text-fill: #C9C0B3;
+}
+
+.dark-mode .metric-value,
+.dark-mode .section-title,
+.dark-mode .check-box {
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .timeline-blue {
+    -fx-background-color: #263640;
+}
+
+.dark-mode .timeline-purple {
+    -fx-background-color: #332b3d;
+}
+
+.dark-mode .timeline-gold {
+    -fx-background-color: #3B3322;
+}
+
+.dark-mode .timeline-blue .label {
+    -fx-text-fill: #9AD7F5;
+}
+
+.dark-mode .timeline-purple .label {
+    -fx-text-fill: #D8B4FE;
+}
+
+.dark-mode .timeline-gold .label {
+    -fx-text-fill: #FCD979;
+}
+
+.dark-mode .table-view {
+    -fx-background-color: #2b2b29;
+    -fx-border-color: rgba(244, 233, 212, 0.16);
+}
+
+.dark-mode .table-view .column-header-background {
+    -fx-background-color: #30302e;
+}
+
+.dark-mode .table-row-cell {
+    -fx-background-color: #2b2b29;
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .table-row-cell:odd {
+    -fx-background-color: #262624;
+}
+
+.dark-mode .table-row-cell:hover {
+    -fx-background-color: #363633;
+}
+
+.dark-mode .table-row-cell:selected,
+.dark-mode .table-row-cell:selected .table-cell {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #1f1f1d;
+}
+
+.dark-mode .table-cell {
+    -fx-text-fill: #EDE6DA;
+    -fx-border-color: rgba(244, 233, 212, 0.08);
+}
+
+.dark-mode .tab-pane .tab {
+    -fx-background-color: #363633;
+}
+
+.dark-mode .tab-pane .tab:selected {
+    -fx-background-color: #30302e;
+}
+
+.dark-mode .task-details-card,
+.dark-mode .list-view {
+    -fx-background-color: #2b2b29;
+    -fx-border-color: rgba(244, 233, 212, 0.16);
+}
+
+.dark-mode .task-details-header {
+    -fx-border-color: rgba(244, 233, 212, 0.14);
+}
+
+.dark-mode .task-detail-label,
+.dark-mode .completed-title {
+    -fx-text-fill: #C9C0B3;
+}
+
+.dark-mode .task-detail-accent {
+    -fx-text-fill: #FFC936;
+}
+
+.dark-mode .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EDE6DA;
+    -fx-border-color: rgba(244, 233, 212, 0.1);
+}
+
+.dark-mode .list-cell:filled:hover {
+    -fx-background-color: #363633;
+}
+
+.dark-mode .list-cell:filled:selected {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #1f1f1d;
+}
+
+.dark-mode .tasks-page .button {
+    -fx-background-color: #363633;
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .tasks-page .button:hover {
+    -fx-background-color: #42423f;
+}
+
+.dark-mode .tasks-page .algo-btn,
+.dark-mode .tasks-page #btnRunAlgorithm {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #1f1f1d;
+}
+
+.dark-mode .logout-panel {
+    -fx-background-color: #2b2b29;
+    -fx-border-color: rgba(244, 233, 212, 0.18);
+}
+
+.dark-mode .logout-title {
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .logout-cancel-btn {
+    -fx-border-color: #EDE6DA;
+    -fx-text-fill: #EDE6DA;
+}
+
+.dark-mode .logout-cancel-btn:hover {
+    -fx-background-color: rgba(244, 233, 212, 0.1);
+}

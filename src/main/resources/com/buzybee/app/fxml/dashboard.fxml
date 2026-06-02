@@ -2,144 +2,79 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="348.0" minWidth="622.0" prefHeight="348.0" prefWidth="622.0" styleClass="dashboard-root" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.DashboardController">
+<VBox prefHeight="650.0" prefWidth="1000.0" spacing="24.0" styleClass="dashboard-page" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.DashboardController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
 
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="37.0" styleClass="top-bar">
-            <padding>
-                <Insets left="45.0" right="14.0" />
-            </padding>
+    <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+        <VBox spacing="4.0">
+            <Label styleClass="dashboard-title" text="My Dashboard" />
+            <Label fx:id="greetingLabel" styleClass="dashboard-greeting" text="Hello!" />
+            <Label fx:id="dashboardSubtitleLabel" styleClass="dashboard-subtitle" text="Here is your BuzyBee overview." />
+        </VBox>
 
-            <Label styleClass="brand-title" text="BuzyBee" HBox.hgrow="NEVER" />
-            <Region HBox.hgrow="ALWAYS" />
+        <Region HBox.hgrow="ALWAYS" />
 
-            <HBox alignment="CENTER" prefWidth="80.0" spacing="12.0" styleClass="top-actions" HBox.hgrow="NEVER">
-                <HBox alignment="CENTER" spacing="3.0" styleClass="theme-toggle">
-                    <Button fx:id="btnDarkMode" onAction="#onDarkMode" styleClass="theme-btn">
-                        <graphic>
-                            <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                                <image>
-                                    <Image url="@../images/dark.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </Button>
+        <TextField prefWidth="250.0" promptText="Search tasks..." styleClass="dashboard-search" />
+    </HBox>
 
-                    <Button fx:id="btnLightMode" onAction="#onLightMode" styleClass="theme-btn theme-btn-active">
-                        <graphic>
-                            <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                                <image>
-                                    <Image url="@../images/light.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </Button>
+    <HBox spacing="24.0" VBox.vgrow="ALWAYS">
+        <VBox spacing="24.0" HBox.hgrow="ALWAYS">
+            <HBox spacing="16.0">
+                <VBox spacing="6.0" styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="metric-title" text="Completed Tasks" />
+                    <Label fx:id="completedPercentLabel" styleClass="metric-value" text="0%" />
+                    <Label fx:id="completedCountLabel" styleClass="metric-footer" text="0 completed" />
+                </VBox>
+
+                <VBox spacing="6.0" styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="metric-title" text="Hours Tracked" />
+                    <Label fx:id="hoursTrackedLabel" styleClass="metric-value" text="0 hrs" />
+                    <Label styleClass="metric-footer" text="Active workload" />
+                </VBox>
+
+                <VBox spacing="6.0" styleClass="metric-card metric-card-alert" HBox.hgrow="ALWAYS">
+                    <Label styleClass="metric-title" text="Pending Actions" />
+                    <Label fx:id="pendingActionsLabel" styleClass="metric-value" text="0 Tasks" />
+                    <Label fx:id="dueTodayLabel" styleClass="metric-footer metric-footer-alert" text="0 due today" />
+                </VBox>
+            </HBox>
+
+            <VBox spacing="16.0" styleClass="timeline-card" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <Label styleClass="section-title" text="Task Overview" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button mnemonicParsing="false" onAction="#openTasks" styleClass="dashboard-primary-btn" text="Open Tasks" />
                 </HBox>
 
-                <Button fx:id="btnNotification" onAction="#onTopNotification" styleClass="top-action-btn">
-                    <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/notification.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                <VBox fx:id="taskOverviewList" spacing="12.0" />
+            </VBox>
+        </VBox>
 
-                <Button fx:id="btnUser" onAction="#onTopUser" styleClass="top-action-btn">
-                    <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/user.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </HBox>
-        </HBox>
-    </top>
-   <left>
-          <VBox alignment="TOP_CENTER" prefWidth="36.0" spacing="12.0" BorderPane.alignment="CENTER">
-              <padding>
-                  <Insets top="10.0" />
-              </padding>
+        <VBox prefWidth="280.0" spacing="24.0">
+            <VBox spacing="12.0" styleClass="side-card">
+                <Label fx:id="monthLabel" styleClass="side-card-title" text="Month" />
+                <DatePicker fx:id="dashboardDatePicker" maxWidth="Infinity" promptText="Pick a date" showWeekNumbers="false" />
+            </VBox>
 
-              <Button fx:id="btnDashboard" onAction="#onNavDashboard" styleClass="rail-btn">
-                  <graphic>
-                      <ImageView fitHeight="19.0" fitWidth="19.0" preserveRatio="true">
-                          <image>
-                              <Image url="@../images/dashboard.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-
-              <Button fx:id="btnCalendar" onAction="#onNavCalendar" styleClass="rail-btn">
-                  <graphic>
-                      <ImageView fitHeight="21.0" fitWidth="21.0" preserveRatio="true">
-                          <image>
-                              <Image url="@../images/calendar.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-
-              <Button fx:id="btnTasks" onAction="#onNavTasks" styleClass="rail-btn">
-                  <graphic>
-                      <ImageView fitHeight="21.0" fitWidth="21.0" preserveRatio="true">
-                          <image>
-                              <Image url="@../images/task.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-
-              <Button fx:id="btnAnalytics" onAction="#onNavAnalytics" styleClass="rail-btn">
-                  <graphic>
-                      <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                          <image>
-                              <Image url="@../images/analytics.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-
-              <Region maxWidth="40.0" prefHeight="1.0" styleClass="rail-divider" />
-
-              <Button fx:id="btnSettings" onAction="#onNavSettings" styleClass="rail-btn">
-                  <graphic>
-                      <ImageView fitHeight="22.0" fitWidth="22.0" preserveRatio="true">
-                          <image>
-                              <Image url="@../images/settings.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-
-             <VBox alignment="CENTER" styleClass="logout-slot">
-                 <Button fx:id="btnLogout" onAction="#onNavLogout" styleClass="rail-btn logout-btn">
-                     <graphic>
-                         <ImageView fitHeight="18.0" fitWidth="18.0" preserveRatio="true">
-                             <image>
-                                 <Image url="@../images/logout.png" />
-                             </image>
-                         </ImageView>
-                     </graphic>
-                 </Button>
-             </VBox>
-          </VBox>
-   </left>
-   <center>
-
-         <StackPane fx:id="contentArea" onMouseClicked="#clearTopSelection" styleClass="dashboard-canvas" BorderPane.alignment="CENTER" />
-   </center>
-</BorderPane>
+            <VBox spacing="10.0" styleClass="side-card">
+                <Label styleClass="side-card-title" text="Filters" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="filter-btn" text="All Tasks" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="filter-btn" text="Pending" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="filter-btn" text="Scheduled" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="filter-btn" text="Backlog" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="filter-btn" text="Due Today" />
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

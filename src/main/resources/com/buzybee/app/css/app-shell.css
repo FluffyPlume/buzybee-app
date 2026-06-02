@@ -1,0 +1,288 @@
+.app-shell-root {
+    -fx-background-color: #483521;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.top-bar {
+    -fx-background-color: #483521;
+}
+
+.brand-title {
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.top-actions {
+    -fx-min-height: 29px;
+    -fx-pref-height: 29px;
+    -fx-max-height: 29px;
+}
+
+.theme-toggle {
+    -fx-background-color: #826443;
+    -fx-background-radius: 12;
+    -fx-min-width: 64px;
+    -fx-min-height: 24px;
+    -fx-pref-width: 64px;
+    -fx-pref-height: 24px;
+    -fx-max-width: 64px;
+    -fx-max-height: 24px;
+    -fx-padding: 1 1 1 1;
+}
+
+.theme-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 11;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-border-width: 0;
+    -fx-effect: null;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 31px;
+    -fx-min-height: 22px;
+    -fx-pref-width: 31px;
+    -fx-pref-height: 22px;
+    -fx-max-width: 31px;
+    -fx-max-height: 22px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.theme-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+.theme-btn:focused,
+.theme-btn:armed,
+.theme-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: null;
+    -fx-padding: 0;
+}
+
+.theme-btn-active,
+.theme-btn-active:hover,
+.theme-btn-active:focused,
+.theme-btn-active:armed,
+.theme-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-radius: 11;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: null;
+    -fx-padding: 0;
+}
+
+.side-rail {
+    -fx-background-color: #483521;
+}
+
+.top-action-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.top-action-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+}
+
+.top-action-btn:focused,
+.top-action-btn:armed,
+.top-action-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.top-action-btn-active,
+.top-action-btn-active:hover,
+.top-action-btn-active:focused,
+.top-action-btn-active:armed,
+.top-action-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-radius: 50%;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+    -fx-min-width: 32px;
+    -fx-min-height: 31px;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 31px;
+    -fx-max-width: 32px;
+    -fx-max-height: 31px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.side-rail .button,
+.side-rail .button:focused,
+.side-rail .button:armed,
+.side-rail .button:pressed,
+.side-rail .button:default {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-padding: 0;
+}
+
+.rail-btn:focused,
+.rail-btn:armed,
+.rail-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+.rail-btn-active {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #FFFFFF;
+}
+
+.side-rail .rail-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+.side-rail .rail-btn-active,
+.side-rail .rail-btn-active:hover,
+.side-rail .rail-btn-active:focused,
+.side-rail .rail-btn-active:armed,
+.side-rail .rail-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-btn-active:hover,
+.rail-btn-active:focused,
+.rail-btn-active:armed,
+.rail-btn-active:pressed {
+    -fx-background-color: #FFC936;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rail-divider {
+    -fx-background-color: rgba(255,255,255,0.38);
+    -fx-min-height: 1px;
+    -fx-pref-height: 1px;
+}
+
+.logout-slot {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255,255,255,0.38) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 10 0 10 0;
+}
+
+.logout-btn:hover {
+    -fx-background-color: rgba(255,201,54,0.22);
+}
+
+.logout-btn:focused,
+.logout-btn:armed,
+.logout-btn:pressed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-effect: null;
+}
+
+.dashboard-canvas {
+    -fx-background-color: #FAEEDA;
+}
+
+.logout-dialog {
+    -fx-background-color: #FAEEDA;
+    -fx-border-color: #483521;
+    -fx-border-width: 2;
+}
+
+.logout-dialog:header .header-panel {
+    -fx-background-color: #483521;
+}
+
+.logout-dialog:header .header-panel .label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.logout-dialog .button-bar {
+    -fx-background-color: #FAEEDA;
+}
+
+.logout-dialog .button {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #483521;
+    -fx-border-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-padding: 7 18 7 18;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logout-dialog .button:default {
+    -fx-background-color: #FFC936;
+    -fx-text-fill: #483521;
+    -fx-border-color: transparent;
+}
+
+.logout-dialog .button:cancel {
+    -fx-background-color: #FFC936;
+    -fx-border-color: transparent;
+    -fx-text-fill: #483521;
+}
+
+.logout-dialog .button:hover {
+    -fx-opacity: 0.9;
+}

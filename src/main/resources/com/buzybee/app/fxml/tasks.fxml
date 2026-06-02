@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="700.0" prefWidth="1050.0" stylesheets="@../css/tasks.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.TasksController">
+<VBox prefHeight="700.0" prefWidth="1050.0" styleClass="tasks-page" stylesheets="@../css/tasks.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.TasksController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -68,7 +68,7 @@
             </TabPane>
 
             <HBox alignment="CENTER_LEFT" spacing="10.0">
-                <Button fx:id="btnRunAlgorithm" onAction="#handleRunKnapsack" style="-fx-background-color: #FFD700; -fx-font-weight: bold;" text="Run Knapsack Algorithm" />
+                <Button fx:id="btnRunAlgorithm" onAction="#handleRunKnapsack" styleClass="algo-btn" text="Run Knapsack Algorithm" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="btnRefreshTask" onAction="#handleRefresh" text="Refresh" />
                 <Button fx:id="btnDeleteTask" onAction="#handleDeleteTask" text="Delete Task" />
@@ -84,8 +84,8 @@
                 <Insets left="10.0" />
             </padding>
 
-            <VBox spacing="15.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 8; -fx-border-color: rgba(72, 53, 33, 0.15); -fx-border-radius: 8; -fx-padding: 20 15 20 15;">
-                <VBox spacing="5.0" style="-fx-border-color: rgba(72, 53, 33, 0.1); -fx-border-width: 0 0 1 0; -fx-padding: 0 0 10 0;">
+            <VBox spacing="15.0" styleClass="task-details-card">
+                <VBox spacing="5.0" styleClass="task-details-header">
                     <Label text="Task Details">
                         <font><Font name="System Bold" size="18.0" /></font>
                     </Label>
@@ -110,35 +110,35 @@
                         <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label text="Task Name:"      GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                    <Label text="Task Name:"      GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailName"     text="---" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
 
-                        <Label text="Status:"         GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Status:"         GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailStatus"   text="---" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Date Added:"     GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Date Added:"     GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailDateAdded" text="---" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Deadline:"       GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Deadline:"       GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailDeadline" text="---" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                        <Label text="Days Left:"      GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Days Left:"      GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailDaysRemaining" text="---" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                        <Label text="Est. Time:"      GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Est. Time:"      GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailTime"     text="---" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-                        <Label text="Difficulty:"     GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
+                        <Label text="Difficulty:"     GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="task-detail-label"/>
                         <Label fx:id="lblDetailDifficulty" text="---" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-                        <Label text="Priority Score:" GridPane.columnIndex="0" GridPane.rowIndex="7" style="-fx-font-weight: bold; -fx-text-fill: #6D5339;"/>
-                        <Label fx:id="lblDetailPriorityScore" text="---" GridPane.columnIndex="1" GridPane.rowIndex="7" style="-fx-text-fill: #FFC936; -fx-font-weight: bold;" />
+                        <Label text="Priority Score:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="task-detail-label"/>
+                        <Label fx:id="lblDetailPriorityScore" text="---" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="task-detail-accent" />
                     </children>
                 </GridPane>
             </VBox>
 
             <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-                <Label text="Completed Tasks" textFill="#4A3623">
+                <Label text="Completed Tasks" styleClass="completed-title">
                     <font><Font name="System Bold" size="14.0" /></font>
                 </Label>
                 <ListView fx:id="completedListView" VBox.vgrow="ALWAYS" />

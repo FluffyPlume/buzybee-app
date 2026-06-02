@@ -1,4 +1,8 @@
 
+.tasks-page {
+    -fx-background-color: transparent;
+}
+
 .label {
     -fx-text-fill: #483521;
 }
@@ -57,6 +61,34 @@
 .list-cell:filled:selected {
     -fx-background-color: #FFE082;
     -fx-text-fill: #483521;
+}
+
+.task-details-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(72, 53, 33, 0.15);
+    -fx-border-radius: 8;
+    -fx-padding: 20 15 20 15;
+}
+
+.task-details-header {
+    -fx-border-color: rgba(72, 53, 33, 0.1);
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 10 0;
+}
+
+.task-detail-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #6D5339;
+}
+
+.task-detail-accent {
+    -fx-text-fill: #FFC936;
+    -fx-font-weight: bold;
+}
+
+.completed-title {
+    -fx-text-fill: #4A3623;
 }
 
 .tasks-button {

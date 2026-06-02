@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane fx:id="appShellRoot" minHeight="348.0" minWidth="622.0" prefHeight="348.0" prefWidth="622.0" styleClass="app-shell-root" stylesheets="@../css/app-shell.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.AppShellController">
+    <top>
+        <fx:include fx:id="topBar" source="top-bar.fxml" />
+    </top>
+
+    <left>
+        <fx:include fx:id="sideMenu" source="side-menu.fxml" />
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="dashboard-canvas" BorderPane.alignment="CENTER" />
+    </center>
+</BorderPane>

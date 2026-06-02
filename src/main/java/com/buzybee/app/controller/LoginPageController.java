@@ -60,9 +60,21 @@ public class LoginPageController {
 
     @FXML
     private void initialize() {
+        submitOnEnter(signInIdentifierField, this::handleSignIn);
+        submitOnEnter(signInPasswordField, this::handleSignIn);
+        submitOnEnter(signUpEmailField, this::handleSignUpSubmit);
+        submitOnEnter(signUpUsernameField, this::handleSignUpSubmit);
+        submitOnEnter(signUpPasswordField, this::handleSignUpSubmit);
+
         if (signUpForm != null) {
             signUpForm.setDisable(true);
             signUpForm.setMouseTransparent(true);
+        }
+    }
+
+    private void submitOnEnter(TextField field, Runnable submitAction) {
+        if (field != null) {
+            field.setOnAction(event -> submitAction.run());
         }
     }
 
@@ -115,7 +127,7 @@ public class LoginPageController {
     }
 
     private void showDashboard() {
-        loadScreen("fxml/dashboard.fxml", 1280, 720);
+        loadScreen("fxml/app-shell.fxml", 1280, 720);
     }
 
     private void loadScreen(String fxmlPath, double width, double height) {
@@ -124,12 +136,9 @@ public class LoginPageController {
             Parent root = loader.load();
             Stage stage = (Stage) signInForm.getScene().getWindow();
 
-            stage.setScene(new Scene(root));
-
-            stage.setWidth(width);
-            stage.setHeight(height);
-
+            stage.setScene(new Scene(root, width, height));
             stage.setResizable(true);
+            stage.sizeToScene();
             stage.centerOnScreen();
         } catch (IOException exception) {
             signInStatusLabel.setText("Screen could not be loaded.");

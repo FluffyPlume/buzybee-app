@@ -1,0 +1,70 @@
+.analytics-page {
+    -fx-background-color: #FAEEDA;
+}
+
+.analytics-title {
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+}
+
+.analytics-subtitle,
+.analytics-card-title,
+.analytics-card-note {
+    -fx-text-fill: #6D5339;
+}
+
+.analytics-primary-btn {
+    -fx-background-color: #483521;
+    -fx-background-radius: 7;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+
+.analytics-primary-btn:hover {
+    -fx-background-color: #61482E;
+}
+
+.analytics-card,
+.analytics-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(72, 53, 33, 0.15);
+    -fx-border-radius: 8;
+    -fx-padding: 18;
+}
+
+.analytics-card-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+}
+
+.analytics-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+}
+
+.analytics-row {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 7;
+    -fx-padding: 10 12 10 12;
+}
+
+.analytics-row .label {
+    -fx-text-fill: #483521;
+}
+
+.analytics-row-value {
+    -fx-font-weight: bold;
+}
+
+.analytics-empty {
+    -fx-text-fill: #6D5339;
+    -fx-font-size: 13px;
+    -fx-padding: 8 0 0 0;
+}

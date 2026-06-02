@@ -1,163 +1,157 @@
 package com.buzybee.app.controller;
 
 import com.buzybee.app.config.SessionManager;
+import com.buzybee.app.dao.TaskDAO;
+import com.buzybee.app.model.Task;
+import com.buzybee.app.model.User;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.geometry.Pos;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.List;
 
 public class DashboardController {
+    @FXML private Label greetingLabel;
+    @FXML private Label dashboardSubtitleLabel;
+    @FXML private Label completedPercentLabel;
+    @FXML private Label completedCountLabel;
+    @FXML private Label hoursTrackedLabel;
+    @FXML private Label pendingActionsLabel;
+    @FXML private Label dueTodayLabel;
+    @FXML private Label monthLabel;
+    @FXML private DatePicker dashboardDatePicker;
+    @FXML private VBox taskOverviewList;
 
-    //  UI Buttons
-    @FXML private Button btnDashboard;
-    @FXML private Button btnCalendar;
-    @FXML private Button btnTasks;
-    @FXML private Button btnAnalytics;
-    @FXML private Button btnSettings;
-    @FXML private Button btnLogout;
-    @FXML private Button btnDarkMode;
-    @FXML private Button btnLightMode;
-    @FXML private Button btnNotification;
-    @FXML private Button btnUser;
-
-    // The Content Area
-    @FXML private StackPane contentArea;
+    private AppShellController appShellController;
 
     @FXML
-    private void initialize() {
-        // Set the default active button and load the default screen
-        setActiveNav(btnDashboard);
-        loadScreen("dashboard-home.fxml");
+    public void initialize() {
+        dashboardDatePicker.setValue(LocalDate.now());
+        monthLabel.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM yyyy")));
+        loadDashboardData();
+    }
+
+    void setAppShellController(AppShellController appShellController) {
+        this.appShellController = appShellController;
     }
 
     @FXML
-    private void onNavDashboard() {
-        setActiveNav(btnDashboard);
-         loadScreen("dashboard-home.fxml");
-    }
-
-    @FXML
-    private void onNavCalendar() {
-        setActiveNav(btnCalendar);
-        // loadScreen("calendar.fxml");
-    }
-
-    @FXML
-    private void onNavTasks() {
-        setActiveNav(btnTasks);
-         loadScreen("tasks.fxml");
-    }
-
-    @FXML
-    private void onNavAnalytics() {
-        setActiveNav(btnAnalytics);
-        // loadScreen("analytics.fxml");
-    }
-
-    @FXML
-    private void onNavSettings() {
-        setActiveNav(btnSettings);
-        // loadScreen("settings.fxml");
-    }
-
-    @FXML
-    private void onNavLogout() {
-        setActiveNav(btnLogout);
-        SessionManager.getInstance().endSession();
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/auth.fxml"));
-            javafx.scene.Parent root = loader.load();
-
-            javafx.stage.Stage stage = (javafx.stage.Stage) btnLogout.getScene().getWindow();
-
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.setWidth(682);
-            stage.setHeight(383);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Could not load the login screen!");
-            e.printStackTrace();
+    private void openTasks() {
+        if (appShellController != null) {
+            appShellController.showTasks();
         }
     }
 
-    // Screen Swap dun sa contentArea
-    private void loadScreen(String fxmlFileName) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/" + fxmlFileName));
-            Node newScreen = loader.load();
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(newScreen);
-        } catch (Exception e) {
-            System.out.println("Could not load the screen: " + fxmlFileName);
-            e.printStackTrace();
+    private void loadDashboardData() {
+        SessionManager session = SessionManager.getInstance();
+        User currentUser = session.getCurrentUser();
+        TaskDAO taskDAO = session.getTaskDao();
+
+        String username = currentUser != null ? currentUser.getUsername() : "there";
+        greetingLabel.setText("Hello, " + username + "!");
+
+        if (taskDAO == null) {
+            dashboardSubtitleLabel.setText("Sign in to see your workspace overview.");
+            return;
+        }
+
+        List<Task> allTasks = taskDAO.getAllTasks();
+        List<Task> pendingTasks = taskDAO.getPendingTasks();
+        List<Task> scheduledTasks = taskDAO.getScheduledTasks();
+        List<Task> backlogTasks = taskDAO.getBacklogTasks();
+        List<Task> completedTasks = taskDAO.getCompletedTasks();
+
+        int activeCount = pendingTasks.size() + scheduledTasks.size() + backlogTasks.size();
+        int totalCount = allTasks.size();
+        int completedPercent = totalCount == 0 ? 0 : (int) Math.round((completedTasks.size() * 100.0) / totalCount);
+        long dueToday = allTasks.stream()
+                .filter(task -> !"COMPLETED".equals(task.getStatus()))
+                .filter(task -> LocalDate.now().equals(task.getDeadline()))
+                .count();
+        double activeHours = allTasks.stream()
+                .filter(task -> !"COMPLETED".equals(task.getStatus()))
+                .mapToDouble(Task::getEstimatedTime)
+                .sum();
+
+        completedPercentLabel.setText(completedPercent + "%");
+        completedCountLabel.setText(completedTasks.size() + " completed of " + totalCount);
+        hoursTrackedLabel.setText(String.format("%.1f hrs", activeHours));
+        pendingActionsLabel.setText(activeCount + (activeCount == 1 ? " Task" : " Tasks"));
+        dueTodayLabel.setText(dueToday + " due today");
+
+        dashboardSubtitleLabel.setText(activeCount == 0
+                ? "No active tasks right now. Nice and calm."
+                : "You have " + activeCount + " active tasks across your workspace.");
+
+        showTaskOverview(allTasks);
+    }
+
+    private void showTaskOverview(List<Task> tasks) {
+        taskOverviewList.getChildren().clear();
+
+        List<Task> activeTasks = tasks.stream()
+                .filter(task -> !"COMPLETED".equals(task.getStatus()))
+                .sorted(Comparator
+                        .comparing(Task::getDeadline, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Comparator.comparingDouble(Task::getPriorityScore).reversed()))
+                .limit(4)
+                .toList();
+
+        if (activeTasks.isEmpty()) {
+            Label emptyLabel = new Label("No active tasks yet. Add one from the Tasks tab.");
+            emptyLabel.getStyleClass().add("empty-dashboard-label");
+            taskOverviewList.getChildren().add(emptyLabel);
+            return;
+        }
+
+        int index = 0;
+        for (Task task : activeTasks) {
+            taskOverviewList.getChildren().add(createTaskRow(task, index));
+            index++;
         }
     }
 
+    private HBox createTaskRow(Task task, int index) {
+        HBox row = new HBox(16);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.getStyleClass().addAll("timeline-item", timelineStyle(index));
 
+        Label status = new Label(task.getStatus());
+        status.setPrefWidth(75);
+        status.getStyleClass().add("timeline-time");
 
-    @FXML
-    private void onDarkMode() { setActiveThemeButton(btnDarkMode); }
+        Separator separator = new Separator();
+        separator.setOrientation(javafx.geometry.Orientation.VERTICAL);
 
-    @FXML
-    private void onLightMode() { setActiveThemeButton(btnLightMode); }
+        VBox details = new VBox(2);
+        Label title = new Label(task.getName());
+        title.getStyleClass().add("timeline-title");
+        Label subtitle = new Label(taskSubtitle(task));
+        subtitle.getStyleClass().add("timeline-subtitle");
+        details.getChildren().addAll(title, subtitle);
 
-    @FXML
-    private void onTopNotification() { setActiveTopButton(btnNotification); }
-
-    @FXML
-    private void onTopUser() { setActiveTopButton(btnUser); }
-
-    private void setActiveNav(Button selected) {
-        clearTopSelection();
-        Button[] buttons = {btnDashboard, btnCalendar, btnTasks, btnAnalytics, btnSettings, btnLogout};
-        for (Button button : buttons) {
-            if (!button.getStyleClass().contains("rail-btn")) {
-                button.getStyleClass().add("rail-btn");
-            }
-            button.getStyleClass().remove("rail-btn-active");
-            if (button == selected) {
-                button.getStyleClass().add("rail-btn-active");
-            }
-        }
+        row.getChildren().addAll(status, separator, details);
+        return row;
     }
 
-    @FXML
-    private void clearTopSelection() {
-        Button[] buttons = {btnNotification, btnUser};
-        for (Button button : buttons) {
-            if (button != null) {
-                button.getStyleClass().remove("top-action-btn-active");
-            }
-        }
+    private String taskSubtitle(Task task) {
+        String deadline = task.getDeadline() == null ? "No deadline" : "Due " + task.getDeadline();
+        return deadline + " | " + String.format("%.1f hrs", task.getEstimatedTime())
+                + " | Priority " + String.format("%.2f", task.getPriorityScore());
     }
 
-    private void setActiveTopButton(Button selected) {
-        Button[] buttons = {btnNotification, btnUser};
-        for (Button button : buttons) {
-            if (!button.getStyleClass().contains("top-action-btn")) {
-                button.getStyleClass().add("top-action-btn");
-            }
-            button.getStyleClass().remove("top-action-btn-active");
-            if (button == selected) {
-                button.getStyleClass().add("top-action-btn-active");
-            }
-        }
-    }
-
-    private void setActiveThemeButton(Button selected) {
-        Button[] buttons = {btnDarkMode, btnLightMode};
-        for (Button button : buttons) {
-            if (!button.getStyleClass().contains("theme-btn")) {
-                button.getStyleClass().add("theme-btn");
-            }
-            button.getStyleClass().remove("theme-btn-active");
-            if (button == selected) {
-                button.getStyleClass().add("theme-btn-active");
-            }
-        }
+    private String timelineStyle(int index) {
+        return switch (index % 3) {
+            case 0 -> "timeline-gold";
+            case 1 -> "timeline-brown";
+            default -> "timeline-cream";
+        };
     }
 }

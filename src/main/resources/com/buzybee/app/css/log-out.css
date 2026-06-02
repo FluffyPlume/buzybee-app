@@ -1,0 +1,75 @@
+/* ── logout.css ── */
+
+.logout-overlay {
+    -fx-background-color: transparent;
+}
+
+.logout-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(72, 53, 33, 0.15);
+    -fx-border-width: 1;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.30), 26, 0.18, 0, 8);
+}
+
+.logout-bee {
+    -fx-effect: dropshadow(gaussian, rgba(72,53,33,0.18), 8, 0, 0, 2);
+}
+
+.logout-title {
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+}
+
+.logout-subtitle {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B4E2E;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.logout-cancel-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: #483521;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-text-fill: #483521;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 28 8 28;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.logout-cancel-btn:hover {
+    -fx-background-color: rgba(72,53,33,0.08);
+}
+
+.logout-confirm-btn {
+    -fx-background-color: #FFC936;
+    -fx-border-color: transparent;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-text-fill: #483521;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 28 8 28;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.logout-confirm-btn:hover {
+    -fx-background-color: #e6b425;
+}
+
+.logout-confirm-btn:pressed {
+    -fx-background-color: #cc9e1f;
+}

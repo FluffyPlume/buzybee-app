@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="650.0" prefWidth="1000.0" spacing="24.0" styleClass="analytics-page" stylesheets="@../css/analytics.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.AnalyticsController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT">
+        <VBox spacing="4.0">
+            <Label styleClass="analytics-title" text="Analytics" />
+            <Label fx:id="analyticsSubtitleLabel" styleClass="analytics-subtitle" text="Workspace performance overview" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button mnemonicParsing="false" onAction="#openTasks" styleClass="analytics-primary-btn" text="Open Tasks" />
+    </HBox>
+
+    <HBox spacing="16.0">
+        <VBox spacing="6.0" styleClass="analytics-card" HBox.hgrow="ALWAYS">
+            <Label styleClass="analytics-card-title" text="Completion Rate" />
+            <Label fx:id="completionRateLabel" styleClass="analytics-card-value" text="0%" />
+            <Label fx:id="completionCountLabel" styleClass="analytics-card-note" text="0 completed" />
+        </VBox>
+
+        <VBox spacing="6.0" styleClass="analytics-card" HBox.hgrow="ALWAYS">
+            <Label styleClass="analytics-card-title" text="Active Hours" />
+            <Label fx:id="activeHoursLabel" styleClass="analytics-card-value" text="0 hrs" />
+            <Label styleClass="analytics-card-note" text="Pending, scheduled, and backlog" />
+        </VBox>
+
+        <VBox spacing="6.0" styleClass="analytics-card" HBox.hgrow="ALWAYS">
+            <Label styleClass="analytics-card-title" text="Average Difficulty" />
+            <Label fx:id="averageDifficultyLabel" styleClass="analytics-card-value" text="0.0" />
+            <Label styleClass="analytics-card-note" text="Active tasks only" />
+        </VBox>
+    </HBox>
+
+    <HBox spacing="24.0" VBox.vgrow="ALWAYS">
+        <VBox spacing="14.0" styleClass="analytics-panel" HBox.hgrow="ALWAYS">
+            <Label styleClass="analytics-section-title" text="Task Breakdown" />
+            <VBox spacing="10.0">
+                <HBox alignment="CENTER_LEFT" styleClass="analytics-row">
+                    <Label text="Pending" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="pendingCountLabel" styleClass="analytics-row-value" text="0" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" styleClass="analytics-row">
+                    <Label text="Scheduled" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="scheduledCountLabel" styleClass="analytics-row-value" text="0" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" styleClass="analytics-row">
+                    <Label text="Backlog" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="backlogCountLabel" styleClass="analytics-row-value" text="0" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" styleClass="analytics-row">
+                    <Label text="Completed" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="completedCountLabel" styleClass="analytics-row-value" text="0" />
+                </HBox>
+            </VBox>
+        </VBox>
+
+        <VBox spacing="14.0" styleClass="analytics-panel" HBox.hgrow="ALWAYS">
+            <Label styleClass="analytics-section-title" text="Priority Watch" />
+            <VBox fx:id="priorityWatchList" spacing="10.0" />
+        </VBox>
+    </HBox>
+</VBox>

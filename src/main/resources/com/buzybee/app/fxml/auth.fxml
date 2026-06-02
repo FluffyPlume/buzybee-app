@@ -30,12 +30,12 @@
 
                 <Button layoutX="112.0" layoutY="190.0" mnemonicParsing="false" onAction="#handleForgotPassword" prefHeight="20.0" prefWidth="138.0" styleClass="forgot-button" text="Forgot Password?" />
 
-                <Button layoutX="7.0" layoutY="211.0" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="36.0" prefWidth="243.0" styleClass="primary-button" text="Sign In" />
+                <Button layoutX="7.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="36.0" prefWidth="243.0" styleClass="primary-button" text="Sign In" />
 
-                <Line endX="94.0" layoutX="11.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
-                <Label layoutX="123.0" layoutY="250.0" styleClass="or-label" text="or" />
-                <Line endX="94.0" layoutX="158.0" layoutY="260.0" startX="0.0" styleClass="or-line" />
-                <Button layoutX="7.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleGoogleSignIn" prefHeight="35.0" prefWidth="243.0" styleClass="google-button" text="Continue with Google">
+                <Line endX="94.0" layoutX="11.0" layoutY="269.0" startX="0.0" styleClass="or-line" />
+                <Label layoutX="123.0" layoutY="259.0" styleClass="or-label" text="or" />
+                <Line endX="94.0" layoutX="158.0" layoutY="269.0" startX="0.0" styleClass="or-line" />
+                <Button layoutX="7.0" layoutY="281.0" mnemonicParsing="false" onAction="#handleGoogleSignIn" prefHeight="35.0" prefWidth="243.0" styleClass="google-button" text="Continue with Google">
                     <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
                             <image>
@@ -44,7 +44,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Label fx:id="signInStatusLabel" layoutX="0.0" layoutY="307.0" prefWidth="243.0" styleClass="status-label" text="" />
+                <Label fx:id="signInStatusLabel" layoutX="0.0" layoutY="316.0" prefWidth="243.0" styleClass="status-label" text="" />
             </children>
         </AnchorPane>
 
