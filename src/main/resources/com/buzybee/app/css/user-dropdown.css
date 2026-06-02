@@ -1,0 +1,70 @@
+.user-dropdown {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 17;
+    -fx-border-color: #5A4228;
+    -fx-border-width: 1.25;
+    -fx-border-radius: 17;
+    -fx-effect: dropshadow(gaussian, rgba(72, 53, 33, 0.13), 8, 0.22, 0, 3);
+    -fx-font-family: Georgia, "Times New Roman", serif;
+}
+
+.user-dropdown-header {
+    -fx-background-color: #EFCB62;
+    -fx-background-radius: 16 16 0 0;
+    -fx-border-color: transparent transparent #5A4228 transparent;
+    -fx-border-width: 0 0 1.25 0;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.user-dropdown-text {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.user-dropdown-name {
+    -fx-text-fill: #4A321D;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+
+.user-dropdown-email {
+    -fx-text-fill: #4A321D;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.user-dropdown-menu {
+    -fx-padding: 8 8 12 8;
+}
+
+.user-dropdown-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+    -fx-padding: 6 6 6 6;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #4A321D;
+    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.user-dropdown-item:hover,
+.user-dropdown-item:armed {
+    -fx-background-color: rgba(239, 203, 98, 0.26);
+    -fx-text-fill: #4A321D;
+}
+
+.user-dropdown-item:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-effect: null;
+}
+
+.user-dropdown-divider .line {
+    -fx-border-color: #EFCB62;
+    -fx-border-width: 1 0 0 0;
+}
