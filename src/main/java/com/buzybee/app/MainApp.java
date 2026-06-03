@@ -13,6 +13,9 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Font.loadFont(MainApp.class.getResource("fonts/Ramsina-Regular.ttf").toExternalForm(), 16);
+        Font.loadFont(MainApp.class.getResource("fonts/Fredoka-SemiBold.ttf").toExternalForm(), 16);
+        Font.loadFont(MainApp.class.getResource("fonts/Nunito-Regular.ttf").toExternalForm(), 16);
+        Font.loadFont(MainApp.class.getResource("fonts/Nunito-SemiBold.ttf").toExternalForm(), 16);
 
         FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("fxml/auth.fxml"));
         Scene scene = new Scene(loader.load(), 682, 383);

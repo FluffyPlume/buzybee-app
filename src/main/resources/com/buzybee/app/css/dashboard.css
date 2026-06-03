@@ -1,181 +1,464 @@
 .dashboard-page {
-    -fx-background-color: #FAEEDA;
+    -fx-background-color: #faeeda;
+    -fx-padding: 18 20 20 20;
+    -fx-font-family: "Nunito";
 }
 
-.dashboard-title {
-    -fx-font-family: Georgia, "Times New Roman", serif;
-    -fx-font-size: 28px;
+.dashboard-greeting,
+.stat-value,
+.section-title,
+.focus-title,
+.timer-display,
+.side-title,
+.streak-count,
+.calendar-title {
+    -fx-font-family: "Fredoka";
     -fx-font-weight: bold;
-    -fx-text-fill: #483521;
 }
 
 .dashboard-greeting {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #61482E;
+    -fx-font-size: 22px;
+    -fx-text-fill: #3b1f0c;
 }
 
 .dashboard-subtitle {
-    -fx-font-size: 14px;
-    -fx-text-fill: #6D5339;
-}
-
-.dashboard-search {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 20;
-    -fx-border-color: rgba(72, 53, 33, 0.25);
-    -fx-border-radius: 20;
-    -fx-padding: 8 15 8 15;
-    -fx-prompt-text-fill: #9C8A78;
-}
-
-.metric-card,
-.timeline-card,
-.side-card {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(72, 53, 33, 0.15);
-    -fx-border-radius: 8;
-    -fx-padding: 16;
-}
-
-.metric-card {
-    -fx-min-height: 100;
-}
-
-.metric-card-alert {
-    -fx-background-color: #FFF3E0;
-}
-
-.metric-title {
+    -fx-font-family: "Nunito";
     -fx-font-size: 13px;
-    -fx-text-fill: #6D5339;
+    -fx-text-fill: #7a5020;
 }
 
-.metric-value {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #483521;
+.add-task-button {
+    -fx-background-color: #3b1f0c;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-text-fill: #f9d96b;
+    -fx-font-family: "Nunito";
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+    -fx-padding: 9 14 9 14;
+    -fx-cursor: hand;
 }
 
-.metric-footer {
+.stat-card,
+.task-overview-card,
+.side-card {
+    -fx-background-color: #fff8ee;
+    -fx-background-radius: 12;
+    -fx-border-color: #e8d5a0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.5;
+    -fx-padding: 12 14 12 14;
+}
+
+.stat-card {
+    -fx-min-height: 106;
+}
+
+.stat-label {
+    -fx-font-family: "Nunito";
     -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #61482E;
+    -fx-font-weight: 600;
+    -fx-text-fill: #9a7040;
 }
 
-.metric-footer-alert {
-    -fx-text-fill: #B45309;
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-text-fill: #3b1f0c;
 }
 
-.timeline-card {
-    -fx-padding: 20;
+.stat-subtext {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-text-fill: #b07a30;
+}
+
+.completed-progress {
+    -fx-pref-height: 5;
+    -fx-min-height: 5;
+    -fx-max-height: 5;
+}
+
+.completed-progress .track {
+    -fx-background-color: #e8d5a0;
+    -fx-background-radius: 5;
+}
+
+.completed-progress .bar {
+    -fx-background-color: #c48a20;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+.task-overview-card {
+    -fx-min-height: 360;
 }
 
 .section-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #483521;
+    -fx-font-size: 15px;
+    -fx-text-fill: #3b1f0c;
 }
 
-.dashboard-primary-btn {
-    -fx-background-color: #483521;
-    -fx-background-radius: 7;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-weight: bold;
-    -fx-padding: 8 18 8 18;
-    -fx-cursor: hand;
-}
-
-.dashboard-primary-btn:hover {
-    -fx-background-color: #61482E;
-}
-
-.dashboard-link-btn {
+.filter-tab {
     -fx-background-color: transparent;
-    -fx-text-fill: #61482E;
-    -fx-font-weight: bold;
-    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #e8d5a0;
+    -fx-border-radius: 8;
+    -fx-text-fill: #9a7040;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 5 10 5 10;
     -fx-cursor: hand;
 }
 
-.dashboard-link-btn:hover {
-    -fx-text-fill: #483521;
-    -fx-underline: true;
+.filter-tab-active {
+    -fx-background-color: #3b1f0c;
+    -fx-border-color: #3b1f0c;
+    -fx-text-fill: #f9d96b;
 }
 
-.timeline-item {
-    -fx-background-radius: 8;
-    -fx-padding: 10;
+.task-row {
+    -fx-border-color: transparent transparent #f0ddb0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 0 10 0;
 }
 
-.timeline-gold {
-    -fx-background-color: #FEF3C7;
+.task-row-last {
+    -fx-border-color: transparent;
 }
 
-.timeline-brown {
-    -fx-background-color: #EADBC8;
+.task-check,
+.task-check-done {
+    -fx-min-width: 18;
+    -fx-min-height: 18;
+    -fx-pref-width: 18;
+    -fx-pref-height: 18;
+    -fx-max-width: 18;
+    -fx-max-height: 18;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 0;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
 }
 
-.timeline-cream {
-    -fx-background-color: #F5E6CC;
+.task-check {
+    -fx-background-color: transparent;
+    -fx-border-color: #c48a20;
+    -fx-text-fill: transparent;
 }
 
-.timeline-time,
-.timeline-title {
-    -fx-font-weight: bold;
+.task-check-done {
+    -fx-background-color: #c48a20;
+    -fx-border-color: #c48a20;
+    -fx-text-fill: white;
+}
+
+.task-name,
+.task-name-done {
+    -fx-font-family: "Nunito";
     -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #3b1f0c;
 }
 
-.timeline-title {
-    -fx-font-size: 14px;
+.task-name-done {
+    -fx-text-fill: #b07a30;
+    -fx-strikethrough: true;
 }
 
-.timeline-subtitle {
-    -fx-font-size: 12px;
-    -fx-opacity: 0.8;
+.tag-pill {
+    -fx-background-radius: 999;
+    -fx-padding: 3 8 3 8;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
 }
 
-.timeline-gold .label {
-    -fx-text-fill: #92400E;
+.tag-work {
+    -fx-background-color: #fdefc3;
+    -fx-text-fill: #854f0b;
 }
 
-.timeline-brown .label {
-    -fx-text-fill: #483521;
+.tag-personal {
+    -fx-background-color: #e1f5ee;
+    -fx-text-fill: #0f6e56;
 }
 
-.timeline-cream .label {
-    -fx-text-fill: #6D5339;
+.tag-urgent {
+    -fx-background-color: #fcebeb;
+    -fx-text-fill: #a32d2d;
+}
+
+.tag-custom {
+    -fx-background-color: #efe7d6;
+    -fx-text-fill: #7a5020;
+}
+
+.task-due {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-text-fill: #b07a30;
+}
+
+.focus-task-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #c48a20;
+    -fx-font-size: 13px;
+    -fx-padding: 3 5 3 5;
+    -fx-cursor: hand;
 }
 
 .empty-dashboard-label {
-    -fx-text-fill: #6D5339;
+    -fx-font-family: "Nunito";
     -fx-font-size: 13px;
-    -fx-padding: 8 0 0 0;
+    -fx-text-fill: #b07a30;
+    -fx-padding: 42 0 0 0;
 }
 
-.side-card-title {
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #483521;
+.focus-card {
+    -fx-background-color: #3b1f0c;
+    -fx-background-radius: 12;
+    -fx-padding: 14 16 14 16;
 }
 
-.filter-btn {
-    -fx-background-color: #FAEEDA;
-    -fx-text-fill: #483521;
+.focus-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #f9d96b;
+}
+
+.focus-task {
+    -fx-font-family: "Nunito";
     -fx-font-size: 13px;
-    -fx-background-radius: 7;
-    -fx-border-color: rgba(72, 53, 33, 0.2);
-    -fx-border-radius: 7;
-    -fx-padding: 8 14 8 14;
-    -fx-alignment: CENTER_LEFT;
+    -fx-font-weight: 600;
+    -fx-text-fill: #f9d96b;
+    -fx-underline: true;
     -fx-cursor: hand;
 }
 
-.filter-btn:hover {
-    -fx-background-color: #F0DFC2;
+.timer-display {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-size: 32px;
+    -fx-text-fill: #f5c842;
+    -fx-prompt-text-fill: rgba(245,200,66,0.62);
+    -fx-padding: 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-.check-box {
-    -fx-text-fill: #483521;
+.timer-display:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.timer-button {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-text-fill: #f9d96b;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7 10 7 10;
+    -fx-cursor: hand;
+}
+
+.timer-reset-button {
+    -fx-background-color: rgba(200,50,50,0.25);
+}
+
+.side-title {
+    -fx-font-size: 15px;
+    -fx-text-fill: #3b1f0c;
+}
+
+.streak-count {
+    -fx-font-size: 28px;
+    -fx-text-fill: #c48a20;
+}
+
+.streak-copy {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-text-fill: #7a5020;
+}
+
+.streak-dot-done,
+.streak-dot-today {
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+    -fx-pref-width: 24;
+    -fx-pref-height: 24;
+    -fx-alignment: center;
+    -fx-background-radius: 6;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.streak-dot-done {
+    -fx-background-color: #c48a20;
+    -fx-text-fill: white;
+}
+
+.streak-dot-today {
+    -fx-background-color: #e8d5a0;
+    -fx-border-color: #3b1f0c;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-text-fill: #b07a30;
+}
+
+.calendar-nav {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #c48a20;
+    -fx-font-size: 20px;
+    -fx-padding: 0 4 0 4;
+    -fx-cursor: hand;
+}
+
+.calendar-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3b1f0c;
+}
+
+.calendar-weekday {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #b07a30;
+}
+
+.calendar-day {
+    -fx-min-width: 30;
+    -fx-min-height: 28;
+    -fx-pref-width: 30;
+    -fx-pref-height: 28;
+    -fx-background-radius: 6;
+}
+
+.calendar-day:hover {
+    -fx-background-color: #fdefc3;
+}
+
+.calendar-day-number {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #3b1f0c;
+}
+
+.calendar-today {
+    -fx-background-color: #3b1f0c;
+}
+
+.calendar-today .calendar-day-number {
+    -fx-text-fill: #f9d96b;
+}
+
+.calendar-task-dot {
+    -fx-background-color: #c48a20;
+    -fx-background-radius: 4;
+    -fx-min-width: 4;
+    -fx-min-height: 4;
+    -fx-pref-width: 4;
+    -fx-pref-height: 4;
+    -fx-max-width: 4;
+    -fx-max-height: 4;
+}
+
+.calendar-overflow {
+    -fx-opacity: 0.5;
+}
+
+.date-picker-popup {
+    -fx-background-color: #FAEEDA;
+    -fx-border-color: #483521;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #3b1f0c;
+}
+
+.date-picker-popup .spinner .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f9d96b;
+}
+
+.date-picker-popup .spinner Label {
+    -fx-text-fill: #f9d96b;
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 14px;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b1f0c;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #fdefc3;
+    -fx-background-radius: 6;
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: #3b1f0c;
+    -fx-background-radius: 6;
+    -fx-text-fill: #f9d96b;
+}
+
+.date-picker-popup .today {
+    -fx-border-color: #c48a20;
+    -fx-border-radius: 6;
+    -fx-border-width: 1.5;
+}
+
+.date-picker-popup .week-number-cell {
+    -fx-text-fill: #b07a30;
+    -fx-font-size: 10px;
+}
+
+.date-picker-popup .day-name-cell {
+    -fx-text-fill: #b07a30;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 14;
+    -fx-border-color: #483521;
+    -fx-border-radius: 14;
+    -fx-border-width: 3;
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(72,53,33,0.72);
+    -fx-prompt-text-fill: rgba(72,53,33,0.62);
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #483521;
+    -fx-background-radius: 0 14 14 0;
+    -fx-padding: 4 8 4 8;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #FAEEDA;
 }
