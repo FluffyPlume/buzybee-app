@@ -1,0 +1,284 @@
+.modal-title {
+    -fx-font-family: "Fredoka";
+    -fx-font-weight: bold;
+}
+
+.modal-overlay {
+    -fx-background-color: rgba(59,31,12,0.45);
+}
+
+.add-task-modal {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 28;
+    -fx-border-color: #483521;
+    -fx-border-radius: 28;
+    -fx-border-width: 3;
+    -fx-padding: 10 18 12 18;
+}
+
+.modal-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #483521;
+    -fx-padding: 0 0 0 0;
+}
+
+.modal-input {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 14;
+    -fx-border-color: #483521;
+    -fx-border-radius: 14;
+    -fx-border-width: 3;
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(72,53,33,0.72);
+    -fx-prompt-text-fill: rgba(72,53,33,0.62);
+    -fx-padding: 4 14 4 14;
+}
+
+.modal-input:focused {
+    -fx-border-color: #483521;
+}
+
+.dropdown-trigger {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 14;
+    -fx-border-color: #483521;
+    -fx-border-radius: 14;
+    -fx-border-width: 3;
+    -fx-text-fill: rgba(72,53,33,0.72);
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 14 4 14;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.dropdown-panel {
+    -fx-background-color: #FAEEDA;
+    -fx-background-insets: 0;
+    -fx-background-radius: 17;
+    -fx-border-color: #483521;
+    -fx-border-radius: 17;
+    -fx-border-width: 3;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(72,53,33,0.16), 12, 0.18, 0, 4);
+}
+
+.dropdown-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-fit-to-width: true;
+    -fx-hbar-policy: never;
+}
+
+.dropdown-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dropdown-scroll-pane .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+
+.dropdown-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.dropdown-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(72,53,33,0.36);
+    -fx-background-radius: 8;
+}
+
+.dropdown-scroll-pane .scroll-bar:vertical .track,
+.dropdown-scroll-pane .scroll-bar:vertical .increment-button,
+.dropdown-scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+}
+
+.dropdown-month-title {
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3b1f0c;
+}
+
+.dropdown-nav {
+    -fx-background-color: #FAEEDA;
+    -fx-border-color: transparent;
+    -fx-text-fill: #c48a20;
+    -fx-font-size: 18px;
+    -fx-padding: 0 5 0 5;
+    -fx-cursor: hand;
+}
+
+.dropdown-weekday,
+.dropdown-weekday-edge {
+    -fx-min-width: 34;
+    -fx-pref-width: 34;
+    -fx-alignment: center;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #7a5020;
+}
+
+.dropdown-weekday-edge {
+    -fx-text-fill: #d88b83;
+}
+
+.dropdown-day {
+    -fx-min-width: 34;
+    -fx-min-height: 26;
+    -fx-pref-width: 34;
+    -fx-pref-height: 26;
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+    -fx-text-fill: #3b1f0c;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.dropdown-day:hover {
+    -fx-background-color: #fdefc3;
+}
+
+.dropdown-day-selected {
+    -fx-background-color: #3b1f0c;
+    -fx-text-fill: #f9d96b;
+}
+
+.dropdown-option {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 7;
+    -fx-border-color: transparent;
+    -fx-text-fill: #3b1f0c;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7 10 7 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.dropdown-option:hover {
+    -fx-background-color: #fdefc3;
+}
+
+.modal-status {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 11px;
+    -fx-text-fill: #a32d2d;
+    -fx-padding: 0;
+}
+
+.modal-cancel-button,
+.modal-add-button {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7 12 7 12;
+    -fx-cursor: hand;
+}
+
+.modal-cancel-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #e8d5a0;
+    -fx-text-fill: #9a7040;
+}
+
+.modal-add-button {
+    -fx-background-color: #3b1f0c;
+    -fx-border-color: #3b1f0c;
+    -fx-text-fill: #f9d96b;
+}
+
+.task-picker-row {
+    -fx-background-color: #fdefc3;
+    -fx-background-radius: 8;
+    -fx-border-color: #e8d5a0;
+    -fx-border-radius: 8;
+    -fx-text-fill: #3b1f0c;
+    -fx-font-family: "Nunito";
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 10 8 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.task-picker-row:hover {
+    -fx-background-color: #f9d96b;
+}
+
+/* ── Time Spinner ─────────────────────────────────────── */
+
+.time-spinner-row {
+    -fx-padding: 6 10 4 10;
+}
+
+.time-segment {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 8;
+    -fx-border-color: #483521;
+    -fx-border-radius: 8;
+    -fx-border-width: 2;
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3b1f0c;
+    -fx-alignment: CENTER;
+    -fx-padding: 2 0 2 0;
+}
+
+.time-segment:focused {
+    -fx-background-color: #f9d96b;
+    -fx-border-color: #3b1f0c;
+}
+
+.time-colon {
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+    -fx-padding: 4 0 0 0;
+}
+
+.time-arrow {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #c48a20;
+    -fx-font-size: 10px;
+    -fx-padding: 0 4 0 4;
+    -fx-cursor: hand;
+    -fx-min-width: 52;
+    -fx-pref-width: 52;
+}
+
+.time-arrow:hover {
+    -fx-text-fill: #3b1f0c;
+}
+
+.time-label-row {
+    -fx-padding: 0 10 6 10;
+}
+
+.time-unit-label {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #7a5020;
+    -fx-min-width: 52;
+    -fx-pref-width: 52;
+    -fx-alignment: CENTER;
+}

@@ -25,6 +25,7 @@ public class Task {
     // Algorithm & System Variables
     private double priorityScore; // Ratio nung Knapsack Algo
     private String status; // "PENDING" , "SCHEDULED" , "BACKLOG" , "COMPLETED"
+    private String tag; // "work", "personal", "urgent"
     private List<String> assignedTimeSlots;
 
     public long getDaysRemaining() {
@@ -47,6 +48,7 @@ public class Task {
 
         //Default Settings for new entries
         this.status = "PENDING";
+        this.tag = "work";
         this.priorityScore = 0;
         this.assignedTimeSlots = new ArrayList<>();
         this.dateAdded = LocalDate.now();
@@ -74,6 +76,9 @@ public class Task {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getTag() { return tag == null || tag.isBlank() ? "work" : tag; }
+    public void setTag(String tag) { this.tag = tag; }
 
     public List<String> getAssignedTimeSlots() { return assignedTimeSlots; }
     public void setAssignedTimeSlots(List<String> assignedTimeSlots) { this.assignedTimeSlots = assignedTimeSlots; }
