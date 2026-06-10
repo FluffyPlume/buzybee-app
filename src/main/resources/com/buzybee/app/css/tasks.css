@@ -181,3 +181,28 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+
+.terminal-display {
+
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+
+
+    -fx-text-fill: #483521;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-background-color: #FFFFFF;
+
+
+    -fx-border-color: rgba(72, 53, 33, 0.15);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+.terminal-display .content {
+    -fx-background-color: transparent;
+}
+.terminal-display .scroll-pane {
+    -fx-background-color: transparent;
+}

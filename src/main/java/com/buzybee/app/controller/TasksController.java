@@ -64,6 +64,8 @@ public class TasksController {
     private ObservableList<Task> backlogTasks = FXCollections.observableArrayList();
     private ObservableList<Task> completedTasks = FXCollections.observableArrayList();
 
+    @FXML private TextArea txtConsole;
+
     @FXML
     private void initialize() {
         taskService = new TaskService();
@@ -180,6 +182,13 @@ public class TasksController {
         }
     }
 
+    private void logToConsole(String message) {
+        if (txtConsole != null) {
+            String timestamp = java.time.LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            txtConsole.appendText("[" + timestamp + "] " + message + "\n");
+        }
+    }
+
     private void loadDataFromDatabase() {
         pendingTasks.clear();
         scheduledTasks.clear();
@@ -198,7 +207,7 @@ public class TasksController {
     @FXML
     private void handleAddNewTask() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-edit-task-modal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Add New Task");
@@ -207,9 +216,10 @@ public class TasksController {
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-            AddEditTaskController controller = loader.getController();
+            AddTaskModalController controller = loader.getController();
             Task newTask = controller.getCreatedTask();
 
+            // Only create if a task was actually returned
             if (newTask != null) {
                 taskService.createNewTask(newTask);
                 loadDataFromDatabase();
@@ -230,9 +240,11 @@ public class TasksController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-edit-task-modal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
             Parent root = loader.load();
-            AddEditTaskController controller = loader.getController();
+
+
+            AddTaskModalController controller = loader.getController();
             controller.setTaskToEdit(selectedTask);
 
             Stage stage = new Stage();
@@ -240,6 +252,7 @@ public class TasksController {
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
+            taskService.prioritizeActiveTasks();
             loadDataFromDatabase();
             showTaskDetails(selectedTask);
 
@@ -284,14 +297,45 @@ public class TasksController {
 
     @FXML
     private void handleRefresh() {
+        taskService.prioritizeActiveTasks();
         loadDataFromDatabase();
         System.out.println("Data Refreshed from JSON.");
     }
 
     @FXML
     private void handleRunKnapsack() {
+        logToConsole("==================================================================");
+        logToConsole("INITIATING GREEDY FRACTIONAL KNAPSACK ARCHITECTURE...");
+        logToConsole("==================================================================");
+
+        logToConsole("[INFO] Scanning internal memory arrays...");
+        logToConsole(String.format("       Pending Queue: %d tasks found.", pendingTasks.size()));
+        logToConsole(String.format("       Backlog Queue: %d tasks found.", backlogTasks.size()));
+
+        logToConsole("\n[MATH] Applying Refined Value-to-Density Matrix Equation:");
+        logToConsole("       Ratio = (Difficulty * Urgency Multiplier) / sqrt(EstimatedTime)\n");
+
+        logToConsole("[EXEC] Executing algorithm and recalculating task priority ratios...");
+
         taskService.prioritizeActiveTasks();
+
         loadDataFromDatabase();
-        System.out.println("Algorithm Finished! Lists refreshed.");
+
+        logToConsole("------------------------------------------------------------------");
+        logToConsole(String.format("%-22s | %-10s | %-10s | %-8s", "TASK NAME", "STATUS", "DIFFICULTY", "SCORE"));
+        logToConsole("------------------------------------------------------------------");
+
+        for (Task t : scheduledTasks) {
+            logToConsole(String.format("%-22s | %-10s | %-10.1f | %-8.2f",
+                    t.getName(), t.getStatus(), t.getDifficulty(), t.getPriorityScore()));
+        }
+
+        for (Task t : backlogTasks) {
+            logToConsole(String.format("%-22s | %-10s | %-10.1f | %-8.2f",
+                    t.getName(), "BACKLOG", t.getDifficulty(), t.getPriorityScore()));
+        }
+
+        logToConsole("------------------------------------------------------------------");
+        logToConsole("[SUCCESS] Optimization complete. UI TableViews synchronized securely.\n");
     }
 }

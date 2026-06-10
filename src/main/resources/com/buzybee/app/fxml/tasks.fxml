@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextArea?>
 <VBox prefHeight="700.0" prefWidth="1050.0" styleClass="tasks-page" stylesheets="@../css/tasks.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.TasksController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -63,6 +64,12 @@
                                 <TableColumn fx:id="colBacklogPriorityScore" prefWidth="90.0" text="Priority Score" />
                             </columns>
                         </TableView>
+                    </Tab>
+
+                    <Tab text="Logs">
+                        <VBox style="-fx-background-color: #121212;">
+                            <TextArea fx:id="txtConsole" editable="false" wrapText="true" VBox.vgrow="ALWAYS" styleClass="terminal-display" />
+                        </VBox>
                     </Tab>
                 </tabs>
             </TabPane>

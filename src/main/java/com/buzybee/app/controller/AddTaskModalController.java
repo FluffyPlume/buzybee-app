@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.time.LocalDate;
@@ -44,8 +45,6 @@ public class AddTaskModalController {
     @FXML private GridPane dateGrid;
     @FXML private Label statusLabel;
 
-    private TaskDAO taskDAO;
-    private Runnable onTaskSaved = () -> { };
     private int selectedDifficulty;
     private double selectedHours;
     private LocalDate selectedDate = LocalDate.now();
@@ -59,6 +58,13 @@ public class AddTaskModalController {
     private int timeMin  = 0;
     private int timeSec  = 0;
 
+    // Edit State Variables
+    private Task taskToEdit = null;
+    private Task createdTask = null;
+
+    private TaskDAO taskDAO;
+    private Runnable onTaskSaved = () -> { };
+
     @FXML
     private void initialize() {
         difficultyPopup = createDropdownPopup(difficultyPanel, 198);
@@ -68,6 +74,40 @@ public class AddTaskModalController {
         populateDifficultyOptions();
         renderCalendar();
         initTimeFields();
+    }
+
+    // --- SETUP FOR EDIT MODE ---
+    public void setTaskToEdit(Task task) {
+        this.taskToEdit = task;
+
+        // Populate Text Fields
+        nameField.setText(task.getName());
+        labelField.setText(task.getTag());
+
+        // Populate Difficulty
+        selectedDifficulty = (int) task.getDifficulty();
+        difficultyButton.setText(selectedDifficulty + "  \u25be");
+
+        // Populate Date
+        selectedDate = task.getDeadline();
+        pickerMonth = YearMonth.from(selectedDate);
+        dateButton.setText(selectedDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy")) + "  \u25be");
+        renderCalendar();
+
+        // Populate Time Spinners from Double
+        double t = task.getEstimatedTime();
+        timeHour = (int) t;
+        timeMin = (int) ((t - timeHour) * 60);
+        timeSec = (int) ((((t - timeHour) * 60) - timeMin) * 60);
+
+        hourField.setText(String.format("%02d", timeHour));
+        minField.setText(String.format("%02d", timeMin));
+        secField.setText(String.format("%02d", timeSec));
+        syncTimeButton();
+    }
+
+    public Task getCreatedTask() {
+        return createdTask;
     }
 
     // ── Time Spinner ──────────────────────────────────────────────────────────
@@ -81,13 +121,11 @@ public class AddTaskModalController {
     private void setupTimeField(TextField field, int min, int max,
                                 java.util.function.IntSupplier getter,
                                 java.util.function.IntConsumer setter) {
-        // Click → select all so user types to replace
         field.setOnMouseClicked(e -> field.selectAll());
         field.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (isFocused) {
                 Platform.runLater(field::selectAll);
             } else {
-                // Commit on focus loss
                 commitTimeField(field, min, max, getter, setter);
             }
         });
@@ -142,15 +180,6 @@ public class AddTaskModalController {
 
     // ── Dropdowns ─────────────────────────────────────────────────────────────
 
-    void configure(TaskDAO taskDAO, Runnable onTaskSaved) {
-        this.taskDAO = taskDAO;
-        this.onTaskSaved = onTaskSaved == null ? () -> { } : onTaskSaved;
-    }
-
-    void requestInitialFocus() {
-        Platform.runLater(nameField::requestFocus);
-    }
-
     @FXML private void toggleDifficultyDropdown() { toggleDropdown(difficultyButton, difficultyPopup); }
     @FXML private void toggleDateDropdown()        { toggleDropdown(dateButton,       datePopup);       }
     @FXML private void toggleTimeDropdown()        { toggleDropdown(timeButton,       timePopup);       }
@@ -159,7 +188,7 @@ public class AddTaskModalController {
     @FXML private void showNextMonth()     { pickerMonth = pickerMonth.plusMonths(1);  renderCalendar(); }
 
     @FXML
-    private void handleCancel() { close(); }
+    private void handleCancel() { closeWindow(); }
 
     @FXML
     private void handleAddTask() {
@@ -173,14 +202,26 @@ public class AddTaskModalController {
         if (selectedHours <= 0) { statusLabel.setText("Estimated time must be greater than zero."); return; }
         if (selectedDifficulty <= 0) { statusLabel.setText("Difficulty is required."); return; }
 
-        Task task = new Task(name, selectedDifficulty, selectedHours, selectedDate);
-        task.setTag(tag.isEmpty() ? "work" : tag.toLowerCase(Locale.ROOT));
-        if (taskDAO != null) {
-            taskDAO.getAllTasks().add(0, task);
-            taskDAO.saveChanges();
+        if (taskToEdit == null) {
+            createdTask = new Task(name, selectedDifficulty, selectedHours, selectedDate);
+            createdTask.setTag(tag.isEmpty() ? "work" : tag.toLowerCase(Locale.ROOT));
+
+            if (taskDAO != null) {
+                taskDAO.getAllTasks().add(0, createdTask);
+                taskDAO.saveChanges();
+                onTaskSaved.run();
+            }
+
+        } else {
+            taskToEdit.setName(name);
+            taskToEdit.setDifficulty(selectedDifficulty);
+            taskToEdit.setEstimatedTime(selectedHours);
+            taskToEdit.setDeadline(selectedDate);
+            taskToEdit.setTag(tag.isEmpty() ? "work" : tag.toLowerCase(Locale.ROOT));
+            createdTask = taskToEdit;
         }
-        onTaskSaved.run();
-        close();
+
+        closeWindow();
     }
 
     // ── Internals ─────────────────────────────────────────────────────────────
@@ -195,8 +236,6 @@ public class AddTaskModalController {
         popup.setAutoHide(true);
         popup.getContent().add(panel);
 
-        // Inject the stylesheet into the popup's own scene so that
-        // .dropdown-panel (background, border, radius) renders correctly.
         popup.setOnShown(e -> {
             javafx.scene.Scene popupScene = panel.getScene();
             if (popupScene != null) {
@@ -242,7 +281,7 @@ public class AddTaskModalController {
 
     private void populateDifficultyOptions() {
         difficultyPanel.getChildren().clear();
-        for (int level = 1; level <= 5; level++) {
+        for (int level = 1; level <= 10; level++) {
             int difficulty = level;
             Button option = createDropdownOption(String.valueOf(level));
             option.setOnAction(event -> {
@@ -294,10 +333,10 @@ public class AddTaskModalController {
         }
     }
 
-    private void close() {
+    private void closeWindow() {
         hideDropdownPanels();
-        Pane parent = (Pane) overlayRoot.getParent();
-        if (parent != null) parent.getChildren().remove(overlayRoot);
+        Stage stage = (Stage) overlayRoot.getScene().getWindow();
+        stage.close();
     }
 
     private String textValue(TextField field) {
@@ -305,4 +344,14 @@ public class AddTaskModalController {
     }
 
     private record DropdownPopup(Popup popup, ScrollPane scrollPane, VBox panel, double width) { }
+
+    // --- DASHBOARD HELPER METHODS ---
+    public void configure(TaskDAO taskDAO, Runnable onTaskSaved) {
+        this.taskDAO = taskDAO;
+        this.onTaskSaved = onTaskSaved == null ? () -> { } : onTaskSaved;
+    }
+
+    public void requestInitialFocus() {
+        Platform.runLater(nameField::requestFocus);
+    }
 }
