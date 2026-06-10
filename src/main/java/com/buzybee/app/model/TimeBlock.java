@@ -34,6 +34,17 @@ public class TimeBlock {
         this.remainingHours = totalAvailableHours;
     }
 
+    public TimeBlock(LocalDate date, double totalAvailableHours) {
+        this.id = UUID.randomUUID().toString();
+        this.date = date;
+        this.totalAvailableHours = totalAvailableHours;
+        this.remainingHours = totalAvailableHours;
+
+        // Give it default times just so it doesn't crash if something asks for it later
+        this.startTime = LocalTime.of(8, 0); // 8:00 AM
+        this.endTime = LocalTime.of(22, 0);  // 10:00 PM
+    }
+
     // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

@@ -112,6 +112,10 @@ public class TaskService {
         taskDAO.saveWeeklySchedule(completeWeek);
     }
 
+    public List<TimeBlock> getSavedSchedule() {
+        return taskDAO.getAllTimeBlocks();
+    }
+
     // ==========================================
     // 3. TASK COMPLETION
     // ==========================================
