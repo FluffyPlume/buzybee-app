@@ -53,22 +53,36 @@ public class LoginPageController {
     @FXML private TextField signInIdentifierField;
     @FXML private PasswordField signInPasswordField;
 
-    // Sign-Up Fields (NEW)
+    // Sign-Up Fields
     @FXML private TextField signUpEmailField;
     @FXML private TextField signUpUsernameField;
     @FXML private PasswordField signUpPasswordField;
+
+    // Confirm Step Fields
+    @FXML private AnchorPane confirmForm;
+    @FXML private TextField confirmEmailField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Label confirmStatusLabel;
 
     @FXML
     private void initialize() {
         submitOnEnter(signInIdentifierField, this::handleSignIn);
         submitOnEnter(signInPasswordField, this::handleSignIn);
-        submitOnEnter(signUpEmailField, this::handleSignUpSubmit);
-        submitOnEnter(signUpUsernameField, this::handleSignUpSubmit);
-        submitOnEnter(signUpPasswordField, this::handleSignUpSubmit);
+        submitOnEnter(signUpEmailField, this::handleGoToConfirm);
+        submitOnEnter(signUpUsernameField, this::handleGoToConfirm);
+        submitOnEnter(signUpPasswordField, this::handleGoToConfirm);
+        submitOnEnter(confirmEmailField, this::handleSignUpSubmit);
+        submitOnEnter(confirmPasswordField, this::handleSignUpSubmit);
 
         if (signUpForm != null) {
             signUpForm.setDisable(true);
             signUpForm.setMouseTransparent(true);
+        }
+        if (confirmForm != null) {
+            confirmForm.setDisable(true);
+            confirmForm.setMouseTransparent(true);
+            confirmForm.setOpacity(0);
+            confirmForm.setTranslateX(36);
         }
     }
 
@@ -104,7 +118,7 @@ public class LoginPageController {
     }
 
     @FXML
-    private void handleSignUpSubmit() {
+    private void handleGoToConfirm() {
         String email = signUpEmailField.getText();
         String user = signUpUsernameField.getText();
         String pass = signUpPasswordField.getText();
@@ -114,15 +128,58 @@ public class LoginPageController {
             return;
         }
 
+        // Slide signUpForm out, confirmForm in
+        animating = true;
+        signUpForm.setDisable(true);
+        signUpForm.setMouseTransparent(true);
+        confirmForm.setDisable(false);
+        confirmForm.setMouseTransparent(false);
+        confirmForm.setOpacity(0);
+        confirmForm.setTranslateX(36);
+
+        ParallelTransition transition = new ParallelTransition(
+                slide(signUpForm, -FORM_OFFSET),
+                fade(signUpForm, 0),
+                slide(confirmForm, 0),
+                fade(confirmForm, 1)
+        );
+        transition.setOnFinished(e -> {
+            signUpForm.setOpacity(0);
+            animating = false;
+        });
+        transition.play();
+    }
+
+    @FXML
+    private void handleSignUpSubmit() {
+        String email = signUpEmailField.getText();
+        String user = signUpUsernameField.getText();
+        String pass = signUpPasswordField.getText();
+        String confirmEmail = confirmEmailField.getText();
+        String confirmPass = confirmPasswordField.getText();
+
+        if (confirmEmail == null || confirmEmail.isBlank() || confirmPass == null || confirmPass.isBlank()) {
+            confirmStatusLabel.setText("Please fill out all fields.");
+            return;
+        }
+        if (!email.equalsIgnoreCase(confirmEmail)) {
+            confirmStatusLabel.setText("Email does not match.");
+            return;
+        }
+        if (!pass.equals(confirmPass)) {
+            confirmStatusLabel.setText("Password does not match.");
+            return;
+        }
+
         boolean isRegistered = userDAO.registerUser(user, pass, email);
 
         if (isRegistered) {
-            signUpStatusLabel.setText("Success! Creating your workspace...");
+            confirmStatusLabel.setText("Success! Creating your workspace...");
             User newUser = new User(user, pass, email);
             SessionManager.getInstance().startSession(newUser);
             showDashboard();
         } else {
-            signUpStatusLabel.setText("Username or email already taken.");
+            confirmStatusLabel.setText("Username or email already taken.");
         }
     }
 
@@ -219,6 +276,14 @@ public class LoginPageController {
         brandSwitchButton.setDisable(true);
         brandPanel.toFront();
         beeImage.toFront();
+
+        // Always reset confirm form when switching modes
+        if (confirmForm != null) {
+            confirmForm.setDisable(true);
+            confirmForm.setMouseTransparent(true);
+            confirmForm.setOpacity(0);
+            confirmForm.setTranslateX(36);
+        }
 
         if (targetSignUpMode) {
             signUpForm.setTranslateX(FORM_OFFSET);
