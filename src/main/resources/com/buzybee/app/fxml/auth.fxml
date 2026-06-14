@@ -62,7 +62,7 @@
                 <Label layoutX="8.0" layoutY="174.0" styleClass="field-label" text="Password" />
                 <PasswordField fx:id="signUpPasswordField" layoutX="6.0" layoutY="194.0" prefHeight="37.0" prefWidth="253.0" promptText="●●●●●●" styleClass="signin-field, password-field" />
 
-                <Button layoutX="6.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSignUpSubmit" prefHeight="37.0" prefWidth="253.0" styleClass="primary-button" text="Sign Up" />
+                <Button layoutX="6.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleGoToConfirm" prefHeight="37.0" prefWidth="253.0" styleClass="primary-button" text="Sign Up" />
 
                 <Line endX="94.0" layoutX="7.0" layoutY="296.0" startX="0.0" styleClass="or-line" />
                 <Label layoutX="126.0" layoutY="286.0" styleClass="or-label" text="or" />
@@ -77,6 +77,23 @@
                     </graphic>
                 </Button>
                 <Label fx:id="signUpStatusLabel" layoutX="6.0" layoutY="344.0" prefWidth="253.0" styleClass="status-label" text="" />
+            </children>
+        </AnchorPane>
+
+        <AnchorPane fx:id="confirmForm" layoutX="396.0" layoutY="14.0" opacity="0.0" prefHeight="328.0" prefWidth="260.0" translateX="36.0">
+            <children>
+                <Label layoutX="3.0" layoutY="-2.0" styleClass="signup-title" text="Create an account!" />
+                <Label layoutX="7.0" layoutY="33.0" styleClass="signup-subtitle" text="Almost there! Confirm your info" />
+
+                <Label layoutX="8.0" layoutY="72.0" styleClass="field-label" text="Confirm E-mail" />
+                <TextField fx:id="confirmEmailField" layoutX="6.0" layoutY="90.0" prefHeight="37.0" prefWidth="253.0" promptText="you@example" styleClass="signin-field, email-field" />
+
+                <Label layoutX="8.0" layoutY="140.0" styleClass="field-label" text="Confirm Password" />
+                <PasswordField fx:id="confirmPasswordField" layoutX="6.0" layoutY="160.0" prefHeight="37.0" prefWidth="253.0" promptText="●●●●●●" styleClass="signin-field, password-field" />
+
+                <Button layoutX="6.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleSignUpSubmit" prefHeight="37.0" prefWidth="253.0" styleClass="primary-button" text="Finish" />
+
+                <Label fx:id="confirmStatusLabel" layoutX="6.0" layoutY="268.0" prefWidth="253.0" styleClass="status-label" text="" />
             </children>
         </AnchorPane>
 
