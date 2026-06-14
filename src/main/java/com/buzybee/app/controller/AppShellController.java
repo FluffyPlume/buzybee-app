@@ -65,7 +65,7 @@ public class AppShellController {
     void showSettings() {
         topBarController.clearTopSelection();
         sideMenuController.selectSettings();
-        clearContent();
+        loadScreen("settings.fxml");
     }
 
     void showLogout() {
@@ -159,6 +159,8 @@ public class AppShellController {
                 dashboardController.setAppShellController(this);
             } else if (controller instanceof AnalyticsController analyticsController) {
                 analyticsController.setAppShellController(this);
+            } else if (controller instanceof SettingsController settingsController) {
+            settingsController.setAppShellController(this);
             }
             if (darkMode) {
                 addStylesheet(newScreen, getClass().getResource(DARK_MODE_STYLESHEET).toExternalForm());
