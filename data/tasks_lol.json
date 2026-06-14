@@ -1,0 +1,48 @@
+[
+  {
+    "id": "2d6dd551-153d-403f-8568-79481b3f4942",
+    "name": "dfgsdgs",
+    "difficulty": 8.0,
+    "estimatedTime": 20.0,
+    "deadline": "2026-06-26",
+    "dateAdded": "2026-06-14",
+    "priorityScore": 1.4907119849998598,
+    "status": "FAILED_CONSTRAINT",
+    "tag": "dfgsdg",
+    "assignedTimeSlots": [
+      "THURSDAY (1.0 hrs",
+      "FRIDAY (6.0 hrs",
+      "SATURDAY (7.0 hrs"
+    ]
+  },
+  {
+    "id": "75967116-af30-498b-8641-f10f887e7384",
+    "name": "sdvcsdfv",
+    "difficulty": 10.0,
+    "estimatedTime": 10.0,
+    "deadline": "2026-06-21",
+    "dateAdded": "2026-06-14",
+    "priorityScore": 4.5175395145262565,
+    "status": "SCHEDULED",
+    "tag": "fvdfvb",
+    "assignedTimeSlots": [
+      "SATURDAY (7.0 hrs",
+      "FRIDAY (3.0 hrs"
+    ]
+  },
+  {
+    "id": "3175221a-e46f-47a9-bce1-1c6e1e885efe",
+    "name": "ertereg",
+    "difficulty": 2.0,
+    "estimatedTime": 4.0,
+    "deadline": "2026-06-16",
+    "dateAdded": "2026-06-14",
+    "priorityScore": 5.0,
+    "status": "SCHEDULED",
+    "tag": "fdgdfg",
+    "assignedTimeSlots": [
+      "TUESDAY (3.0 hrs",
+      "MONDAY (1.0 hrs"
+    ]
+  }
+]

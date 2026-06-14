@@ -31,7 +31,7 @@
     -fx-font-family: "Fredoka";
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: rgba(72,53,33,0.72);
+    -fx-text-fill: #483521;
     -fx-prompt-text-fill: rgba(72,53,33,0.62);
     -fx-padding: 4 14 4 14;
 }
@@ -55,6 +55,26 @@
     -fx-cursor: hand;
 }
 
+.dropdown-trigger-label {
+    -fx-font-family: "Fredoka";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #483521;
+}
+
+.dropdown-arrow {
+    -fx-background-color: #483521, #FAEEDA;
+    -fx-background-insets: 0, 1.5;
+    -fx-shape: "M 0 0 L 10 0 L 5 6 Z";
+    -fx-min-width: 12;
+    -fx-pref-width: 12;
+    -fx-min-height: 8;
+    -fx-pref-height: 8;
+    -fx-max-width: 12;
+    -fx-max-height: 8;
+    -fx-scale-shape: true;
+}
+
 .dropdown-panel {
     -fx-background-color: #FAEEDA;
     -fx-background-insets: 0;
@@ -72,6 +92,9 @@
     -fx-padding: 0;
     -fx-fit-to-width: true;
     -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
 .dropdown-scroll-pane > .viewport {
@@ -82,21 +105,51 @@
     -fx-opacity: 0;
     -fx-pref-height: 0;
     -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-padding: 0;
 }
 
 .dropdown-scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
-    -fx-pref-width: 8;
+    -fx-pref-width: 6;
+    -fx-max-width: 6;
+    -fx-padding: 4 0 4 0;
 }
 
 .dropdown-scroll-pane .scroll-bar:vertical .thumb {
     -fx-background-color: rgba(72,53,33,0.36);
     -fx-background-radius: 8;
+    -fx-pref-width: 4;
+    -fx-max-width: 4;
 }
 
-.dropdown-scroll-pane .scroll-bar:vertical .track,
+.dropdown-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-pref-width: 6;
+}
+
 .dropdown-scroll-pane .scroll-bar:vertical .increment-button,
 .dropdown-scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+.dropdown-scroll-pane .scroll-bar:vertical .increment-arrow,
+.dropdown-scroll-pane .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+.dropdown-scroll-pane .corner {
     -fx-background-color: transparent;
 }
 
@@ -160,6 +213,7 @@
     -fx-background-color: #FAEEDA;
     -fx-background-radius: 7;
     -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-text-fill: #3b1f0c;
     -fx-font-family: "Nunito";
     -fx-font-size: 12px;
@@ -167,6 +221,8 @@
     -fx-padding: 7 10 7 10;
     -fx-alignment: CENTER_LEFT;
     -fx-cursor: hand;
+    -fx-max-width: Infinity;   
+    -fx-pref-width: 0;         
 }
 
 .dropdown-option:hover {
@@ -239,6 +295,8 @@
     -fx-text-fill: #3b1f0c;
     -fx-alignment: CENTER;
     -fx-padding: 2 0 2 0;
+    -fx-alignment: CENTER;
+    -fx-display-caret: true;
 }
 
 .time-segment:focused {
@@ -278,7 +336,7 @@
     -fx-font-size: 10px;
     -fx-font-weight: 600;
     -fx-text-fill: #7a5020;
-    -fx-min-width: 52;
-    -fx-pref-width: 52;
+    -fx-min-width: 56;
+    -fx-pref-width: 56;
     -fx-alignment: CENTER;
 }

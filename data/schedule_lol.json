@@ -1,0 +1,129 @@
+[
+  {
+    "id": "a7b4d028-c885-4d5e-8db0-7f8edc9da829",
+    "date": "2026-06-14",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 1.0,
+    "remainingHours": 1.0,
+    "assignedTasks": []
+  },
+  {
+    "id": "d6f78699-5878-43f6-8ecb-ed6e06649c58",
+    "date": "2026-06-15",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 2.0,
+    "remainingHours": 1.0,
+    "assignedTasks": [
+      {
+        "id": "3175221a-e46f-47a9-bce1-1c6e1e885efe",
+        "name": "ertereg",
+        "difficulty": 2.0,
+        "estimatedTime": 4.0,
+        "deadline": "2026-06-16",
+        "dateAdded": "2026-06-14",
+        "priorityScore": 5.0,
+        "status": "SCHEDULED",
+        "tag": "fdgdfg",
+        "assignedTimeSlots": [
+          "TUESDAY (3.0 hrs",
+          "MONDAY (1.0 hrs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "617f9677-9e59-4f5e-9237-2ab99715f192",
+    "date": "2026-06-16",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 3.0,
+    "remainingHours": 0.0,
+    "assignedTasks": [
+      {
+        "id": "3175221a-e46f-47a9-bce1-1c6e1e885efe",
+        "name": "ertereg",
+        "difficulty": 2.0,
+        "estimatedTime": 4.0,
+        "deadline": "2026-06-16",
+        "dateAdded": "2026-06-14",
+        "priorityScore": 5.0,
+        "status": "SCHEDULED",
+        "tag": "fdgdfg",
+        "assignedTimeSlots": [
+          "TUESDAY (3.0 hrs",
+          "MONDAY (1.0 hrs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "952fe1b3-6566-4ade-9cb0-2b4c3dbc6e6b",
+    "date": "2026-06-17",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 4.0,
+    "remainingHours": 4.0,
+    "assignedTasks": []
+  },
+  {
+    "id": "88e49da0-7bda-4c81-92a1-a3b041b40740",
+    "date": "2026-06-18",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 5.0,
+    "remainingHours": 5.0,
+    "assignedTasks": []
+  },
+  {
+    "id": "2360ba7a-ed56-4f73-9426-d7863e19639b",
+    "date": "2026-06-19",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 6.0,
+    "remainingHours": 3.0,
+    "assignedTasks": [
+      {
+        "id": "75967116-af30-498b-8641-f10f887e7384",
+        "name": "sdvcsdfv",
+        "difficulty": 10.0,
+        "estimatedTime": 10.0,
+        "deadline": "2026-06-21",
+        "dateAdded": "2026-06-14",
+        "priorityScore": 4.5175395145262565,
+        "status": "SCHEDULED",
+        "tag": "fvdfvb",
+        "assignedTimeSlots": [
+          "SATURDAY (7.0 hrs",
+          "FRIDAY (3.0 hrs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "462d6bbb-c645-4b79-8652-d6551c55d7e1",
+    "date": "2026-06-20",
+    "startTime": "08:00",
+    "endTime": "22:00",
+    "totalAvailableHours": 7.0,
+    "remainingHours": 0.0,
+    "assignedTasks": [
+      {
+        "id": "75967116-af30-498b-8641-f10f887e7384",
+        "name": "sdvcsdfv",
+        "difficulty": 10.0,
+        "estimatedTime": 10.0,
+        "deadline": "2026-06-21",
+        "dateAdded": "2026-06-14",
+        "priorityScore": 4.5175395145262565,
+        "status": "SCHEDULED",
+        "tag": "fvdfvb",
+        "assignedTimeSlots": [
+          "SATURDAY (7.0 hrs",
+          "FRIDAY (3.0 hrs"
+        ]
+      }
+    ]
+  }
+]

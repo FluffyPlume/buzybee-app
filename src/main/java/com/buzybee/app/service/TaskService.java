@@ -93,8 +93,9 @@ public class TaskService {
         tasksToSchedule.addAll(taskDAO.getBacklogTasks());
         List<TimeBlock> savedSchedule = taskDAO.getAllTimeBlocks();
 
-        schedulerService.runSchedulingPipeline(tasksToSchedule, savedSchedule, mode);
+        schedulerService.runSchedulingPipeline(tasksToSchedule, savedSchedule, mode == null ? "BACKLOAD" : mode.toUpperCase());
 
+        taskDAO.saveWeeklySchedule(savedSchedule);
         taskDAO.saveChanges();
     }
 

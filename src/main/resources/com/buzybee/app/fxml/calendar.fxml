@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="calendarRoot"
+           prefHeight="650.0"
+           prefWidth="1000.0"
+           stylesheets="@../css/calendar.css"
+           xmlns="http://javafx.com/javafx/25.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.buzybee.app.controller.CalendarController">
+    <VBox spacing="22" styleClass="calendar-page">
+        <padding>
+            <Insets bottom="24" left="24" right="24" top="24" />
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <VBox spacing="4">
+                <Label styleClass="calendar-title" text="My Calendar" />
+                <Label styleClass="calendar-subtitle" text="Plan your week around scheduled BuzyBee tasks" />
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER" spacing="6" styleClass="view-toggle">
+                <Button fx:id="dailyViewButton" onAction="#handleDailyView" styleClass="view-toggle-btn" text="Daily" />
+                <Button fx:id="weeklyViewButton" onAction="#handleWeeklyView" styleClass="view-toggle-btn-active" text="Weekly" />
+                <Button fx:id="monthlyViewButton" onAction="#handleMonthlyView" styleClass="view-toggle-btn" text="Monthly" />
+            </HBox>
+            <HBox alignment="CENTER" spacing="4" styleClass="mode-toggle">
+                <Button fx:id="frontloadButton" onAction="#handleFrontloadMode" styleClass="mode-toggle-btn" text="Frontload" />
+                <Button fx:id="backloadButton" onAction="#handleBackloadMode" styleClass="mode-toggle-btn-active" text="Backload" />
+            </HBox>
+            <Button onAction="#handleSetAvailability" styleClass="secondary-action-btn" text="Set Availability" />
+            <Button onAction="#handleRunSchedule" styleClass="secondary-action-btn" text="Run Schedule" />
+            <Button onAction="#handleAddTask" styleClass="add-task-btn" text="+ Add Task" />
+        </HBox>
+
+        <HBox spacing="22" VBox.vgrow="ALWAYS">
+            <VBox maxWidth="260" minWidth="230" prefWidth="245" spacing="14">
+                <VBox spacing="10" styleClass="calendar-side-card">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label fx:id="miniMonthLabel" styleClass="side-card-title" text="June 2026" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handlePrevMonth" styleClass="mini-nav-btn" text="&#x2039;" />
+                        <Button onAction="#handleNextMonth" styleClass="mini-nav-btn" text="&#x203A;" />
+                    </HBox>
+                    <GridPane fx:id="miniMonthGrid" hgap="7" vgap="6" styleClass="mini-month-grid" />
+                </VBox>
+
+                <VBox spacing="12" styleClass="selected-day-card">
+                    <Label styleClass="side-card-kicker" text="Selected date" />
+                    <Label fx:id="selectedDateLabel" styleClass="selected-date-title" text="Today" />
+                    <ScrollPane fitToWidth="true" maxHeight="112" styleClass="sidebar-scroll">
+                        <VBox fx:id="selectedDayTaskList" spacing="8" />
+                    </ScrollPane>
+                </VBox>
+
+                <VBox spacing="12" styleClass="task-list-card">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label styleClass="side-card-title" text="Filters" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label styleClass="filter-note" text="Labels" />
+                    </HBox>
+                    <ScrollPane fitToWidth="true" maxHeight="128" styleClass="sidebar-scroll">
+                        <VBox fx:id="filterList" spacing="8" />
+                    </ScrollPane>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="0" styleClass="calendar-board" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="calendar-board-header">
+                    <Label fx:id="headerDateLabel" styleClass="week-label" text="Jun 8 - Jun 14, 2026" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button onAction="#handleToday" styleClass="today-btn" text="Today" />
+                    <Button onAction="#handlePrevWeek" styleClass="nav-btn" text="&#x2039;" />
+                    <Button onAction="#handleNextWeek" styleClass="nav-btn" text="&#x203A;" />
+                </HBox>
+
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="calendar-scroll" VBox.vgrow="ALWAYS">
+                    <GridPane fx:id="calendarGrid" hgap="0" styleClass="calendar-grid" vgap="0" />
+                </ScrollPane>
+            </VBox>
+        </HBox>
+    </VBox>
+</StackPane>
