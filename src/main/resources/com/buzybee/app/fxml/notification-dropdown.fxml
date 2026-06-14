@@ -6,6 +6,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<VBox maxWidth="240.0" minWidth="240.0" prefWidth="240.0" styleClass="notification-dropdown" stylesheets="@../css/notification-dropdown.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.NotificationDropdownController">
+    <VBox fx:id="notificationList" spacing="4.0" styleClass="notification-list" />
+</VBox>
 <StackPane styleClass="notification-popup-root" stylesheets="@../css/notification-dropdown.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.NotificationDropdownController">
     <Pane styleClass="notification-pointer" StackPane.alignment="TOP_CENTER" />
     <VBox maxWidth="336.0" minWidth="336.0" prefWidth="336.0" styleClass="notification-dropdown">

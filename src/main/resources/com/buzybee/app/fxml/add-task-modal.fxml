@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,29 +31,43 @@
 
                         <StackPane fx:id="difficultyDropdown" maxHeight="50.0" maxWidth="198.0" minHeight="50.0" minWidth="0.0" prefHeight="50.0" prefWidth="198.0">
                             <children>
-                                <Button fx:id="difficultyButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleDifficultyDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Difficulty  v" />
-                                <VBox fx:id="difficultyPanel" spacing="2.0" styleClass="dropdown-panel" StackPane.alignment="TOP_LEFT" />
+                                <Button fx:id="difficultyButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleDifficultyDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Difficulty" />
+                                <ScrollPane fx:id="difficultyScroll"
+                                            fitToWidth="true"
+                                            prefWidth="120"
+                                            maxWidth="120"
+                                            prefHeight="200"
+                                            maxHeight="200"
+                                            visible="false"
+                                            managed="false"
+                                            styleClass="dropdown-scroll-pane"
+                                            StackPane.alignment="TOP_LEFT">
+                                    <content>
+                                        <VBox fx:id="difficultyPanel" spacing="2.0" styleClass="dropdown-panel" />
+                                    </content>
+                                </ScrollPane>
                             </children>
                         </StackPane>
                     </children>
                 </HBox>
 
-                <!-- Estimated Time and Deadline side-by-side, equal width -->
                 <HBox spacing="14.0">
                     <children>
-                        <!-- Estimated Time spinner trigger -->
                         <StackPane fx:id="timeDropdown" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Button fx:id="timeButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleTimeDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Estimated Time  v" />
-                                <VBox fx:id="timePanel" styleClass="dropdown-panel" StackPane.alignment="TOP_LEFT">
+                                <Button fx:id="timeButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleTimeDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Estimated Time" />
+                                <VBox fx:id="timePanel"
+                                      visible="false"
+                                      managed="false"
+                                      styleClass="dropdown-panel"
+                                      StackPane.alignment="TOP_LEFT">
                                     <children>
-                                        <!-- HH : MM : SS spinner row -->
                                         <HBox alignment="CENTER" spacing="4.0" styleClass="time-spinner-row">
                                             <children>
                                                 <VBox alignment="CENTER" spacing="2.0">
                                                     <children>
                                                         <Button fx:id="hourUp" onAction="#hourUp" styleClass="time-arrow" text="▲" />
-                                                        <TextField fx:id="hourField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" />
+                                                        <TextField fx:id="hourField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" alignment="CENTER" />
                                                         <Button fx:id="hourDown" onAction="#hourDown" styleClass="time-arrow" text="▼" />
                                                     </children>
                                                 </VBox>
@@ -60,7 +75,7 @@
                                                 <VBox alignment="CENTER" spacing="2.0">
                                                     <children>
                                                         <Button fx:id="minUp" onAction="#minUp" styleClass="time-arrow" text="▲" />
-                                                        <TextField fx:id="minField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" />
+                                                        <TextField fx:id="minField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" alignment="CENTER" />
                                                         <Button fx:id="minDown" onAction="#minDown" styleClass="time-arrow" text="▼" />
                                                     </children>
                                                 </VBox>
@@ -68,17 +83,17 @@
                                                 <VBox alignment="CENTER" spacing="2.0">
                                                     <children>
                                                         <Button fx:id="secUp" onAction="#secUp" styleClass="time-arrow" text="▲" />
-                                                        <TextField fx:id="secField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" />
+                                                        <TextField fx:id="secField" prefWidth="52.0" prefHeight="44.0" text="00" styleClass="time-segment" alignment="CENTER" />
                                                         <Button fx:id="secDown" onAction="#secDown" styleClass="time-arrow" text="▼" />
                                                     </children>
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" spacing="24.0" styleClass="time-label-row">
+                                        <HBox alignment="CENTER" spacing="8.0" styleClass="time-label-row">
                                             <children>
-                                                <Label text="HH" styleClass="time-unit-label" />
-                                                <Label text="MM" styleClass="time-unit-label" />
-                                                <Label text="SS" styleClass="time-unit-label" />
+                                              <Label text="Hours" styleClass="time-unit-label" />
+                                               <Label text="Minutes" styleClass="time-unit-label" />
+                                                <Label text="Seconds" styleClass="time-unit-label" />
                                             </children>
                                         </HBox>
                                     </children>
@@ -86,11 +101,15 @@
                             </children>
                         </StackPane>
 
-                        <!-- Deadline dropdown -->
                         <StackPane fx:id="dateDropdown" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Button fx:id="dateButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleDateDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Deadline  v" />
-                                <VBox fx:id="datePanel" spacing="8.0" styleClass="dropdown-panel" StackPane.alignment="TOP_LEFT">
+                                <Button fx:id="dateButton" maxWidth="Infinity" minWidth="0.0" onAction="#toggleDateDropdown" prefHeight="50.0" styleClass="dropdown-trigger" text="Deadline" />
+                                <VBox fx:id="datePanel"
+                                      spacing="8.0"
+                                      visible="false"
+                                      managed="false"
+                                      styleClass="dropdown-panel"
+                                      StackPane.alignment="TOP_LEFT">
                                     <children>
                                         <HBox alignment="CENTER" spacing="8.0">
                                             <children>

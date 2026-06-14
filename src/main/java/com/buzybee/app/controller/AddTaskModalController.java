@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -15,9 +16,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.geometry.Insets;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -30,9 +35,9 @@ public class AddTaskModalController {
     @FXML private TextField nameField;
     @FXML private TextField labelField;
     @FXML private Button difficultyButton;
+    @FXML private ScrollPane difficultyScroll;
     @FXML private VBox difficultyPanel;
 
-    // Time picker controls
     @FXML private Button timeButton;
     @FXML private VBox timePanel;
     @FXML private TextField hourField;
@@ -53,12 +58,10 @@ public class AddTaskModalController {
     private DropdownPopup datePopup;
     private DropdownPopup timePopup;
 
-    // Time spinner state
     private int timeHour = 0;
     private int timeMin  = 0;
     private int timeSec  = 0;
 
-    // Edit State Variables
     private Task taskToEdit = null;
     private Task createdTask = null;
 
@@ -67,34 +70,80 @@ public class AddTaskModalController {
 
     @FXML
     private void initialize() {
-        difficultyPopup = createDropdownPopup(difficultyPanel, 198);
-        datePopup       = createDropdownPopup(datePanel, 300);
-        timePopup       = createDropdownPopup(timePanel, 220);
+        // Use Platform.runLater so the scene is fully built before we
+        // pull nodes out of it — this is the key fix when managed=false
+        // causes getParent() to return null during initialize()
+        Platform.runLater(() -> {
+            difficultyPopup = createScrollableDropdownPopup(difficultyScroll, difficultyPanel, 120);
+            datePopup       = createDropdownPopup(datePanel, 300);
+            timePopup       = createDropdownPopup(timePanel, 240);
+        });
+
+        styleDropdownButton(difficultyButton, "Difficulty");
+        styleDropdownButton(timeButton, "Estimated Time");
+        styleDropdownButton(dateButton, "Deadline");
 
         populateDifficultyOptions();
         renderCalendar();
         initTimeFields();
     }
 
-    // --- SETUP FOR EDIT MODE ---
+    // ── Arrow Graphic Helper ──────────────────────────────────────────────────
+
+    private Polygon createArrow() {
+        Polygon arrow = new Polygon(0.0, 0.0, 10.0, 0.0, 5.0, 6.0);
+        arrow.setFill(Color.web("#FAEEDA"));
+        arrow.setStroke(Color.web("#483521"));
+        arrow.setStrokeWidth(1.5);
+        return arrow;
+    }
+
+    private void styleDropdownButton(Button button, String label) {
+        javafx.scene.layout.HBox wrapper = new javafx.scene.layout.HBox();
+        wrapper.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Label textLabel = new Label(label);
+        textLabel.setMaxWidth(Double.MAX_VALUE);
+        javafx.scene.layout.HBox.setHgrow(textLabel, javafx.scene.layout.Priority.ALWAYS);
+        textLabel.getStyleClass().add("dropdown-trigger-label");
+
+        wrapper.getChildren().addAll(textLabel, createArrow());
+
+        button.setText("");
+        button.setGraphic(wrapper);
+        button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        button.setMaxWidth(Double.MAX_VALUE);
+
+        button.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double padding = 28.0;
+            wrapper.setPrefWidth(newVal.doubleValue() - padding);
+        });
+    }
+
+    private void updateButtonLabel(Button button, String text) {
+        if (button.getGraphic() instanceof javafx.scene.layout.HBox wrapper) {
+            wrapper.getChildren().stream()
+                    .filter(n -> n instanceof Label)
+                    .map(n -> (Label) n)
+                    .findFirst()
+                    .ifPresent(lbl -> lbl.setText(text));
+        }
+    }
+
     public void setTaskToEdit(Task task) {
         this.taskToEdit = task;
 
-        // Populate Text Fields
         nameField.setText(task.getName());
         labelField.setText(task.getTag());
 
-        // Populate Difficulty
         selectedDifficulty = (int) task.getDifficulty();
-        difficultyButton.setText(selectedDifficulty + "  \u25be");
+        updateButtonLabel(difficultyButton, String.valueOf(selectedDifficulty));
 
-        // Populate Date
         selectedDate = task.getDeadline();
         pickerMonth = YearMonth.from(selectedDate);
-        dateButton.setText(selectedDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy")) + "  \u25be");
+        updateButtonLabel(dateButton, selectedDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy")));
         renderCalendar();
 
-        // Populate Time Spinners from Double
         double t = task.getEstimatedTime();
         timeHour = (int) t;
         timeMin = (int) ((t - timeHour) * 60);
@@ -168,9 +217,9 @@ public class AddTaskModalController {
 
     private void syncTimeButton() {
         if (timeHour == 0 && timeMin == 0 && timeSec == 0) {
-            timeButton.setText("Estimated Time  \u25be");
+            updateButtonLabel(timeButton, "Estimated Time");
         } else {
-            timeButton.setText(String.format("%02d:%02d:%02d  \u25be", timeHour, timeMin, timeSec));
+            updateButtonLabel(timeButton, String.format("%02d:%02d:%02d", timeHour, timeMin, timeSec));
         }
     }
 
@@ -226,17 +275,92 @@ public class AddTaskModalController {
 
     // ── Internals ─────────────────────────────────────────────────────────────
 
+    private DropdownPopup createScrollableDropdownPopup(ScrollPane scroll, VBox panel, double width) {
+        javafx.scene.Parent scrollParent = scroll.getParent();
+        if (scrollParent instanceof Pane p) { p.getChildren().remove(scroll); }
+
+        // Strip border from the inner panel — border lives on outerWrapper below
+        panel.getStyleClass().remove("dropdown-panel");
+        panel.setStyle("-fx-background-color: transparent; -fx-padding: 2;");
+
+        // Make the ScrollPane itself transparent so only outerWrapper paints the
+        // rounded background/border — otherwise the ScrollPane's own square
+        // background shows through and spills past the rounded corners.
+        scroll.getStyleClass().add("dropdown-scroll-pane");
+        scroll.setStyle("-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0; -fx-border-color: transparent;");
+
+        scroll.setVisible(true);
+        scroll.setManaged(true);
+        scroll.setFitToWidth(true);
+        scroll.setPrefHeight(200);
+        scroll.setMaxHeight(200);
+        // Leave room inside the padded wrapper so the scrollbar doesn't sit on the border
+        double innerWidth = width - 12;
+        scroll.setMinWidth(innerWidth);
+        scroll.setPrefWidth(innerWidth);
+        scroll.setMaxWidth(innerWidth);
+
+        // outerWrapper IS the popup root — border+radius+shadow render here
+        VBox outerWrapper = new VBox(scroll);
+        outerWrapper.getStyleClass().add("dropdown-panel");
+        outerWrapper.setMinWidth(width);
+        outerWrapper.setPrefWidth(width);
+        outerWrapper.setMaxWidth(width);
+        outerWrapper.setPadding(new Insets(6));
+
+        // Clip to the rounded shape so the ScrollPane/scrollbar never spill
+        // past outerWrapper's rounded border. Bound to actual size so it
+        // always matches, regardless of padding/content size.
+        Rectangle clip = new Rectangle();
+        clip.setArcWidth(17);
+        clip.setArcHeight(17);
+        clip.widthProperty().bind(outerWrapper.widthProperty());
+        clip.heightProperty().bind(outerWrapper.heightProperty());
+        outerWrapper.setClip(clip);
+
+        Popup popup = new Popup();
+        popup.setAutoHide(true);
+        popup.setAutoFix(false);         // ← stops the popup repositioning that clips borders
+        popup.getContent().add(outerWrapper);
+
+        popup.setOnShown(e -> {
+            // Make popup scene background transparent so shadow renders fully
+            if (outerWrapper.getScene() != null) {
+                outerWrapper.getScene().setFill(javafx.scene.paint.Color.TRANSPARENT);
+            }
+            javafx.scene.Scene popupScene = outerWrapper.getScene();
+            if (popupScene != null) {
+                String css = getClass().getResource("/com/buzybee/css/add-task-modal.css") != null
+                        ? getClass().getResource("/com/buzybee/css/add-task-modal.css").toExternalForm()
+                        : overlayRoot.getStylesheets().isEmpty() ? null : overlayRoot.getStylesheets().get(0);
+                if (css != null && !popupScene.getStylesheets().contains(css)) {
+                    popupScene.getStylesheets().add(css);
+                }
+            }
+        });
+
+        return new DropdownPopup(popup, scroll, outerWrapper, width);
+    }
+
     private DropdownPopup createDropdownPopup(VBox panel, double width) {
-        Pane parent = (Pane) panel.getParent();
-        if (parent != null) { parent.getChildren().remove(panel); }
+        javafx.scene.Parent parent = panel.getParent();
+        if (parent instanceof Pane p) { p.getChildren().remove(panel); }
+
+        panel.setVisible(true);
+        panel.setManaged(true);
         panel.setMinWidth(width);
         panel.setPrefWidth(width);
         panel.setMaxWidth(width);
+
         Popup popup = new Popup();
         popup.setAutoHide(true);
+        popup.setAutoFix(false);
         popup.getContent().add(panel);
 
         popup.setOnShown(e -> {
+            if (panel.getScene() != null) {
+                panel.getScene().setFill(Color.TRANSPARENT);
+            }
             javafx.scene.Scene popupScene = panel.getScene();
             if (popupScene != null) {
                 String css = getClass().getResource("/com/buzybee/css/add-task-modal.css") != null
@@ -251,21 +375,24 @@ public class AddTaskModalController {
         return new DropdownPopup(popup, null, panel, width);
     }
 
-    private void toggleDropdown(Button trigger, DropdownPopup dropdown) {
-        boolean show = !dropdown.popup.isShowing();
-        hideDropdownPanels();
-        if (show) {
-            dropdown.panel.applyCss();
-            dropdown.panel.layout();
-            Point2D point = trigger.localToScreen(
-                    (trigger.getWidth() - dropdown.width) / 2,
-                    trigger.getHeight() + 6
-            );
-            double maxHeight = availablePopupHeight(trigger, point.getY());
-            dropdown.panel.setMaxHeight(maxHeight);
-            dropdown.popup.show(trigger, point.getX(), point.getY());
-        }
+   private void toggleDropdown(Button trigger, DropdownPopup dropdown) {
+    if (dropdown == null) return;
+
+    boolean show = !dropdown.popup.isShowing();
+    hideDropdownPanels();
+    if (show) {
+        dropdown.panel.applyCss();
+        dropdown.panel.layout();
+        double actualWidth = dropdown.panel.getWidth() > 0 ? dropdown.panel.getWidth() : dropdown.width;
+        Point2D point = trigger.localToScreen(
+                (trigger.getWidth() / 2) - (actualWidth / 2),
+                trigger.getHeight() + 6
+        );
+        double maxHeight = availablePopupHeight(trigger, point.getY());
+        dropdown.panel.setMaxHeight(Math.min(maxHeight, 220));
+        dropdown.popup.show(trigger, point.getX(), point.getY());
     }
+}
 
     private double availablePopupHeight(Button trigger, double popupY) {
         Window window = trigger.getScene().getWindow();
@@ -286,7 +413,7 @@ public class AddTaskModalController {
             Button option = createDropdownOption(String.valueOf(level));
             option.setOnAction(event -> {
                 selectedDifficulty = difficulty;
-                difficultyButton.setText(difficulty + "  \u25be");
+                updateButtonLabel(difficultyButton, String.valueOf(difficulty));
                 hideDropdownPanels();
             });
             difficultyPanel.getChildren().add(option);
@@ -325,7 +452,7 @@ public class AddTaskModalController {
             if (date.equals(selectedDate)) btn.getStyleClass().add("dropdown-day-selected");
             btn.setOnAction(e -> {
                 selectedDate = date;
-                dateButton.setText(date.format(DateTimeFormatter.ofPattern("MMM d, yyyy")) + "  \u25be");
+                updateButtonLabel(dateButton, date.format(DateTimeFormatter.ofPattern("MMM d, yyyy")));
                 hideDropdownPanels();
                 renderCalendar();
             });
@@ -334,10 +461,14 @@ public class AddTaskModalController {
     }
 
     private void closeWindow() {
-        hideDropdownPanels();
+    hideDropdownPanels();
+    if (overlayRoot.getParent() instanceof Pane parent) {
+        parent.getChildren().remove(overlayRoot);
+    } else {
         Stage stage = (Stage) overlayRoot.getScene().getWindow();
         stage.close();
     }
+}
 
     private String textValue(TextField field) {
         return field.getText() == null ? "" : field.getText().trim();
@@ -345,7 +476,6 @@ public class AddTaskModalController {
 
     private record DropdownPopup(Popup popup, ScrollPane scrollPane, VBox panel, double width) { }
 
-    // --- DASHBOARD HELPER METHODS ---
     public void configure(TaskDAO taskDAO, Runnable onTaskSaved) {
         this.taskDAO = taskDAO;
         this.onTaskSaved = onTaskSaved == null ? () -> { } : onTaskSaved;

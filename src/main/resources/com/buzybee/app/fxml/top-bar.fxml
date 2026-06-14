@@ -11,10 +11,20 @@
 
 <HBox alignment="CENTER_LEFT" prefHeight="37.0" styleClass="top-bar" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.TopBarController">
     <padding>
-        <Insets left="45.0" right="14.0" />
+        <Insets left="0.0" right="14.0" />
     </padding>
 
-    <Label styleClass="brand-title" text="BuzyBee" HBox.hgrow="NEVER" />
+    <HBox alignment="CENTER" prefWidth="36.0" minWidth="36.0" maxWidth="36.0" HBox.hgrow="NEVER">
+        <ImageView fitHeight="32.0" fitWidth="32.0" preserveRatio="true" styleClass="brand-bee-logo">
+            <image>
+                <Image url="@../images/Bee.png" />
+            </image>
+        </ImageView>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="6.0" HBox.hgrow="NEVER">
+        <Label styleClass="brand-title" text="BuzyBee" />
+    </HBox>
     <Region HBox.hgrow="ALWAYS" />
 
     <HBox alignment="CENTER" prefWidth="170.0" spacing="12.0" styleClass="top-actions" HBox.hgrow="NEVER">

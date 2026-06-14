@@ -47,7 +47,7 @@ public class AppShellController {
     void showCalendar() {
         topBarController.clearTopSelection();
         sideMenuController.selectCalendar();
-        clearContent();
+        loadScreen("calendar.fxml");
     }
 
     void showTasks() {

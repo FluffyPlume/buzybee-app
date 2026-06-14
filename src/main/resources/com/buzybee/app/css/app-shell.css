@@ -14,6 +14,10 @@
     -fx-text-fill: #FFFFFF;
 }
 
+.brand-bee-logo {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 3, 0.2, 0, 1);
+}
+
 .top-actions {
     -fx-min-height: 29px;
     -fx-pref-height: 29px;

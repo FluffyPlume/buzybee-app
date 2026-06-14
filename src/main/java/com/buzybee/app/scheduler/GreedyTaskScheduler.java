@@ -11,6 +11,19 @@ public class GreedyTaskScheduler {
     public void assignTasksToTimeBlocks(List<Task> sortedTasks, List<TimeBlock> schedule, String mode) throws NoAvailabilityException {
         System.out.println("--- 2. RUNNING GREEDY SCHEDULER in " + mode + "MODE ---");
 
+        if (schedule == null || schedule.isEmpty()) {
+            throw new NoAvailabilityException("No weekly availability has been set.");
+        }
+
+        for (TimeBlock block : schedule) {
+            block.getAssignedTasks().clear();
+            block.setRemainingHours(block.getTotalAvailableHours());
+        }
+
+        for (Task task : sortedTasks) {
+            task.getAssignedTimeSlots().clear();
+        }
+
         if (mode.equals("FRONTLOAD")) {
             for (Task task : sortedTasks){ // Pick up each task one by one (starting with the highest priority)
                 double hoursLeftToSchedule = task.getEstimatedTime(); // Tracks how many hours of this task still need to be place
