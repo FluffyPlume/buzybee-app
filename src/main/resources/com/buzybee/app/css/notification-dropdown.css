@@ -1,49 +1,66 @@
+.notification-popup-root {
+    -fx-background-color: transparent;
+    -fx-font-family: "Nunito SemiBold", "Nunito", "Segoe UI", Arial, sans-serif;
+}
+
+.notification-pointer {
+    -fx-background-color: #483521;
+    -fx-shape: "M 18 0 L 36 24 L 0 24 Z";
+    -fx-min-width: 36px;
+    -fx-min-height: 24px;
+    -fx-pref-width: 36px;
+    -fx-pref-height: 24px;
+    -fx-max-width: 36px;
+    -fx-max-height: 24px;
+}
+
 .notification-dropdown {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 17;
-    -fx-border-color: #5A4228;
-    -fx-border-width: 1.25;
-    -fx-border-radius: 17;
-    -fx-effect: dropshadow(gaussian, rgba(72, 53, 33, 0.13), 8, 0.22, 0, 3);
-    -fx-font-family: Georgia, "Times New Roman", serif;
+    -fx-background-color: #483521;
+    -fx-background-radius: 15;
+    -fx-border-color: transparent;
+    -fx-effect: none;
 }
 
 .notification-list {
-    -fx-padding: 8 8 12 8;
+    -fx-padding: 13 30 28 30;
+}
+
+.notification-heading {
+    -fx-padding: 24 18 4 18;
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
 }
 
 .notification-row {
     -fx-background-color: transparent;
-    -fx-background-radius: 7;
-    -fx-padding: 6 6 6 6;
+    -fx-padding: 0;
     -fx-alignment: TOP_LEFT;
 }
 
 .notification-row:hover {
-    -fx-background-color: rgba(239, 203, 98, 0.18);
+    -fx-background-color: transparent;
 }
 
 .notification-dot {
-    -fx-min-width: 8px;
-    -fx-min-height: 8px;
-    -fx-pref-width: 8px;
-    -fx-pref-height: 8px;
-    -fx-max-width: 8px;
-    -fx-max-height: 8px;
-    -fx-background-radius: 8;
-    -fx-translate-y: 5;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
 }
 
 .notification-dot-danger {
-    -fx-background-color: #B45332;
+    -fx-background-color: transparent;
 }
 
 .notification-dot-warning {
-    -fx-background-color: #D79D2A;
+    -fx-background-color: transparent;
 }
 
 .notification-dot-calm {
-    -fx-background-color: #5A4228;
+    -fx-background-color: transparent;
 }
 
 .notification-text {
@@ -51,19 +68,20 @@
 }
 
 .notification-title {
-    -fx-text-fill: #4A321D;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
+    -fx-text-fill: #FFDC27;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
 }
 
 .notification-detail {
-    -fx-text-fill: #6F5A42;
-    -fx-font-size: 11px;
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
 }
 
 .notification-empty {
-    -fx-padding: 10 8 10 8;
-    -fx-text-fill: #6F5A42;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
+    -fx-padding: 10 0 18 0;
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
 }
