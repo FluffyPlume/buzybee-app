@@ -50,6 +50,9 @@ public class TasksController {
     @FXML private Label lblDetailDaysRemaining;
     @FXML private Label lblDetailDateAdded;
 
+    @FXML private ComboBox<String> cmbSortOptions;
+    @FXML private TextArea txtConsole;
+
     @FXML private Button btnAddNewTask;
     @FXML private Button btnMarkComplete;
     @FXML private Button btnEditTask;
@@ -63,8 +66,6 @@ public class TasksController {
     private ObservableList<Task> scheduledTasks = FXCollections.observableArrayList();
     private ObservableList<Task> backlogTasks = FXCollections.observableArrayList();
     private ObservableList<Task> completedTasks = FXCollections.observableArrayList();
-
-    @FXML private TextArea txtConsole;
 
     @FXML
     private void initialize() {
@@ -108,6 +109,19 @@ public class TasksController {
             }
         });
 
+        // Setup Sort Dropdown Options
+        if (cmbSortOptions != null) {
+            cmbSortOptions.setItems(FXCollections.observableArrayList(
+                    "Sort by Priority (High to Low)",
+                    "Sort by Deadline (Closest First)",
+                    "Sort by Deadline (Latest First)"
+            ));
+            cmbSortOptions.getSelectionModel().selectFirst(); // Default choice
+
+            // Listen for when the user clicks a new sort option
+            cmbSortOptions.setOnAction(event -> applySorting());
+        }
+
         loadDataFromDatabase();
     }
 
@@ -148,8 +162,6 @@ public class TasksController {
         if (completedListView.getSelectionModel().getSelectedItem() != null) return completedListView.getSelectionModel().getSelectedItem();
         return null;
     }
-
-
 
     private void showTaskDetails(Task task) {
         if (task != null) {
@@ -196,13 +208,39 @@ public class TasksController {
         completedTasks.clear();
 
         if (taskService != null) {
-            pendingTasks.addAll(taskService.getAllActiveTasks());
-            scheduledTasks.addAll(taskService.getAllActiveTasks());
+            pendingTasks.addAll(taskService.getPendingTasks());
+            scheduledTasks.addAll(taskService.getScheduledTasks());
             backlogTasks.addAll(taskService.getBacklogTasks());
             completedTasks.addAll(SessionManager.getInstance().getTaskDao().getCompletedTasks());
         }
+
+        // Ensure tables stay sorted when data refreshes
+        applySorting();
     }
 
+    // ==========================================
+    // SORTING LOGIC
+    // ==========================================
+    private void applySorting() {
+        if (cmbSortOptions == null || cmbSortOptions.getValue() == null) return;
+
+        String mode = cmbSortOptions.getValue();
+        java.util.Comparator<Task> comparator;
+
+        if (mode.equals("Sort by Priority (High to Low)")) {
+            comparator = java.util.Comparator.comparing(Task::getPriorityScore).reversed();
+        }
+        else if (mode.equals("Sort by Deadline (Latest First)")) {
+            comparator = java.util.Comparator.comparing(Task::getDeadline, java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()));
+        }
+        else {
+            comparator = java.util.Comparator.comparing(Task::getDeadline, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder()));
+        }
+
+        FXCollections.sort(pendingTasks, comparator);
+        FXCollections.sort(scheduledTasks, comparator);
+        FXCollections.sort(backlogTasks, comparator);
+    }
 
     @FXML
     private void handleAddNewTask() {
@@ -219,7 +257,6 @@ public class TasksController {
             AddTaskModalController controller = loader.getController();
             Task newTask = controller.getCreatedTask();
 
-            // Only create if a task was actually returned
             if (newTask != null) {
                 taskService.createNewTask(newTask);
                 loadDataFromDatabase();
@@ -243,7 +280,6 @@ public class TasksController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/buzybee/app/fxml/add-task-modal.fxml"));
             Parent root = loader.load();
 
-
             AddTaskModalController controller = loader.getController();
             controller.setTaskToEdit(selectedTask);
 
@@ -260,7 +296,6 @@ public class TasksController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleDeleteTask() {
