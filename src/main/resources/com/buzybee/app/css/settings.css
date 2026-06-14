@@ -1,0 +1,284 @@
+/* Scroll Pane */
+
+.settings-row .settings-pill-button,
+.settings-row .google-button {
+    -fx-translate-y: 6;
+}
+
+.connected-account-label {
+    -fx-text-fill: #FAEEDA;
+}
+
+.settings-scroll {
+    -fx-background-color: #FAEEDA;
+    -fx-background: #FAEEDA;
+    -fx-border-color: transparent;
+}
+
+.settings-scroll > .viewport {
+    -fx-background-color: #FAEEDA;
+}
+
+.settings-scroll .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+    -fx-background-color: transparent;
+}
+
+.settings-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(72, 53, 33, 0.36);
+    -fx-background-radius: 10;
+}
+
+.settings-scroll .scroll-bar .increment-button,
+.settings-scroll .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+/* Page & Shell */
+
+.settings-page {
+    -fx-background-color: #FAEEDA;
+    -fx-alignment: TOP_LEFT;
+    -fx-padding: 22 0 28 32;
+}
+
+.settings-shell {
+    -fx-background-color: #483521;
+    -fx-background-radius: 13;
+    -fx-font-family: "Nunito SemiBold", "Nunito", "Segoe UI", Arial, sans-serif;
+}
+
+.settings-pointer {
+    -fx-background-color: #483521;
+    -fx-shape: "M 0 12 L 22 0 L 22 24 Z";
+    -fx-min-width: 22px;
+    -fx-min-height: 24px;
+    -fx-pref-width: 22px;
+    -fx-pref-height: 24px;
+    -fx-max-width: 22px;
+    -fx-max-height: 24px;
+    -fx-translate-x: -50;
+    -fx-translate-y: 292;
+}
+
+/* Cards */
+
+.settings-card {
+    -fx-background-color: #9D734C;
+    -fx-background-radius: 16;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2;
+    -fx-border-radius: 16;
+    -fx-padding: 18 28 18 28;
+}
+
+
+
+
+.settings-card-title {
+    -fx-text-fill: #FFDC27;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+}
+
+/* Account Rows */
+
+.settings-row {
+    -fx-min-height: 40px;
+}
+
+.settings-row-title,
+.settings-section-title {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 14px;
+    -fx-font-weight: 900;
+}
+
+
+.notification-setting-label {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+}
+
+/* Text Inputs */
+
+.settings-row-input {
+    -fx-background-color: #5A4028;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-text-fill: #FFF8EF;
+    -fx-prompt-text-fill: #C4A882;
+    -fx-font-size: 14px;
+    -fx-padding: 7 10 7 10;
+}
+
+.settings-row-input:focused {
+    -fx-border-color: #FFDC27;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+/* Buttons  */
+
+.settings-pill-button,
+.google-button {
+    -fx-background-color: #5A4028;
+    -fx-background-radius: 22;
+    -fx-border-color: transparent;
+    -fx-padding: 9 19 9 19;
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+    -fx-cursor: hand;
+    -fx-min-width: 78px;
+}
+
+.settings-pill-button:hover,
+.google-button:hover {
+    -fx-background-color: #C4A882;
+}
+
+.wide-pill {
+    -fx-min-width: 118px;
+}
+
+.time-button {
+    -fx-min-width: 104px;
+}
+
+.google-button {
+    -fx-padding: 8 14 8 12;
+    -fx-min-width: 132px;
+}
+
+.google-button-label {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+}
+
+.settings-save-button {
+    -fx-background-color: #B87333;
+    -fx-background-radius: 22;
+    -fx-border-color: transparent;
+    -fx-padding: 9 24 9 24;
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 13px;
+    -fx-font-weight: 900;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+}
+
+.settings-save-button:hover {
+    -fx-background-color: #9D6128;
+}
+
+/* Toggle Switch */
+
+.settings-switch {
+    -fx-background-color: #B87333;
+    -fx-background-radius: 18;
+    -fx-border-color: transparent;
+    -fx-min-width: 70px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 70px;
+    -fx-pref-height: 30px;
+    -fx-max-width: 70px;
+    -fx-max-height: 30px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+}
+
+.settings-switch-on {
+    -fx-background-color: #B87333;
+}
+
+.settings-switch-off {
+    -fx-background-color: #C4A882;
+}
+
+.settings-switch-track {
+    -fx-min-width: 62px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 62px;
+    -fx-pref-height: 30px;
+    -fx-max-width: 62px;
+    -fx-max-height: 30px;
+    -fx-padding: 2 2 2 2;
+}
+
+.settings-switch-knob {
+    -fx-background-color: #FAEEDA;
+    -fx-background-radius: 50%;
+    -fx-min-width: 26px;
+    -fx-min-height: 26px;
+    -fx-pref-width: 26px;
+    -fx-pref-height: 26px;
+    -fx-max-width: 26px;
+    -fx-max-height: 26px;
+}
+
+/* Support and Legal */
+
+.support-card {
+    -fx-padding: 18 28 18 28;
+}
+
+.legal-panel {
+    -fx-background-color: #483518;
+    -fx-background-radius: 12;
+    -fx-padding: 14 20 14 20;
+    -fx-cursor: default;
+}
+
+.legal-header {
+    -fx-cursor: hand;
+    -fx-padding: 0 0 6 0;
+}
+
+.legal-content {
+    -fx-padding: 8 0 0 0;
+}
+
+.legal-title {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 19px;
+    -fx-font-weight: 500;
+}
+
+.legal-copy {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 2px;
+}
+
+.legal-copy-bold {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 14px;
+    -fx-font-weight: 900;
+}
+
+.legal-chevron {
+    -fx-text-fill: #FFF8EF;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+}
+
+.settings-card.account-card {
+    -fx-border-color: #FFDC27;
+    -fx-background-color: 483521;
+}
+
+.settings-card.notification-card {
+    -fx-border-color: #FFDC27;
+    -fx-background-color: 483521;
+}
+
+.settings-card.support-card {
+    -fx-border-color: #FFDC27;
+    -fx-background-color: 483521;
+}

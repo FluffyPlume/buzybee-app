@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="settings-scroll" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.SettingsController">
+    <content>
+        <StackPane styleClass="settings-page">
+            <VBox maxWidth="780.0" minWidth="640.0" prefWidth="720.0" spacing="34.0" styleClass="settings-shell">
+                <padding>
+                    <Insets bottom="24.0" left="30.0" right="30.0" top="24.0" />
+                </padding>
+
+                <Pane styleClass="settings-pointer" />
+
+                <!-- Account Security Card -->
+                <VBox spacing="11.0" styleClass="settings-card, account-card">
+                    <Label styleClass="settings-card-title" text="Account Security" />
+
+                    <!-- Username -->
+                    <HBox alignment="BOTTOM_LEFT" spacing="18.0" styleClass="settings-row">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label styleClass="settings-row-title" text="Username" />
+                            <TextField fx:id="usernameField" styleClass="settings-row-input" promptText="Enter username" />
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#onSaveChanges" styleClass="settings-pill-button" text="Save" />
+                    </HBox>
+
+                    <!-- Email -->
+                    <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="settings-row">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label styleClass="settings-row-title" text="Email address" />
+                            <TextField fx:id="emailField" styleClass="settings-row-input" promptText="Enter email" />
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#onSaveChanges" styleClass="settings-pill-button" text="Save" />
+                    </HBox>
+
+                    <!-- Password -->
+                    <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="settings-row">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label styleClass="settings-row-title" text="Password" />
+                            <PasswordField fx:id="passwordField" styleClass="settings-row-input" promptText="Enter new password" />
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#onChangePassword" styleClass="settings-pill-button" text="Change" />
+                    </HBox>
+
+                    <!-- Connected Account -->
+                    <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="settings-row">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label styleClass="settings-row-title" text="Connected account" />
+                            <Label styleClass="settings-row-value, connected-account-label" text="Signed in with Google" />
+                        </VBox>
+                        <Button mnemonicParsing="false" styleClass="google-button">
+                            <graphic>
+                                <HBox alignment="CENTER" spacing="8.0">
+                                    <ImageView fitHeight="18.0" fitWidth="18.0" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../images/Google Logo.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Label styleClass="google-button-label" text="Manage" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </HBox>
+
+                    <!-- Your Data -->
+                    <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="settings-row">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label styleClass="settings-row-title" text="Your data" />
+                            <Label styleClass="settings-row-value, connected-account-label" text="Download or request deletion of your data" />
+                        </VBox>
+                        <Button mnemonicParsing="false" styleClass="settings-pill-button" text="Request" />
+                    </HBox>
+                </VBox>
+
+                <!-- Notifications Card -->
+                <VBox spacing="14.0" styleClass="settings-card, notification-card">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label styleClass="settings-card-title" text="Notifications" HBox.hgrow="ALWAYS" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#onRestoreDefaults" styleClass="settings-pill-button wide-pill" text="Restore defaults" />
+                    </HBox>
+
+                    <Label styleClass="settings-section-title" text="Study Reminders" />
+
+                    <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <Label styleClass="notification-setting-label" text="Practice notifications" HBox.hgrow="ALWAYS" />
+                        <ToggleButton fx:id="practiceToggle" mnemonicParsing="false" selected="true" styleClass="settings-switch" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <Label styleClass="notification-setting-label" text="Daily study reminders" HBox.hgrow="ALWAYS" />
+                        <ToggleButton fx:id="dailyToggle" mnemonicParsing="false" selected="true" styleClass="settings-switch" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <Label styleClass="notification-setting-label" text="Task due reminders" HBox.hgrow="ALWAYS" />
+                        <ToggleButton fx:id="taskToggle" mnemonicParsing="false" selected="false" styleClass="settings-switch" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="settings-row">
+                        <Label styleClass="notification-setting-label" text="Remind me at" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="timePickerButton" mnemonicParsing="false" onAction="#onPickTime" styleClass="settings-pill-button time-button" text="8:00 AM" />
+                    </HBox>
+                </VBox>
+
+                <!-- Support and Legal Card -->
+                <VBox spacing="10.0" styleClass="settings-card, support-card">
+                    <Label styleClass="settings-card-title" text="Support and Legal" />
+
+                    <!-- FAQs -->
+                    <VBox styleClass="legal-panel">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#onToggleFaq" styleClass="legal-header">
+                            <Label styleClass="legal-title" text="FAQs" HBox.hgrow="ALWAYS" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="faqChevron" styleClass="legal-chevron" text="⌃" />
+                        </HBox>
+                        <VBox fx:id="faqContent" spacing="6.0" styleClass="legal-content">
+                            <Label styleClass="legal-copy-bold" text="Why is the app slow?" />
+                            <Label styleClass="legal-copy" text="Try closing background apps and ensuring a stable internet connection. If the issue persists, restart the app." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="How do I reset my password?" />
+                            <Label styleClass="legal-copy" text="Go to the login screen and tap 'Forgot password.' A reset link will be sent to your registered email." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Can I use BuzyBee offline?" />
+                            <Label styleClass="legal-copy" text="Most features require an internet connection. Tasks and notes you have already loaded can be viewed offline." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="How do I delete my account?" />
+                            <Label styleClass="legal-copy" text="Submit a data deletion request in the Account Security section above. Our team will process it within 7 business days." wrapText="true" />
+                        </VBox>
+                    </VBox>
+
+                    <!-- Privacy Policy -->
+                    <VBox styleClass="legal-panel">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#onTogglePrivacy" styleClass="legal-header">
+                            <Label styleClass="legal-title" text="Privacy Policy" HBox.hgrow="ALWAYS" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="privacyChevron" styleClass="legal-chevron" text="⌃" />
+                        </HBox>
+                        <VBox fx:id="privacyContent" spacing="6.0" styleClass="legal-content">
+                            <Label styleClass="legal-copy-bold" text="What data we collect" />
+                            <Label styleClass="legal-copy" text="We collect your name, email, and usage data (tasks created, sessions, reminders) to provide and improve BuzyBee." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="How we use your data" />
+                            <Label styleClass="legal-copy" text="Your data is used solely to operate the app and personalize your experience. We do not sell data to third parties." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Data storage" />
+                            <Label styleClass="legal-copy" text="All data is encrypted at rest and in transit. We use industry-standard security measures to protect your information." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Your rights" />
+                            <Label styleClass="legal-copy" text="You may request a copy of your data or ask us to delete it at any time via the 'Your data' section above." wrapText="true" />
+                        </VBox>
+                    </VBox>
+
+                    <!-- Terms of Service -->
+                    <VBox styleClass="legal-panel">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#onToggleTerms" styleClass="legal-header">
+                            <Label styleClass="legal-title" text="Terms of Service" HBox.hgrow="ALWAYS" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="termsChevron" styleClass="legal-chevron" text="⌃" />
+                        </HBox>
+                        <VBox fx:id="termsContent" spacing="6.0" styleClass="legal-content">
+                            <Label styleClass="legal-copy-bold" text="Acceptance of terms" />
+                            <Label styleClass="legal-copy" text="By using BuzyBee, you agree to these terms. If you do not agree, please discontinue use of the app." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Permitted use" />
+                            <Label styleClass="legal-copy" text="BuzyBee is for personal productivity use only. You may not use it for unlawful purposes or to harm others." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Account responsibility" />
+                            <Label styleClass="legal-copy" text="You are responsible for keeping your login credentials secure. Report any unauthorized access immediately." wrapText="true" />
+                            <Label styleClass="legal-copy-bold" text="Changes to terms" />
+                            <Label styleClass="legal-copy" text="We may update these terms periodically. Continued use of the app after changes means you accept the updated terms." wrapText="true" />
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Save Button -->
+                <HBox alignment="CENTER_RIGHT">
+                    <Button mnemonicParsing="false" onAction="#onSaveChanges" styleClass="settings-save-button" text="Save changes" />
+                </HBox>
+
+            </VBox>
+        </StackPane>
+    </content>
+</ScrollPane>
