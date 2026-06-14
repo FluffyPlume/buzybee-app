@@ -21,6 +21,7 @@ public class TimeBlock {
     private double totalAvailableHours; // e.g., 3.0
     private double remainingHours;
     private List<Task> assignedTasks = new java.util.ArrayList<>();
+    private java.util.Map<String, Double> taskAllocations = new java.util.HashMap<>();
 
     // Constructor
     public TimeBlock(LocalDate date, LocalTime startTime, LocalTime endTime, double totalAvailableHours) {
@@ -69,5 +70,27 @@ public class TimeBlock {
 
     public double getRemainingHours() { return remainingHours; }
     public void setRemainingHours(double remainingHours) { this.remainingHours = remainingHours; }
+
+    public void allocateTask(Task task, double hours) {
+        if (this.assignedTasks == null) {
+            this.assignedTasks = new java.util.ArrayList<>();
+        }
+        if (this.taskAllocations == null) {
+            this.taskAllocations = new java.util.HashMap<>();
+        }
+
+        if (!this.assignedTasks.contains(task)) {
+            this.assignedTasks.add(task);
+        }
+        this.taskAllocations.put(task.getId(), hours);
+    }
+
+    public double getAllocatedHours(String taskId) {
+        if (this.taskAllocations == null) {
+            return 0.0;
+        }
+        return taskAllocations.getOrDefault(taskId, 0.0);
+    }
+
 
 }

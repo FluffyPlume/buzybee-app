@@ -507,26 +507,39 @@ public class CalendarController {
 
             int startingHour = todayBlock.getStartTime().getHour();
             int startingRow = (startingHour - dynamicStartHour) + 1;
+
             int taskOffset = 0;
 
             for (Task task : todayBlock.getAssignedTasks()) {
                 if (!isTagVisible(task)) continue;
 
-                int targetRow = startingRow + taskOffset;
+                double allocatedHours = todayBlock.getAllocatedHours(task.getId());
 
+                int rowSpan = (int) Math.max(1, Math.round(allocatedHours));
+
+                int targetRow = startingRow + taskOffset;
                 if (targetRow > (dynamicEndHour - dynamicStartHour)) break;
 
-                VBox targetCell = getCell(day + 1, targetRow);
-                if (targetCell == null) continue;
+                VBox taskPill = new VBox(2);
+                taskPill.getStyleClass().add("task-pill-container");
+                taskPill.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                Label taskPill = new Label(task.getName() + "\n" + capitalize(task.getTag()) + " | " + String.format("%.1fh", task.getEstimatedTime()));
-                taskPill.getStyleClass().add("task-pill");
-                taskPill.setMaxWidth(Double.MAX_VALUE);
-                taskPill.setWrapText(true);
-                VBox.setMargin(taskPill, new Insets(0, 0, 2, 0));
+                Label titleLabel = new Label(task.getName());
+                titleLabel.getStyleClass().add("task-pill-title");
+                titleLabel.setWrapText(true);
 
-                targetCell.getChildren().add(taskPill);
-                taskOffset++;
+                Label metaLabel = new Label(capitalize(task.getTag()) + " | " + String.format("%.1fh", allocatedHours));
+                metaLabel.getStyleClass().add("task-pill-meta");
+                metaLabel.setWrapText(true);
+
+                taskPill.getChildren().addAll(titleLabel, metaLabel);
+
+                calendarGrid.add(taskPill, day + 1, targetRow);
+                GridPane.setRowSpan(taskPill, rowSpan);
+
+                GridPane.setMargin(taskPill, new Insets(2, 4, 2, 4));
+
+                taskOffset += rowSpan;
             }
         }
     }
@@ -709,17 +722,34 @@ public class CalendarController {
         List<javafx.scene.control.ComboBox<Integer>> startCombos = new ArrayList<>();
         List<javafx.scene.control.ComboBox<Integer>> endCombos = new ArrayList<>();
 
+        List<TimeBlock> savedSchedule = taskService.getSavedSchedule();
+
         for (int i = 0; i < 7; i++) {
             LocalDate date = scheduleStart.plusDays(i);
             Label label = new Label(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + date.format(DateTimeFormatter.ofPattern("MMM d")));
 
+            TimeBlock savedDay = null;
+            if (savedSchedule != null) {
+                savedDay = savedSchedule.stream()
+                        .filter(b -> b.getDate() != null && b.getDate().equals(date))
+                        .findFirst()
+                        .orElse(null);
+            }
+
             javafx.scene.control.ComboBox<Integer> startCombo = new javafx.scene.control.ComboBox<>();
             for (int h = 8; h < 22; h++) startCombo.getItems().add(h);
-            startCombo.setPromptText("Start");
 
             javafx.scene.control.ComboBox<Integer> endCombo = new javafx.scene.control.ComboBox<>();
             for (int h = 9; h <= 22; h++) endCombo.getItems().add(h);
-            endCombo.setPromptText("End");
+
+            if (savedDay != null && savedDay.getStartTime() != null && savedDay.getTotalAvailableHours() > 0) {
+                startCombo.setValue(savedDay.getStartTime().getHour());
+                endCombo.setValue(savedDay.getEndTime().getHour());
+            } else {
+                startCombo.setPromptText("Start");
+                endCombo.setPromptText("End");
+            }
+
             HBox timeRow = new HBox(8, startCombo, new Label("to"), endCombo);
             timeRow.setAlignment(Pos.CENTER_LEFT);
 

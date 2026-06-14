@@ -68,22 +68,22 @@ public class TaskDAO {
     // 3. Filter Views
     // ==========================================
 
-    // 1. Gets only tasks waiting in the inbox
+    // Gets only tasks waiting in the inbox (including ones that failed to fit in the calendar!)
     public List<Task> getPendingTasks() {
         List<Task> pending = new ArrayList<>();
         for (Task t : allTasks) {
-            if (t.getStatus().equals("PENDING")) {
+            if (t.getStatus().equals("PENDING") || t.getStatus().equals("FAILED_CONSTRAINT")) {
                 pending.add(t);
             }
         }
         return pending;
     }
 
-    // 2. Gets only tasks that the algorithm successfully placed in the calendar
+    // Gets only tasks that the algorithm successfully placed in the calendar
     public List<Task> getScheduledTasks() {
         List<Task> scheduled = new ArrayList<>();
         for (Task t : allTasks) {
-            if (t.getStatus().equals("SCHEDULED")) {
+            if (t.getStatus().equals("SCHEDULED") || t.getStatus().equals("OVERALLOCATED_WARNING")) {
                 scheduled.add(t);
             }
         }
