@@ -48,8 +48,8 @@ import java.util.Set;
 
 public class CalendarController {
 
-    private static final int START_HOUR = 8;
-    private static final int END_HOUR = 22;
+    private int dynamicStartHour = 8;
+    private int dynamicEndHour = 22;
 
     @FXML private StackPane calendarRoot;
     @FXML private Button dailyViewButton;
@@ -395,6 +395,7 @@ public class CalendarController {
     }
 
     private void renderCalendar() {
+        calculateDynamicGridHours();
         calendarGrid.getChildren().clear();
         calendarGrid.getColumnConstraints().clear();
         calendarGrid.getRowConstraints().clear();
@@ -435,7 +436,7 @@ public class CalendarController {
         headerRow.setMinHeight(58);
         calendarGrid.getRowConstraints().add(headerRow);
 
-        for (int hour = START_HOUR; hour < END_HOUR; hour++) {
+        for (int hour = dynamicStartHour; hour < dynamicEndHour; hour++) {
             RowConstraints hourRow = new RowConstraints(55);
             hourRow.setMinHeight(55);
             hourRow.setVgrow(Priority.ALWAYS);
@@ -471,8 +472,8 @@ public class CalendarController {
     }
 
     private void addTimeRows(int visibleDays) {
-        for (int hour = START_HOUR; hour < END_HOUR; hour++) {
-            int row = (hour - START_HOUR) + 1;
+        for (int hour = dynamicStartHour; hour < dynamicEndHour; hour++) {
+            int row = (hour - dynamicStartHour) + 1;
 
             Label time = new Label(formatHour(hour));
             time.getStyleClass().add("time-label");
@@ -491,25 +492,41 @@ public class CalendarController {
     }
 
     private void addScheduledTasks(int visibleDays) {
-        Map<LocalDate, List<Task>> tasksByDate = getVisibleTasksByDate();
+        List<TimeBlock> savedSchedule = taskService.getSavedSchedule();
+        if (savedSchedule == null) return;
+
         for (int day = 0; day < visibleDays; day++) {
             LocalDate date = getVisibleDate(day);
-            List<Task> tasks = tasksByDate.getOrDefault(date, List.of());
 
-            for (int i = 0; i < tasks.size(); i++) {
-                int targetRow = Math.min(i + 2, END_HOUR - START_HOUR);
+            TimeBlock todayBlock = savedSchedule.stream()
+                    .filter(b -> b.getDate().equals(date))
+                    .findFirst()
+                    .orElse(null);
+
+            if (todayBlock == null || todayBlock.getAssignedTasks().isEmpty()) continue;
+
+            int startingHour = todayBlock.getStartTime().getHour();
+            int startingRow = (startingHour - dynamicStartHour) + 1;
+            int taskOffset = 0;
+
+            for (Task task : todayBlock.getAssignedTasks()) {
+                if (!isTagVisible(task)) continue;
+
+                int targetRow = startingRow + taskOffset;
+
+                if (targetRow > (dynamicEndHour - dynamicStartHour)) break;
+
                 VBox targetCell = getCell(day + 1, targetRow);
-                if (targetCell == null) {
-                    continue;
-                }
+                if (targetCell == null) continue;
 
-                Task task = tasks.get(i);
                 Label taskPill = new Label(task.getName() + "\n" + capitalize(task.getTag()) + " | " + String.format("%.1fh", task.getEstimatedTime()));
                 taskPill.getStyleClass().add("task-pill");
                 taskPill.setMaxWidth(Double.MAX_VALUE);
                 taskPill.setWrapText(true);
                 VBox.setMargin(taskPill, new Insets(0, 0, 2, 0));
+
                 targetCell.getChildren().add(taskPill);
+                taskOffset++;
             }
         }
     }
@@ -676,11 +693,10 @@ public class CalendarController {
         }
         return schedule.stream().anyMatch(block -> scheduleStart.equals(block.getDate()));
     }
-
     private boolean showAvailabilityDialog(LocalDate scheduleStart) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Weekly Availability");
-        dialog.setHeaderText("How many hours are you available this week?");
+        dialog.setHeaderText("Select your free time window for each day:");
         if (calendarGrid.getScene() != null) {
             dialog.initOwner(calendarGrid.getScene().getWindow());
         }
@@ -690,17 +706,28 @@ public class CalendarController {
         form.setVgap(10);
         form.setPadding(new Insets(12));
 
-        Map<LocalDate, Double> existingHours = getAvailabilityByDate();
-        List<TextField> hourFields = new ArrayList<>();
+        List<javafx.scene.control.ComboBox<Integer>> startCombos = new ArrayList<>();
+        List<javafx.scene.control.ComboBox<Integer>> endCombos = new ArrayList<>();
+
         for (int i = 0; i < 7; i++) {
             LocalDate date = scheduleStart.plusDays(i);
             Label label = new Label(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + date.format(DateTimeFormatter.ofPattern("MMM d")));
-            TextField field = new TextField();
-            field.setPromptText("0");
-            field.setText(existingHours.containsKey(date) ? String.format(Locale.US, "%.1f", existingHours.get(date)) : "");
+
+            javafx.scene.control.ComboBox<Integer> startCombo = new javafx.scene.control.ComboBox<>();
+            for (int h = 8; h < 22; h++) startCombo.getItems().add(h);
+            startCombo.setPromptText("Start");
+
+            javafx.scene.control.ComboBox<Integer> endCombo = new javafx.scene.control.ComboBox<>();
+            for (int h = 9; h <= 22; h++) endCombo.getItems().add(h);
+            endCombo.setPromptText("End");
+            HBox timeRow = new HBox(8, startCombo, new Label("to"), endCombo);
+            timeRow.setAlignment(Pos.CENTER_LEFT);
+
             form.add(label, 0, i);
-            form.add(field, 1, i);
-            hourFields.add(field);
+            form.add(timeRow, 1, i);
+
+            startCombos.add(startCombo);
+            endCombos.add(endCombo);
         }
 
         dialog.getDialogPane().setContent(form);
@@ -713,20 +740,29 @@ public class CalendarController {
         List<TimeBlock> week = new ArrayList<>();
         try {
             for (int i = 0; i < 7; i++) {
-                String value = hourFields.get(i).getText() == null ? "" : hourFields.get(i).getText().trim();
-                double hours = value.isEmpty() ? 0.0 : Double.parseDouble(value);
-                if (hours < 0) {
-                    throw new NumberFormatException("Hours cannot be negative.");
+                Integer start = startCombos.get(i).getValue();
+                Integer end = endCombos.get(i).getValue();
+
+                double hours = 0.0;
+                java.time.LocalTime startTime = java.time.LocalTime.of(8, 0);
+                java.time.LocalTime endTime = java.time.LocalTime.of(22, 0);
+
+                if (start != null && end != null) {
+                    if (start >= end) {
+                        throw new InvalidTaskException("End time must be after Start time!");
+                    }
+                    hours = (double) (end - start);
+                    startTime = java.time.LocalTime.of(start, 0);
+                    endTime = java.time.LocalTime.of(end, 0);
                 }
-                week.add(new TimeBlock(scheduleStart.plusDays(i), hours));
+
+                week.add(new TimeBlock(scheduleStart.plusDays(i), startTime, endTime, hours));
             }
             taskService.createWeeklySchedule(week);
             renderAll();
             return true;
-        } catch (NumberFormatException e) {
-            showError("Invalid availability", "Please enter valid non-negative numbers for each day.");
         } catch (InvalidTaskException e) {
-            showError("Invalid availability", e.getMessage());
+            showError("Invalid Time Selection", e.getMessage());
         }
         return false;
     }
@@ -771,5 +807,35 @@ public class CalendarController {
             alert.initOwner(calendarGrid.getScene().getWindow());
         }
         alert.showAndWait();
+    }
+
+    private void calculateDynamicGridHours() {
+        List<TimeBlock> schedule = taskService.getSavedSchedule();
+
+        if (schedule == null || schedule.isEmpty()) {
+            dynamicStartHour = 8;
+            dynamicEndHour = 22;
+            return;
+        }
+
+        int minStart = 24;
+        int maxEnd = 0;
+        boolean hasValidBlocks = false;
+
+        for (TimeBlock block : schedule) {
+            if (block.getStartTime() != null && block.getEndTime() != null) {
+                minStart = Math.min(minStart, block.getStartTime().getHour());
+                maxEnd = Math.max(maxEnd, block.getEndTime().getHour());
+                hasValidBlocks = true;
+            }
+        }
+
+        if (hasValidBlocks) {
+            dynamicStartHour = minStart;
+            dynamicEndHour = maxEnd;
+        } else {
+            dynamicStartHour = 8;
+            dynamicEndHour = 22;
+        }
     }
 }
