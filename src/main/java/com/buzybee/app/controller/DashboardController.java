@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.ColumnConstraints;
@@ -54,6 +55,7 @@ public class DashboardController {
     private Label completedValueLabel;
     private Label completedSubtextLabel;
     private ProgressBar completedProgress;
+    private Label activeHoursValueLabel;
     private Label pendingValueLabel;
     private Label pendingSubtextLabel;
     private VBox taskList;
@@ -124,7 +126,7 @@ public class DashboardController {
         HBox row = new HBox(12);
         row.getChildren().addAll(
                 createCompletedCard(),
-                createStatCard("\u25f7", "Hours tracked", "2.5", "Active workload", null),
+                createActiveHoursCard(),
                 createPendingCard()
         );
         return row;
@@ -140,6 +142,22 @@ public class DashboardController {
         completedProgress.setMaxWidth(Double.MAX_VALUE);
         completedProgress.getStyleClass().add("completed-progress");
         card.getChildren().addAll(label, completedValueLabel, completedSubtextLabel, completedProgress);
+        HBox.setHgrow(card, Priority.ALWAYS);
+        return card;
+    }
+
+    private Node createActiveHoursCard() {
+        VBox card = createCard("stat-card");
+        card.getStyleClass().add("clickable-stat-card");
+        activeHoursValueLabel = createStatValue();
+        Label footer = new Label("Active workload");
+        footer.getStyleClass().add("stat-subtext");
+        card.getChildren().addAll(createStatLabel("\u25f7", "Hours tracked"), activeHoursValueLabel, footer);
+        card.setOnMouseClicked(event -> {
+            if (appShellController != null) {
+                appShellController.showAnalytics();
+            }
+        });
         HBox.setHgrow(card, Priority.ALWAYS);
         return card;
     }
@@ -319,6 +337,7 @@ public class DashboardController {
         completedValueLabel.setText(String.valueOf(done));
         completedSubtextLabel.setText("of " + todayTasks.size() + " tasks");
         completedProgress.setProgress(todayTasks.isEmpty() ? 0 : (double) done / todayTasks.size());
+        activeHoursValueLabel.setText(String.format(Locale.ROOT, "%.1f", activeHours(tasks)));
         pendingValueLabel.setText(String.valueOf(pending));
         pendingSubtextLabel.setText(pending + " due today");
 
@@ -467,6 +486,8 @@ public class DashboardController {
         VBox modal = new VBox(10);
         modal.getStyleClass().add("add-task-modal");
         modal.setMaxWidth(320);
+        modal.setPrefHeight(260);
+        modal.setMaxHeight(260);
         Label title = new Label("Choose a focus task");
         title.getStyleClass().add("modal-title");
 
@@ -496,6 +517,14 @@ public class DashboardController {
             }
         }
 
+        ScrollPane taskScroll = new ScrollPane(rows);
+        taskScroll.setFitToWidth(true);
+        taskScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        taskScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        taskScroll.setMaxHeight(150);
+        taskScroll.getStyleClass().add("task-picker-scroll");
+        VBox.setVgrow(taskScroll, Priority.ALWAYS);
+
         HBox actions = new HBox();
         actions.setAlignment(Pos.CENTER_RIGHT);
         Button cancel = new Button("Cancel");
@@ -503,7 +532,7 @@ public class DashboardController {
         cancel.setOnAction(event -> dashboardRoot.getChildren().remove(overlay));
         actions.getChildren().add(cancel);
 
-        modal.getChildren().addAll(title, rows, actions);
+        modal.getChildren().addAll(title, taskScroll, actions);
         overlay.getChildren().add(modal);
         dashboardRoot.getChildren().add(overlay);
     }
@@ -614,6 +643,13 @@ public class DashboardController {
 
     private List<Task> tasks() {
         return taskDAO == null || taskDAO.getAllTasks() == null ? List.of() : taskDAO.getAllTasks();
+    }
+
+    private double activeHours(List<Task> tasks) {
+        return tasks.stream()
+                .filter(task -> !"COMPLETED".equals(task.getStatus()))
+                .mapToDouble(Task::getEstimatedTime)
+                .sum();
     }
 
     private List<Task> todayTasks(List<Task> tasks) {
