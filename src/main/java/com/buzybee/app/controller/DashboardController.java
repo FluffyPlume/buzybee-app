@@ -3,6 +3,9 @@ package com.buzybee.app.controller;
 import com.buzybee.app.config.SessionManager;
 import com.buzybee.app.dao.TaskDAO;
 import com.buzybee.app.model.Task;
+import com.buzybee.app.model.TimeBlock;
+import com.buzybee.app.model.User;
+import com.buzybee.app.service.TaskService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -44,6 +47,7 @@ public class DashboardController {
 
     private AppShellController appShellController;
     private TaskDAO taskDAO;
+    private TaskService taskService;
     private TaskFilter currentFilter = TaskFilter.ALL;
     private YearMonth displayedMonth = YearMonth.now();
     private Timeline timerTimeline;
@@ -71,6 +75,7 @@ public class DashboardController {
     @FXML
     public void initialize() {
         taskDAO = SessionManager.getInstance().getTaskDao();
+        taskService = new TaskService();
         dashboardRoot.getChildren().setAll(createDashboard());
         setupTimer();
         refreshDashboard();
@@ -168,20 +173,6 @@ public class DashboardController {
         pendingSubtextLabel = new Label();
         pendingSubtextLabel.getStyleClass().add("stat-subtext");
         card.getChildren().addAll(createStatLabel("\u26a0", "Pending"), pendingValueLabel, pendingSubtextLabel);
-        HBox.setHgrow(card, Priority.ALWAYS);
-        return card;
-    }
-
-    private Node createStatCard(String icon, String labelText, String valueText, String subtext, Node extra) {
-        VBox card = createCard("stat-card");
-        Label value = createStatValue();
-        value.setText(valueText);
-        Label footer = new Label(subtext);
-        footer.getStyleClass().add("stat-subtext");
-        card.getChildren().addAll(createStatLabel(icon, labelText), value, footer);
-        if (extra != null) {
-            card.getChildren().add(extra);
-        }
         HBox.setHgrow(card, Priority.ALWAYS);
         return card;
     }
@@ -326,18 +317,38 @@ public class DashboardController {
         return card;
     }
 
+    // ─── Gets today's tasks from the saved schedule (same source as Calendar) ───
+
+    private List<Task> todayScheduledTasks() {
+        LocalDate today = LocalDate.now();
+        List<TimeBlock> schedule = taskService.getSavedSchedule();
+        if (schedule == null) return List.of();
+
+        return schedule.stream()
+                .filter(block -> today.equals(block.getDate()))
+                .findFirst()
+                .map(TimeBlock::getAssignedTasks)
+                .orElse(List.of());
+    }
+
     private void refreshDashboard() {
-        List<Task> tasks = tasks();
-        List<Task> todayTasks = todayTasks(tasks);
+        List<Task> allTasks = tasks();
+        List<Task> todayTasks = todayScheduledTasks();
+
         long done = todayTasks.stream().filter(this::isDone).count();
         long pending = todayTasks.size() - done;
 
-        greetingLabel.setText(timeGreeting() + ", bee!");
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        String name = (currentUser != null && currentUser.getUsername() != null && !currentUser.getUsername().isBlank())
+                ? currentUser.getUsername()
+                : "bee";
+        greetingLabel.setText(timeGreeting() + ", " + name + "!");
+
         pendingSubtitleLabel.setText("You have " + pending + " tasks pending today.");
         completedValueLabel.setText(String.valueOf(done));
         completedSubtextLabel.setText("of " + todayTasks.size() + " tasks");
         completedProgress.setProgress(todayTasks.isEmpty() ? 0 : (double) done / todayTasks.size());
-        activeHoursValueLabel.setText(String.format(Locale.ROOT, "%.1f", activeHours(tasks)));
+        activeHoursValueLabel.setText(String.format(Locale.ROOT, "%.1f", activeHours(allTasks)));
         pendingValueLabel.setText(String.valueOf(pending));
         pendingSubtextLabel.setText(pending + " due today");
 
@@ -427,9 +438,7 @@ public class DashboardController {
     }
 
     private void refreshCalendar() {
-        if (calendarGrid == null) {
-            return;
-        }
+        if (calendarGrid == null) return;
 
         calendarMonthLabel.setText(displayedMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy")));
         calendarGrid.getChildren().clear();
@@ -552,9 +561,7 @@ public class DashboardController {
     }
 
     private void toggleTimer() {
-        if (!timerRunning && timerSeconds <= 0 && !applyTimerInput()) {
-            return;
-        }
+        if (!timerRunning && timerSeconds <= 0 && !applyTimerInput()) return;
         timerRunning = !timerRunning;
         if (timerRunning) {
             timerField.setEditable(false);
@@ -592,15 +599,9 @@ public class DashboardController {
     private void setupTimerFieldFormatter() {
         timerField.setText("00:00:00");
         UnaryOperator<TextFormatter.Change> filter = change -> {
-            if (!change.isContentChange()) {
-                return change;
-            }
-
+            if (!change.isContentChange()) return change;
             String digits = change.getControlNewText().replaceAll("[^0-9]", "");
-            if (digits.length() > 6) {
-                digits = digits.substring(digits.length() - 6);
-            }
-
+            if (digits.length() > 6) digits = digits.substring(digits.length() - 6);
             String formatted = formatTimerDigits(digits);
             change.setRange(0, change.getControlText().length());
             change.setText(formatted);
@@ -613,9 +614,7 @@ public class DashboardController {
 
     private int parseTimerText(String text) {
         String[] parts = text == null ? new String[0] : text.split(":");
-        if (parts.length != 3) {
-            return 0;
-        }
+        if (parts.length != 3) return 0;
         int hours = Integer.parseInt(parts[0]);
         int minutes = Math.min(59, Integer.parseInt(parts[1]));
         int seconds = Math.min(59, Integer.parseInt(parts[2]));
@@ -652,17 +651,8 @@ public class DashboardController {
                 .sum();
     }
 
-    private List<Task> todayTasks(List<Task> tasks) {
-        LocalDate today = LocalDate.now();
-        return tasks.stream()
-                .filter(task -> today.equals(task.getDeadline()))
-                .toList();
-    }
-
     private void saveTasks() {
-        if (taskDAO != null) {
-            taskDAO.saveChanges();
-        }
+        if (taskDAO != null) taskDAO.saveChanges();
     }
 
     private boolean isDone(Task task) {
@@ -670,14 +660,18 @@ public class DashboardController {
     }
 
     private boolean hasTaskOn(LocalDate date) {
-        return tasks().stream().anyMatch(task -> date.equals(task.getDeadline()));
+        List<TimeBlock> schedule = taskService.getSavedSchedule();
+        if (schedule == null) return false;
+        return schedule.stream()
+                .filter(block -> date.equals(block.getDate()))
+                .findFirst()
+                .map(block -> !block.getAssignedTasks().isEmpty())
+                .orElse(false);
     }
 
     private String displayTag(Task task) {
         String tag = task.getTag();
-        if (tag == null || tag.isBlank()) {
-            return "work";
-        }
+        if (tag == null || tag.isBlank()) return "work";
         return tag.toLowerCase(Locale.ROOT);
     }
 
@@ -690,12 +684,8 @@ public class DashboardController {
 
     private String timeGreeting() {
         int hour = LocalTime.now().getHour();
-        if (hour < 12) {
-            return "Good morning";
-        }
-        if (hour < 18) {
-            return "Good afternoon";
-        }
+        if (hour < 12) return "Good morning";
+        if (hour < 18) return "Good afternoon";
         return "Good evening";
     }
 }
