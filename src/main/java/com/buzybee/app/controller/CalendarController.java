@@ -439,7 +439,8 @@ public class CalendarController {
         for (int hour = dynamicStartHour; hour < dynamicEndHour; hour++) {
             RowConstraints hourRow = new RowConstraints(55);
             hourRow.setMinHeight(55);
-            hourRow.setVgrow(Priority.ALWAYS);
+            hourRow.setPrefHeight(55);
+
             calendarGrid.getRowConstraints().add(hourRow);
         }
     }
@@ -838,7 +839,6 @@ public class CalendarController {
         }
         alert.showAndWait();
     }
-
     private void calculateDynamicGridHours() {
         List<TimeBlock> schedule = taskService.getSavedSchedule();
 
@@ -854,15 +854,27 @@ public class CalendarController {
 
         for (TimeBlock block : schedule) {
             if (block.getStartTime() != null && block.getEndTime() != null) {
-                minStart = Math.min(minStart, block.getStartTime().getHour());
-                maxEnd = Math.max(maxEnd, block.getEndTime().getHour());
+                int start = block.getStartTime().getHour();
+                int end = block.getEndTime().getHour();
+
+                minStart = Math.min(minStart, start);
+                maxEnd = Math.max(maxEnd, end);
+
+                double totalTaskHours = 0;
+                for (Task t : block.getAssignedTasks()) {
+                    totalTaskHours += block.getAllocatedHours(t.getId());
+                }
+
+                int overflowEnd = start + (int) Math.ceil(totalTaskHours);
+                maxEnd = Math.max(maxEnd, overflowEnd);
+
                 hasValidBlocks = true;
             }
         }
 
         if (hasValidBlocks) {
-            dynamicStartHour = minStart;
-            dynamicEndHour = maxEnd;
+            dynamicStartHour = Math.max(0, minStart);
+            dynamicEndHour = Math.min(24, maxEnd);
         } else {
             dynamicStartHour = 8;
             dynamicEndHour = 22;
