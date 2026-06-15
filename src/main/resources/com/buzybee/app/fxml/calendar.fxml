@@ -83,7 +83,7 @@
                     <Button onAction="#handleNextWeek" styleClass="nav-btn" text="&#x203A;" />
                 </HBox>
 
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="calendar-scroll" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="calendar-scroll" VBox.vgrow="ALWAYS">
                     <GridPane fx:id="calendarGrid" hgap="0" styleClass="calendar-grid" vgap="0" />
                 </ScrollPane>
             </VBox>

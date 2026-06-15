@@ -437,9 +437,10 @@ public class CalendarController {
         calendarGrid.getRowConstraints().add(headerRow);
 
         for (int hour = dynamicStartHour; hour < dynamicEndHour; hour++) {
-            RowConstraints hourRow = new RowConstraints(55);
+            RowConstraints hourRow = new RowConstraints();
             hourRow.setMinHeight(55);
-            hourRow.setPrefHeight(55);
+
+            hourRow.setVgrow(Priority.ALWAYS);
 
             calendarGrid.getRowConstraints().add(hourRow);
         }
@@ -519,7 +520,7 @@ public class CalendarController {
                 int rowSpan = (int) Math.max(1, Math.round(allocatedHours));
 
                 int targetRow = startingRow + taskOffset;
-                if (targetRow > (dynamicEndHour - dynamicStartHour)) break;
+                if (targetRow > 24) break;
 
                 VBox taskPill = new VBox(2);
                 taskPill.getStyleClass().add("task-pill-container");
@@ -725,6 +726,18 @@ public class CalendarController {
 
         List<TimeBlock> savedSchedule = taskService.getSavedSchedule();
 
+        javafx.util.StringConverter<Integer> timeFormatter = new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Integer hour) {
+                if (hour == null) return "";
+                int displayHour = (hour % 12 == 0) ? 12 : (hour % 12);
+                String suffix = (hour < 12) ? " AM" : " PM";
+                return displayHour + suffix;
+            }
+            @Override
+            public Integer fromString(String string) { return null; }
+        };
+
         for (int i = 0; i < 7; i++) {
             LocalDate date = scheduleStart.plusDays(i);
             Label label = new Label(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + date.format(DateTimeFormatter.ofPattern("MMM d")));
@@ -738,9 +751,11 @@ public class CalendarController {
             }
 
             javafx.scene.control.ComboBox<Integer> startCombo = new javafx.scene.control.ComboBox<>();
+            startCombo.setConverter(timeFormatter);
             for (int h = 8; h < 22; h++) startCombo.getItems().add(h);
 
             javafx.scene.control.ComboBox<Integer> endCombo = new javafx.scene.control.ComboBox<>();
+            endCombo.setConverter(timeFormatter);
             for (int h = 9; h <= 22; h++) endCombo.getItems().add(h);
 
             if (savedDay != null && savedDay.getStartTime() != null && savedDay.getTotalAvailableHours() > 0) {
@@ -842,9 +857,10 @@ public class CalendarController {
     private void calculateDynamicGridHours() {
         List<TimeBlock> schedule = taskService.getSavedSchedule();
 
+
         if (schedule == null || schedule.isEmpty()) {
             dynamicStartHour = 8;
-            dynamicEndHour = 22;
+            dynamicEndHour = 17;
             return;
         }
 
@@ -877,7 +893,7 @@ public class CalendarController {
             dynamicEndHour = Math.min(24, maxEnd);
         } else {
             dynamicStartHour = 8;
-            dynamicEndHour = 22;
+            dynamicEndHour = 17;
         }
     }
 }
