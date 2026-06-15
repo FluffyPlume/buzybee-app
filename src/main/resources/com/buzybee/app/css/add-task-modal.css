@@ -277,6 +277,17 @@
     -fx-background-color: #f9d96b;
 }
 
+.task-picker-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.task-picker-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
 /* ── Time Spinner ─────────────────────────────────────── */
 
 .time-spinner-row {

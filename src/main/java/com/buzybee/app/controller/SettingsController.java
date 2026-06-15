@@ -3,7 +3,6 @@ package com.buzybee.app.controller;
 import com.buzybee.app.config.SessionManager;
 import com.buzybee.app.model.User;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -42,40 +41,42 @@ public class SettingsController {
     @FXML private VBox termsContent;
     @FXML private Label termsChevron;
 
+    // Pseudocode accordion
+    @FXML private VBox pseudocodeContent;
+    @FXML private Label pseudocodeChevron;
+
     // Save button feedback
     @FXML private Button saveButton;
 
     private AppShellController appShellController;
 
-    // Accordion open/close state
     private boolean faqOpen = false;
     private boolean privacyOpen = false;
     private boolean termsOpen = false;
+    private boolean pseudocodeOpen = false;
 
-    // Default reminder time
     private String reminderTime = "8:00 AM";
 
     @FXML
     private void initialize() {
-        // Load current user data into fields
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (currentUser != null) {
             usernameField.setText(currentUser.getUsername() != null ? currentUser.getUsername() : "");
             emailField.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
         }
 
-        // Set up toggle switches
         setupSwitch(practiceToggle);
         setupSwitch(dailyToggle);
         setupSwitch(taskToggle);
 
-        // Hide all accordion content by default
         faqContent.setVisible(false);
         faqContent.setManaged(false);
         privacyContent.setVisible(false);
         privacyContent.setManaged(false);
         termsContent.setVisible(false);
         termsContent.setManaged(false);
+        pseudocodeContent.setVisible(false);
+        pseudocodeContent.setManaged(false);
     }
 
     void setAppShellController(AppShellController appShellController) {
@@ -97,11 +98,9 @@ public class SettingsController {
             if (!newEmail.isEmpty()) {
                 currentUser.setEmail(newEmail);
             }
-            // TODO: call your UserDAO update method here, e.g.:
-            // UserDAO.getInstance().updateUser(currentUser);
+            // TODO: UserDAO.getInstance().updateUser(currentUser);
         }
 
-        // Visual feedback on the save button
         if (saveButton != null) {
             String original = saveButton.getText();
             saveButton.setText("Saved!");
@@ -125,10 +124,7 @@ public class SettingsController {
             passwordField.setPromptText("Must be at least 8 characters");
             return;
         }
-
-        // TODO: hash and update the password via your UserDAO, e.g.:
-        // UserDAO.getInstance().updatePassword(currentUser, newPassword);
-
+        // TODO: UserDAO.getInstance().updatePassword(currentUser, newPassword);
         passwordField.clear();
         passwordField.setPromptText("Password updated!");
     }
@@ -148,8 +144,6 @@ public class SettingsController {
 
     @FXML
     private void onPickTime() {
-        // Cycle through common reminder times for simplicity.
-        // Replace this with a real TimePicker dialog if your JavaFX version supports it.
         String[] times = {"6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM",
                 "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM"};
         int currentIndex = 0;
@@ -165,7 +159,7 @@ public class SettingsController {
         }
     }
 
-    // ─── Accordion (Support and Legal) ──────────────────────────────────────────
+    // ─── Accordion ──────────────────────────────────────────────────────────────
 
     @FXML
     private void onToggleFaq() {
@@ -185,10 +179,15 @@ public class SettingsController {
         toggleAccordion(termsContent, termsChevron, termsOpen);
     }
 
+    @FXML
+    private void onTogglePseudocode() {
+        pseudocodeOpen = !pseudocodeOpen;
+        toggleAccordion(pseudocodeContent, pseudocodeChevron, pseudocodeOpen);
+    }
+
     private void toggleAccordion(VBox content, Label chevron, boolean open) {
         content.setVisible(open);
         content.setManaged(open);
-        // Rotate chevron: ⌃ points up when open, down when closed
         chevron.setRotate(open ? 0 : 180);
     }
 

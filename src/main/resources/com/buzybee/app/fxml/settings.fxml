@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="settings-scroll" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.SettingsController">
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="settings-scroll" stylesheets="@../css/settings.css,@../css/pseudocode.css" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.buzybee.app.controller.SettingsController">
     <content>
         <StackPane styleClass="settings-page">
             <VBox maxWidth="780.0" minWidth="640.0" prefWidth="720.0" spacing="34.0" styleClass="settings-shell">
@@ -119,6 +119,8 @@
 
                 <!-- Support and Legal Card -->
                 <VBox spacing="10.0" styleClass="settings-card, support-card">
+
+                    <!-- Title row -->
                     <Label styleClass="settings-card-title" text="Support and Legal" />
 
                     <!-- FAQs -->
@@ -177,11 +179,36 @@
                             <Label styleClass="legal-copy" text="We may update these terms periodically. Continued use of the app after changes means you accept the updated terms." wrapText="true" />
                         </VBox>
                     </VBox>
+
+                    <!-- Pseudocode -->
+                    <VBox styleClass="legal-panel">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#onTogglePseudocode" styleClass="legal-header">
+                            <Label styleClass="legal-title" text="🐝 Pseudocode" HBox.hgrow="ALWAYS" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="pseudocodeChevron" styleClass="legal-chevron" text="⌃" />
+                        </HBox>
+                        <VBox fx:id="pseudocodeContent" spacing="10.0" styleClass="legal-content">
+
+                            <!-- Task Prioritizer -->
+                            <Label styleClass="pseudocode-section-title" text="Task Prioritizer:" />
+                            <Label styleClass="legal-copy" wrapText="true" text="BEGIN FractionalKnapsack&#10;  INPUT: List of ActiveTasks (Pending + Backlog)&#10;&#10;  FOR EACH task IN ActiveTasks DO&#10;    daysRemaining = CalculateDaysUntil(task.deadline)&#10;    urgencyMultiplier = 1.0 / (daysRemaining + 1)&#10;    density = squareRoot(task.estimatedTime)&#10;    task.priorityScore = (task.difficulty * urgencyMultiplier) / density&#10;  END FOR&#10;&#10;  SORT ActiveTasks DESCENDING BY priorityScore&#10;  OUTPUT: Sorted array of ActiveTasks&#10;END FractionalKnapsack" />
+
+                            <!-- Frontload Scheduler -->
+                            <Label styleClass="pseudocode-section-title" text="Frontload Task Scheduling Mode:" />
+                            <Label styleClass="legal-copy" wrapText="true" text="BEGIN GreedyScheduler&#10;  INPUT: SortedTasks (from Knapsack), WeeklySchedule (Array of 7 TimeBlocks)&#10;&#10;  FOR EACH task IN SortedTasks DO&#10;    hoursLeftToSchedule = task.estimatedTime&#10;&#10;    FOR EACH day IN WeeklySchedule DO&#10;      IF hoursLeftToSchedule &lt;= 0 THEN BREAK&#10;      IF day.remainingCapacity &gt; 0 THEN&#10;        hoursToAssign = MINIMUM(hoursLeftToSchedule, day.remainingCapacity)&#10;        day.remainingCapacity -= hoursToAssign&#10;        hoursLeftToSchedule -= hoursToAssign&#10;        ASSIGN task TO day WITH hoursToAssign&#10;      END IF&#10;    END FOR&#10;&#10;    IF hoursLeftToSchedule &gt; 0 THEN MARK task AS FAILED_CONSTRAINT&#10;    ELSE MARK task AS SCHEDULED&#10;  END FOR&#10;&#10;  OUTPUT: Finalized WeeklySchedule&#10;END GreedyScheduler" />
+
+                            <!-- Backload Scheduler -->
+                            <Label styleClass="pseudocode-section-title" text="Task Scheduling Backload Mode:" />
+                            <Label styleClass="legal-copy" wrapText="true" text="BEGIN GreedyScheduler_Backload&#10;  INPUT: SortedTasks (from Knapsack), WeeklySchedule (Array of 7 TimeBlocks)&#10;&#10;  FOR EACH task IN SortedTasks DO&#10;    hoursLeftToSchedule = task.estimatedTime&#10;&#10;    IF task.status EQUALS BACKLOG THEN&#10;      // Loop FORWARD — schedule overdue tasks ASAP&#10;      FOR EACH day IN WeeklySchedule (Start to End) DO&#10;        IF hoursLeftToSchedule &lt;= 0 THEN BREAK&#10;        IF day.remainingCapacity &gt; 0 THEN&#10;          hoursToAssign = MINIMUM(hoursLeftToSchedule, day.remainingCapacity)&#10;          day.remainingCapacity -= hoursToAssign&#10;          hoursLeftToSchedule -= hoursToAssign&#10;          ASSIGN task TO day WITH hoursToAssign&#10;        END IF&#10;      END FOR&#10;    ELSE&#10;      // Loop BACKWARD — push tasks close to deadline&#10;      FOR EACH day IN WeeklySchedule (End to Start) DO&#10;        IF hoursLeftToSchedule &lt;= 0 THEN BREAK&#10;        IF day.date IS AFTER task.deadline THEN CONTINUE&#10;        IF day.remainingCapacity &gt; 0 THEN&#10;          hoursToAssign = MINIMUM(hoursLeftToSchedule, day.remainingCapacity)&#10;          day.remainingCapacity -= hoursToAssign&#10;          hoursLeftToSchedule -= hoursToAssign&#10;          ASSIGN task TO day WITH hoursToAssign&#10;        END IF&#10;      END FOR&#10;    END IF&#10;&#10;    // EMERGENCY FAILSAFE&#10;    IF hoursLeftToSchedule &gt; 0 THEN&#10;      FOR EACH day IN WeeklySchedule (Start to End) DO&#10;        IF hoursLeftToSchedule &lt;= 0 THEN BREAK&#10;        hoursToAssign = MINIMUM(hoursLeftToSchedule, day.remainingCapacity)&#10;        day.remainingCapacity -= hoursToAssign&#10;        hoursLeftToSchedule -= hoursToAssign&#10;        ASSIGN task TO day WITH hoursToAssign TAGGED AS [OVERALLOCATED]&#10;      END FOR&#10;    END IF&#10;&#10;    IF hoursLeftToSchedule &gt; 0 THEN MARK task AS FAILED_CONSTRAINT&#10;    ELSE IF task CONTAINS [OVERALLOCATED] THEN MARK task AS OVERALLOCATED_WARNING&#10;    ELSE MARK task AS SCHEDULED&#10;  END FOR&#10;&#10;  OUTPUT: Finalized WeeklySchedule&#10;END GreedyScheduler_Backload" />
+
+                        </VBox>
+                    </VBox>
+
                 </VBox>
 
                 <!-- Save Button -->
                 <HBox alignment="CENTER_RIGHT">
-                    <Button mnemonicParsing="false" onAction="#onSaveChanges" styleClass="settings-save-button" text="Save changes" />
+                    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveChanges" styleClass="settings-save-button" text="Save changes" />
                 </HBox>
 
             </VBox>

@@ -54,6 +54,14 @@
     -fx-min-height: 106;
 }
 
+.clickable-stat-card {
+    -fx-cursor: hand;
+}
+
+.clickable-stat-card:hover {
+    -fx-background-color: #fff2dc;
+}
+
 .stat-label {
     -fx-font-family: "Nunito";
     -fx-font-size: 11px;
