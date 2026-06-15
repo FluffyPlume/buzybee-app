@@ -5,11 +5,19 @@ import com.buzybee.app.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 public class TopBarController {
     @FXML private Button btnDarkMode;
@@ -42,8 +50,54 @@ public class TopBarController {
 
     @FXML
     private void onDarkMode() {
-        setActiveThemeButton(btnDarkMode);
-        appShellController.setDarkMode(true);
+        // Keep light mode active — dark mode not ready yet
+        setActiveThemeButton(btnLightMode);
+        showComingSoonPopup();
+    }
+
+    private void showComingSoonPopup() {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.initStyle(StageStyle.TRANSPARENT);
+        popup.setResizable(false);
+
+        Label emoji = new Label("🚧");
+        emoji.setStyle("-fx-font-size: 36px;");
+
+        Label title = new Label("Coming Soon!");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #FFC936;");
+
+        Label message = new Label("Dark mode is still being worked on.\nCheck back in a future update!");
+        message.setStyle("-fx-font-size: 13px; -fx-text-fill: #EDE6DA; -fx-text-alignment: center;");
+        message.setWrapText(true);
+
+        Button okBtn = new Button("Got it!");
+        okBtn.setStyle(
+            "-fx-background-color: #FFC936; -fx-text-fill: #1f1f1d; -fx-font-weight: 900;" +
+            "-fx-padding: 8 28 8 28; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"
+        );
+        okBtn.setOnAction(e -> popup.close());
+        okBtn.setOnMouseEntered(e -> okBtn.setStyle(
+            "-fx-background-color: #e6b120; -fx-text-fill: #1f1f1d; -fx-font-weight: 900;" +
+            "-fx-padding: 8 28 8 28; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"
+        ));
+        okBtn.setOnMouseExited(e -> okBtn.setStyle(
+            "-fx-background-color: #FFC936; -fx-text-fill: #1f1f1d; -fx-font-weight: 900;" +
+            "-fx-padding: 8 28 8 28; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"
+        ));
+
+        VBox layout = new VBox(12, emoji, title, message, okBtn);
+        layout.setAlignment(Pos.CENTER);
+        layout.setStyle(
+            "-fx-background-color: #2b2b29; -fx-background-radius: 16;" +
+            "-fx-padding: 32 40 32 40; -fx-border-color: rgba(244,233,212,0.18);" +
+            "-fx-border-radius: 16; -fx-border-width: 1;"
+        );
+
+        Scene scene = new Scene(layout);
+        scene.setFill(Color.TRANSPARENT);
+        popup.setScene(scene);
+        popup.showAndWait();
     }
 
     @FXML
